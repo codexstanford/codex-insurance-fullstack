@@ -4,9 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:esbuild": "node esbuild-build.mjs",
+    "build:css": "npx tailwindcss -i ./src/app.css -o ./build/app.css --minify",
+    "build": "npm-run-all --parallel build:*",
+    "dev:esbuild": "node esbuild-dev.mjs",
+    "dev:css": "npx tailwindcss -i ./src/app.css -o ./build/app.css --minify --watch",
+    "dev": "npm-run-all --parallel dev:*"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.1",
+    "tailwind-merge": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
+    "esbuild": "^0.20.2",
+    "esbuild-plugin-copy": "^2.1.1",
+    "npm-run-all": "^4.1.5",
+    "tailwindcss": "^3.4.1"
+  }
 }

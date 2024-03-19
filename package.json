@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server:start": "pnpm --filter server start"
+    "dev:server": "pnpm --filter server dev",
+    "dev:react": "pnpm --filter react dev",
+    "dev": "npm-run-all --parallel dev:*"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +14,7 @@
   "devDependencies": {
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.2.5"
   }
 }
