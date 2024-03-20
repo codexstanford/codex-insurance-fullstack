@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev:server": "pnpm --filter server dev",
-    "dev:react": "pnpm --filter react dev",
+    "dev:react": "pnpm --filter react watch",
     "dev": "npm-run-all --parallel dev:*"
   },
   "keywords": [],

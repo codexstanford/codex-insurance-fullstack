@@ -1,8 +1,14 @@
-import * as React from "react";
 import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import router from "./router";
+import React from "react";
 
 const App: React.FC = () => {
-  return <>Hello World!</>;
+  return (
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  );
 };
 
 // Init React app
