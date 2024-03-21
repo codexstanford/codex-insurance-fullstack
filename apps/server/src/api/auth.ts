@@ -1,29 +1,29 @@
 import express, { Router } from "express";
 import passport from "passport";
-import { GOOGLE_REDIRECT_URL } from "../auth/googleStrategy";
+import { SUBSET_GOOGLE_REDIRECT } from "../auth/googleStrategy";
+import { ROUTES } from "common";
 
 // https://expressjs.com/en/4x/api.html#router
 const authRouter: Router = express.Router();
 
 /* --------------------------------- Goolge --------------------------------- */
 
-authRouter.get("/login/google", passport.authenticate("google"));
+authRouter.get(ROUTES.SUBSET_LOGIN_GOOGLE, passport.authenticate("google"));
 
 authRouter.get(
-  GOOGLE_REDIRECT_URL,
+  SUBSET_GOOGLE_REDIRECT,
   passport.authenticate("google", {
-    failureRedirect: "/login",
+    failureRedirect: ROUTES.LOGIN,
     failureMessage: true,
   }),
   (_, res) => {
-    console.log("Sucessful login!");
-    res.redirect("/");
+    res.redirect(ROUTES.INDEX);
   },
 );
 
 /* --------------------------------- Logout --------------------------------- */
 
-authRouter.get("/logout", (req, res, next) => {
+authRouter.get(ROUTES.SUBSET_LOGUT, (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -32,6 +32,7 @@ authRouter.get("/logout", (req, res, next) => {
   });
 });
 
+// TODO Remove, only for testing purposes
 authRouter.get("/session", (req, res) => {
   res.send(req.isAuthenticated());
 });

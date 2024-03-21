@@ -4,7 +4,7 @@ import "dotenv/config";
 import express from "express";
 import path from "path";
 import addAuthMiddleware from "./auth/addAuthMiddleware";
-import authRouter from "./routers/auth";
+import authRouter from "./api/auth";
 
 /* -------------------------------------------------------------------------- */
 /*                                   Config                                   */

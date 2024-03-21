@@ -18,7 +18,8 @@
     "express-session": "^1.18.0",
     "passport": "^0.7.0",
     "passport-google-oidc": "^0.1.0",
-    "schema": "workspace:*"
+    "schema": "workspace:*",
+    "common": "workspace:*"
   },
   "devDependencies": {
     "@types/connect-sqlite3": "^0.9.5",

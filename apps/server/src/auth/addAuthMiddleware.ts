@@ -3,7 +3,7 @@ import session from "express-session";
 import connectsqlite3 from "connect-sqlite3";
 import passport from "passport";
 import cookieParser from "cookie-parser";
-import { googleStrategy } from "./googleStrategy";
+import { createGoogleStrategy } from "./googleStrategy";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -24,20 +24,20 @@ declare global {
 
 function configurePassport() {
   passport.serializeUser((user, cb) => {
-    console.log("serializeUser", user);
+    // console.log("serializeUser", user);
     process.nextTick(() => {
       cb(null, user);
     });
   });
 
   passport.deserializeUser((user, cb) => {
-    console.log("deserializeUser", user);
+    // console.log("deserializeUser", user);
     process.nextTick(() => {
       return cb(null, user as Express.User);
     });
   });
 
-  passport.use(googleStrategy);
+  passport.use(createGoogleStrategy);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -49,11 +49,9 @@ export default function addAuthMiddleware(app: Express) {
 
   configurePassport();
 
-  /* ----------------------------- Cookie support ----------------------------- */
+  /* ----------------------------- Session support ---------------------------- */
 
   app.use(cookieParser());
-
-  /* ----------------------------- Session support ---------------------------- */
 
   const SQLiteStore = connectsqlite3(session);
 

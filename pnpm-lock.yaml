@@ -63,6 +63,9 @@ importers:
 
   apps/server:
     dependencies:
+      common:
+        specifier: workspace:*
+        version: link:../../libraries/common
       connect-sqlite3:
         specifier: ^0.9.15
         version: 0.9.15
@@ -118,6 +121,8 @@ importers:
       typescript:
         specifier: ^5.4.2
         version: 5.4.2
+
+  libraries/common: {}
 
   libraries/db:
     dependencies:
