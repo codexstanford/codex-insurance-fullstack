@@ -10,6 +10,10 @@ const Root: React.FC = () => {
             CodeX Insurance Advisor (CIA)
           </Link>
           <Link to={"/auth/login"}>Login</Link>
+          <a href="/api/auth/logout">Logut</a>
+          <a href="/api/auth/session" target="_blank">
+            Session
+          </a>
         </Container>
       </header>
       <main>

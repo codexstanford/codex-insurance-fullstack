@@ -5,10 +5,7 @@ const Login: React.FC = () => {
     <>
       <div className="grid grid-cols-1 gap-3">
         <Heading level={1}>Login</Heading>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" />
-        </div>
+        <a href="/api/auth/login/google">Google</a>
       </div>
     </>
   );
