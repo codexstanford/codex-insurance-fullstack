@@ -3,6 +3,10 @@ import passport from "passport";
 import { SUBSET_GOOGLE_REDIRECT } from "../auth/googleStrategy";
 import { ROUTES } from "common";
 
+// IMPORTANT NOTE
+// All routes specifed here will be prefixed with /api/auth.
+// So keep in mind not to repeat the /api/auth part in the routes here.
+
 // https://expressjs.com/en/4x/api.html#router
 const authRouter: Router = express.Router();
 

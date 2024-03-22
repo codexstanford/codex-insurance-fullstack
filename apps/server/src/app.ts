@@ -5,6 +5,8 @@ import express from "express";
 import path from "path";
 import addAuthMiddleware from "./auth/addAuthMiddleware";
 import authRouter from "./api/auth";
+import { ROUTES } from "common";
+import { renderFile } from "ejs";
 
 /* -------------------------------------------------------------------------- */
 /*                                   Config                                   */
@@ -24,11 +26,23 @@ app.use(express.static(pathToClient));
 
 addAuthMiddleware(app);
 
-app.use("/api/auth", authRouter);
+app.use(ROUTES.API_AUTH, authRouter);
 
 // Handles any requests that don't match the ones above and forwards them to the React app
-app.get("*", (_, res) => {
-  res.sendFile(path.join(pathToClient, "index.html"));
+app.get("*", (req, res, next) => {
+  renderFile(
+    path.join(__dirname, "index.html"),
+    {
+      sessionScriptTag: req.user
+        ? `<script>window.session = ${JSON.stringify(req.user)};</script>`
+        : "",
+    },
+    { escape: (input) => input },
+    (err, str) => {
+      if (err) return next(err);
+      res.send(str);
+    },
+  );
 });
 
 /* -------------------------------------------------------------------------- */

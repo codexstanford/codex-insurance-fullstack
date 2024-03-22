@@ -37,7 +37,7 @@ function configurePassport() {
     });
   });
 
-  passport.use(createGoogleStrategy);
+  passport.use(createGoogleStrategy());
 }
 
 /* -------------------------------------------------------------------------- */
