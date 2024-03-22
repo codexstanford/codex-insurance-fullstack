@@ -1,14 +1,19 @@
 // https://reactrouter.com/en/main/routers/create-browser-router
 
 import { createBrowserRouter } from "react-router-dom";
-import Root from "./pages/Root";
 import Login from "./pages/auth/Login";
+import Root from "./pages/Root";
+import Index from "./pages/Index";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     children: [
+      {
+        path: "/",
+        element: <Index />,
+      },
       {
         path: "auth/login",
         element: <Login />,

@@ -26,7 +26,7 @@ export const containerFluidClasses = classNames(
 /*                                   Gutter                                   */
 /* -------------------------------------------------------------------------- */
 
-export const gutter = "flex gap-3";
+export const gutter = "grid gap-3";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Comp                                    */
