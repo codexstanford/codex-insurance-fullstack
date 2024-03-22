@@ -4,6 +4,7 @@ import connectsqlite3 from "connect-sqlite3";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import { createGoogleStrategy } from "./googleStrategy";
+import { SessionUser } from "common";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -11,10 +12,7 @@ import { createGoogleStrategy } from "./googleStrategy";
 
 declare global {
   namespace Express {
-    interface User {
-      id: number;
-      displayName: string | null;
-    }
+    interface User extends SessionUser {}
   }
 }
 

@@ -1,7 +1,10 @@
 import { Link, Outlet } from "react-router-dom";
 import Container from "../components/Container";
+import useSessionUser from "../hooks/useSessionUser";
 
 const Root: React.FC = () => {
+  const user = useSessionUser();
+
   return (
     <>
       <header className="bg-red-500 text-white">
@@ -9,11 +12,8 @@ const Root: React.FC = () => {
           <Link to={"/"} className="font-bold mr-auto">
             CodeX Insurance Advisor (CIA)
           </Link>
-          <Link to={"/auth/login"}>Login</Link>
-          <a href="/api/auth/logout">Logut</a>
-          <a href="/api/auth/session" target="_blank">
-            Session
-          </a>
+          {!user && <Link to={"/auth/login"}>Login</Link>}
+          {user && <a href="/api/auth/logout">Logut</a>}
         </Container>
       </header>
       <main>

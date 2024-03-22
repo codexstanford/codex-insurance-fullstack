@@ -5,7 +5,7 @@ import express from "express";
 import path from "path";
 import addAuthMiddleware from "./auth/addAuthMiddleware";
 import authRouter from "./api/auth";
-import { ROUTES } from "common";
+import { CLIENT_SESSION_USER_WINDOW_FIELD, ROUTES } from "common";
 import { renderFile } from "ejs";
 
 /* -------------------------------------------------------------------------- */
@@ -30,14 +30,15 @@ app.use(ROUTES.API_AUTH, authRouter);
 
 // Handles any requests that don't match the ones above and forwards them to the React app
 app.get("*", (req, res, next) => {
+  // Replaces "<%= sessionScriptTag %>" in index.html with the user session, if it exists, otherwise, with an empty string
   renderFile(
     path.join(__dirname, "index.html"),
     {
       sessionScriptTag: req.user
-        ? `<script>window.session = ${JSON.stringify(req.user)};</script>`
+        ? `<script>window["${CLIENT_SESSION_USER_WINDOW_FIELD}"] = ${JSON.stringify(req.user)};</script>`
         : "",
     },
-    { escape: (input) => input },
+    { escape: (input) => input }, // Don't escape what shall be inserted for "<%= sessionScriptTag %>"
     (err, str) => {
       if (err) return next(err);
       res.send(str);
