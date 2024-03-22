@@ -1,10 +1,10 @@
+import { SessionUser } from "common";
+import connectsqlite3 from "connect-sqlite3";
+import cookieParser from "cookie-parser";
 import { Express } from "express";
 import session from "express-session";
-import connectsqlite3 from "connect-sqlite3";
 import passport from "passport";
-import cookieParser from "cookie-parser";
 import { createGoogleStrategy } from "./googleStrategy";
-import { SessionUser } from "common";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -21,17 +21,25 @@ declare global {
 /* -------------------------------------------------------------------------- */
 
 function configurePassport() {
-  passport.serializeUser((user, cb) => {
-    // console.log("serializeUser", user);
+  // Convert user retrieved from db to session user
+  passport.serializeUser((dbUser, cb) => {
     process.nextTick(() => {
-      cb(null, user);
+      // This is intentional done explicitly without using the spread operator
+      // to ensure no unexpected fields are added to the session user
+      cb(null, {
+        id: dbUser.id,
+        displayName: dbUser.displayName,
+        givenName: dbUser.givenName,
+        familyName: dbUser.familyName,
+        email: dbUser.email,
+        photoUrl: dbUser.photoUrl,
+      } satisfies SessionUser);
     });
   });
 
-  passport.deserializeUser((user, cb) => {
-    // console.log("deserializeUser", user);
+  passport.deserializeUser((sessionUser: SessionUser, cb) => {
     process.nextTick(() => {
-      return cb(null, user as Express.User);
+      return cb(null, sessionUser);
     });
   });
 

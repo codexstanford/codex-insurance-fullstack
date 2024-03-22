@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "migration:generate": "drizzle-kit generate:sqlite --config scripts/drizzle.config.ts",
-    "push": "drizzle-kit push:sqlite --config scripts/drizzle.config.ts"
+    "push": "drizzle-kit push:sqlite --config scripts/drizzle.config.ts",
+    "studio": "drizzle-kit studio --config scripts/drizzle.config.ts"
   },
   "keywords": [],
   "author": "",

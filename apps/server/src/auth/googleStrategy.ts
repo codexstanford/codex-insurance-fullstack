@@ -1,7 +1,7 @@
 //@ts-ignore that it's not typed
 import GoogleStrategy from "passport-google-oidc";
 import { Profile } from "passport";
-import getOrCreateSSOUser from "../utils/findOrCreateSSOUser";
+import getOrCreateSSOUser from "../utils/getOrCreateSSOUser";
 import { ROUTES } from "common";
 
 // https://www.passportjs.org/tutorials/google
@@ -27,18 +27,20 @@ export const createGoogleStrategy = () => {
       scope: ["profile"],
     },
     function verify(
-      issuer: string,
+      _: string,
       profile: Profile,
       cb: (
         err: Error | null,
         user?: { id: number; displayName: string | null },
       ) => void,
     ) {
-      getOrCreateSSOUser(issuer, profile)
+      getOrCreateSSOUser("google", profile)
         .catch((err) => cb(err))
-        .then(() => {
-          console.log(profile);
-          cb(null, { id: 999, displayName: profile.displayName });
+        .then((user) => {
+          if (!user) {
+            return cb(new Error("User creation failed"));
+          }
+          cb(null, user);
         });
     },
   );

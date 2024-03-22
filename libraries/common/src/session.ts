@@ -1,6 +1,10 @@
 export interface SessionUser {
   id: number;
   displayName: string | null;
+  givenName: string | null;
+  familyName: string | null;
+  email: string | null;
+  photoUrl: string | null;
 }
 
 /**
