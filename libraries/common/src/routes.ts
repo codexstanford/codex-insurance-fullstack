@@ -12,7 +12,7 @@ export const API_AUTH_LOGIN_GOOGLE = API_AUTH + SUBSET_LOGIN_GOOGLE;
 
 /** "Subset", because it'll have to be prefixed with /api to form the full path. */
 export const SUBSET_LOGUT = "/logout";
-export const API_AUTH_LOGUT = API + SUBSET_LOGUT;
+export const API_AUTH_LOGUT = API_AUTH + SUBSET_LOGUT;
 
 /* -------------------------------------------------------------------------- */
 /*                                   CLIENT                                   */
@@ -21,3 +21,7 @@ export const API_AUTH_LOGUT = API + SUBSET_LOGUT;
 export const INDEX = "/";
 
 export const LOGIN = "/login";
+
+export const SERVICE = "/service";
+
+export const SERVICE_COVID19VACCINE = SERVICE + "/covid19vaccine";

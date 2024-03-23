@@ -32,13 +32,8 @@ authRouter.get(ROUTES.SUBSET_LOGUT, (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/");
+    res.redirect(ROUTES.INDEX);
   });
-});
-
-// TODO Remove, only for testing purposes
-authRouter.get("/session", (req, res) => {
-  res.send(req.isAuthenticated());
 });
 
 export default authRouter;

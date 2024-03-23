@@ -1,25 +1,41 @@
-import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { Fragment, useEffect, useState } from "react";
+import { classNames } from "../utils/classNames";
+import {
+  COMMON_BORDER_CLASSES,
+  COMMON_INPUT_CLASSES,
+} from "../consts/classes.const";
 
-const people = [
-  { id: 1, name: "Wade Cooper" },
-  { id: 2, name: "Arlene Mccoy" },
-  { id: 3, name: "Devon Webb" },
-  { id: 4, name: "Tom Cook" },
-  { id: 5, name: "Tanya Fox" },
-  { id: 6, name: "Hellen Schmidt" },
-] as const;
+/* -------------------------------------------------------------------------- */
+/*                                    Types                                   */
+/* -------------------------------------------------------------------------- */
 
-export default function Searchbox() {
-  const [selected, setSelected] = useState(people[0]);
+export type Searchbox_Input<T extends Record<string | number, string>> = {
+  options: T;
+  onChange?: (key?: keyof T) => void;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  Function                                  */
+/* -------------------------------------------------------------------------- */
+
+export function Searchbox<T extends Record<string | number, string>>({
+  options,
+  onChange,
+}: Searchbox_Input<T>) {
+  const [selected, setSelected] = useState<keyof typeof options | undefined>();
   const [query, setQuery] = useState("");
 
-  const filteredPeople =
+  if (onChange) {
+    useEffect(() => void onChange(selected), [selected]);
+  }
+
+  const filteredEntries =
     query === ""
-      ? people
-      : people.filter((person) =>
-          person.name
+      ? Object.entries(options)
+      : Object.entries(options).filter(([_, label]) =>
+          label
             .toLowerCase()
             .replace(/\s+/g, "")
             .includes(query.toLowerCase().replace(/\s+/g, "")),
@@ -27,19 +43,25 @@ export default function Searchbox() {
 
   return (
     <Combobox value={selected} onChange={setSelected}>
-      <div className="relative mt-1">
-        <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
-          <Combobox.Input
-            className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-            displayValue={(person: (typeof people)[number]) => person.name}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon
+      <div className="relative">
+        <div
+          className={classNames(
+            COMMON_INPUT_CLASSES,
+            "relative w-full cursor-default overflow-hidden rounded-2xl bg-white text-left sm:text-sm",
+          )}
+        >
+          <Combobox.Button className="absolute inset-y-0 left-0 flex items-center pl-2">
+            <MagnifyingGlassIcon
               className="h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
           </Combobox.Button>
+          <Combobox.Input
+            className="w-full border-none py-2 pr-3 pl-10 text-sm leading-5 text-black focus:ring-0"
+            displayValue={(id: keyof typeof options) => options[id] || ""}
+            placeholder="eg: contraceptives"
+            onChange={(event) => setQuery(event.target.value)}
+          />
         </div>
         <Transition
           as={Fragment}
@@ -48,36 +70,40 @@ export default function Searchbox() {
           leaveTo="opacity-0"
           afterLeave={() => setQuery("")}
         >
-          <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-            {filteredPeople.length === 0 && query !== "" ? (
-              <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
+          <Combobox.Options
+            className={classNames(
+              COMMON_BORDER_CLASSES,
+              "absolute mt-1 max-h-60 w-full overflow-auto rounded-2xl bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm",
+            )}
+          >
+            {filteredEntries.length === 0 && query !== "" ? (
+              <div className="relative cursor-default select-none px-4 py-2 text-black">
                 Nothing found.
               </div>
             ) : (
-              filteredPeople.map((person) => (
+              filteredEntries.map(([id, label], key) => (
                 <Combobox.Option
-                  key={person.id}
+                  key={key}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-teal-600 text-white" : "text-gray-900"
-                    }`
+                    classNames(
+                      "relative cursor-default select-none py-2 pl-10 pr-4",
+                      [active, "bg-blue-200"],
+                    )
                   }
-                  value={person}
+                  value={id}
                 >
-                  {({ selected, active }) => (
+                  {({ selected }) => (
                     <>
                       <span
                         className={`block truncate ${
                           selected ? "font-medium" : "font-normal"
                         }`}
                       >
-                        {person.name}
+                        {label}
                       </span>
                       {selected ? (
                         <span
-                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                            active ? "text-white" : "text-teal-600"
-                          }`}
+                          className={`absolute inset-y-0 left-0 flex items-center pl-3 text-black`}
                         >
                           <CheckIcon className="h-5 w-5" aria-hidden="true" />
                         </span>
@@ -93,3 +119,5 @@ export default function Searchbox() {
     </Combobox>
   );
 }
+
+export default Searchbox;
