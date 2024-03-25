@@ -24,7 +24,7 @@ export type ButtonLink_Input = {
 /* -------------------------------------------------------------------------- */
 
 const BUTTON_CLASSES =
-  "flex items-center justify-center px-4 py-2 uppercase text-center pointer text-sm";
+  "w-auto flex items-center justify-center px-4 py-2 uppercase text-center pointer text-sm";
 
 const COLOR_CLASSES = {
   white: "bg-white text-black",

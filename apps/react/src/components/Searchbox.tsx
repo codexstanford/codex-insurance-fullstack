@@ -47,7 +47,7 @@ export function Searchbox<T extends Record<string | number, string>>({
         <div
           className={classNames(
             COMMON_INPUT_CLASSES,
-            "relative w-full cursor-default overflow-hidden rounded-2xl bg-white text-left sm:text-sm",
+            "p-0 relative w-full cursor-default overflow-hidden rounded-2xl bg-white text-left sm:text-sm",
           )}
         >
           <Combobox.Button className="absolute inset-y-0 left-0 flex items-center pl-2">

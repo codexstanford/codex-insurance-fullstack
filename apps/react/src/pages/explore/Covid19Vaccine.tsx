@@ -1,30 +1,39 @@
 import React from "react";
-import { ButtonLink } from "../../components/Button";
 import Constraint from "../../components/Constraint";
-import Container from "../../components/Container";
+import ConstraintContainer from "../../components/ConstraintContainer";
+import EpilogFormContainer from "../../components/EpilogFormContainer";
 import InputDate from "../../components/InputDate";
+import InputSelect from "../../components/InputSelect";
+import { useForm, Controller } from "react-hook-form";
 
 const Covid19Vaccine: React.FC = () => {
-  // const { register, handleSubmit, watch } = useForm();
+  const { control } = useForm();
 
   return (
-    <Container
-      makeBoxed="narrow"
-      centerXY={true}
-      makeGutter={true}
-      className="max-w-3xl"
-    >
-      <div className={"flex gap-3 items-center p-3 bg-blue-200"}>
-        <p className="font-bold text-xl mr-auto ">COVID-19 Vaccine</p>
-        <ButtonLink href="/">Save</ButtonLink>
-      </div>
-      <Container makeGutter={true} className="p-3 bg-teal-200">
-        <p className="text-right">Constraints</p>
+    <EpilogFormContainer title="COVID-19 Vaccine" onSave={() => alert("WIP")}>
+      <ConstraintContainer>
         <Constraint id="test" label="Date of Birth">
           <InputDate />
         </Constraint>
-      </Container>
-    </Container>
+        <Constraint id="test2" label="Vaccination History">
+          <Controller
+            name="iceCreamType"
+            control={control}
+            render={({ field }) => (
+              <InputSelect
+                {...field}
+                options={[
+                  { id: 0, label: "Moderna" },
+                  { id: 1, label: "Pfizer" },
+                ]}
+                placeholder="Select your most recent vaccine"
+              />
+            )}
+          />
+          <InputDate />
+        </Constraint>
+      </ConstraintContainer>
+    </EpilogFormContainer>
   );
 };
 

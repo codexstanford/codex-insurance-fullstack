@@ -27,7 +27,7 @@ const InputDate: React.FC = () => {
           icons: "",
           text: "text-black",
           disabledText: "",
-          input: classNames(COMMON_INPUT_CLASSES),
+          input: classNames(COMMON_INPUT_CLASSES, "pl-10"),
           inputIcon: "",
           selected: "bg-blue-200 hover:bg-blue-100 text-black",
         },
