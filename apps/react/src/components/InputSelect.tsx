@@ -18,7 +18,7 @@ interface Option {
 
 type InputSelect_Input<
   TOption extends Option,
-  TValue extends (TOption | undefined) | TOption[],
+  TValue extends (TOption | null) | TOption[],
 > = {
   value: TValue;
   onChange?: (value: TValue) => void;
@@ -32,7 +32,7 @@ type InputSelect_Input<
 
 export default function InputSelect<
   TOption extends Option,
-  TValue extends (TOption | undefined) | TOption[],
+  TValue extends (TOption | null) | TOption[],
 >({
   value,
   options,
@@ -50,7 +50,7 @@ export default function InputSelect<
   }
 
   return (
-    <Listbox {...props} value={value} multiple={Array.isArray(value)}>
+    <Listbox {...props} value={value} multiple={Array.isArray(value)} by="id">
       <div className="relative">
         <Listbox.Button
           className={classNames(COMMON_INPUT_CLASSES, "relative pr-10")}

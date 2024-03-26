@@ -14,7 +14,7 @@ import Container from "./Container";
 /* -------------------------------------------------------------------------- */
 
 type Constraint_Input = {
-  id: string;
+  id?: string;
   label: React.ReactNode;
   isLocked?: boolean;
   onClickLock?: () => void;

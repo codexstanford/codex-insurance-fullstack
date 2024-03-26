@@ -1,12 +1,14 @@
 import { classNames } from "../utils/classNames";
 import { Button } from "./Button";
 import Container from "./Container";
+import FormDataSpy from "./FormDataSpy";
 
 type EpilogFormContainter_Input = {
   containerProps?: React.ComponentProps<typeof Container>;
   title?: React.ReactNode;
   onSave?: () => void;
   children?: React.ReactNode;
+  __debugFormData?: Record<string, unknown>;
 };
 
 const EpilogFormContainer: React.FC<EpilogFormContainter_Input> = ({
@@ -14,6 +16,7 @@ const EpilogFormContainer: React.FC<EpilogFormContainter_Input> = ({
   title,
   onSave,
   children,
+  __debugFormData,
 }) => {
   return (
     <>
@@ -29,6 +32,7 @@ const EpilogFormContainer: React.FC<EpilogFormContainter_Input> = ({
           <Button onClick={() => void (onSave && onSave())}>Save</Button>
         </div>
         {children}
+        {__debugFormData && <FormDataSpy data={__debugFormData} />}
       </Container>
     </>
   );

@@ -24,10 +24,10 @@ export type ButtonLink_Input = {
 /* -------------------------------------------------------------------------- */
 
 const BUTTON_CLASSES =
-  "w-auto flex items-center justify-center px-4 py-2 uppercase text-center pointer text-sm";
+  "w-auto flex items-center justify-center px-4 py-2 uppercase text-center cursor-pointer text-sm";
 
 const COLOR_CLASSES = {
-  white: "bg-white text-black",
+  white: "bg-white hover:bg-gray-100 text-black",
   gray: "bg-gray-200 hover:bg-gray-100 text-gray-500",
 } as const satisfies Record<Color, string>;
 
