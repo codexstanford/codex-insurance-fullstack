@@ -5,6 +5,8 @@ import {
   COMMON_INPUT_CLASSES,
 } from "../consts/classes.const";
 import { classNames } from "../utils/classNames";
+import { useContext } from "react";
+import { InputContext } from "../contexts/InputContext";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -17,12 +19,12 @@ interface Option {
 }
 
 type InputSelect_Input<
-  TOption extends Option,
-  TValue extends (TOption | null) | TOption[],
+  TOptions extends Readonly<Option[]>,
+  TValue extends (TOptions[number] | null) | TOptions,
 > = {
   value: TValue;
   onChange?: (value: TValue) => void;
-  options: TOption[];
+  options: TOptions;
   placeholder?: string;
 };
 
@@ -31,14 +33,16 @@ type InputSelect_Input<
 /* -------------------------------------------------------------------------- */
 
 export default function InputSelect<
-  TOption extends Option,
-  TValue extends (TOption | null) | TOption[],
+  TOptions extends Readonly<Option[]>,
+  TValue extends (TOptions[number] | null) | TOptions,
 >({
   value,
   options,
   placeholder = "Select an option",
   ...props
-}: InputSelect_Input<TOption, TValue>) {
+}: InputSelect_Input<TOptions, TValue>) {
+  const inputContext = useContext(InputContext);
+
   let listboxButtonString = placeholder;
 
   if (Array.isArray(value) && value.length > 0) {
@@ -46,14 +50,17 @@ export default function InputSelect<
   }
 
   if (!Array.isArray(value) && value) {
-    listboxButtonString = value.label;
+    listboxButtonString = (value as TOptions[number]).label;
   }
 
   return (
     <Listbox {...props} value={value} multiple={Array.isArray(value)} by="id">
       <div className="relative">
         <Listbox.Button
-          className={classNames(COMMON_INPUT_CLASSES, "relative pr-10")}
+          className={classNames(COMMON_INPUT_CLASSES, "relative pr-10", [
+            !!inputContext?.isLocked,
+            "bg-blue-200",
+          ])}
         >
           <span className="block truncate">{listboxButtonString}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

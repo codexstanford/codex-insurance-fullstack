@@ -3,7 +3,7 @@ import { Button } from "./Button";
 import Container from "./Container";
 import FormDataSpy from "./FormDataSpy";
 
-type EpilogFormContainter_Input = {
+type Input = {
   containerProps?: React.ComponentProps<typeof Container>;
   title?: React.ReactNode;
   onSave?: () => void;
@@ -11,7 +11,7 @@ type EpilogFormContainter_Input = {
   __debugFormData?: Record<string, unknown>;
 };
 
-const EpilogFormContainer: React.FC<EpilogFormContainter_Input> = ({
+const EpilogFormContainer: React.FC<Input> = ({
   containerProps,
   title,
   onSave,

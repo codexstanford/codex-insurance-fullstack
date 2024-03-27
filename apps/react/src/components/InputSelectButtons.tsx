@@ -9,18 +9,20 @@ interface Option {
   specialStatus?: SpecialStatus;
 }
 
-type InputSelectButtons_Input<T extends Option> = {
-  value: Readonly<T[]>;
-  onChange?: (value: T[]) => void;
-  options: Readonly<T[]>;
+type InputSelectButtons_Input<T extends Readonly<Option[]>> = {
+  value: T;
+  onChange?: (value: T) => void;
+  onBlur?: () => void;
+  options: T;
 };
 
-export default function InputSelectButtons<T extends Option>({
+export default function InputSelectButtons<T extends Readonly<Option[]>>({
   value,
   onChange,
+  onBlur,
   options,
 }: InputSelectButtons_Input<T>) {
-  const isSelected = (opt: T) => value.some((v) => v.id === opt.id);
+  const isSelected = (opt: T[number]) => value.some((v) => v.id === opt.id);
 
   return (
     <div className="flex gap-3 flex-wrap">
@@ -35,10 +37,13 @@ export default function InputSelectButtons<T extends Option>({
           onClick={() => {
             if (opt.specialStatus === "disabled") return;
             if (isSelected(opt)) {
-              onChange?.(value.filter((v) => v.id !== opt.id));
+              onChange?.(
+                Object.freeze(value.filter((v) => v.id !== opt.id)) as T,
+              );
             } else {
-              onChange?.([...value, opt]);
+              onChange?.([...value, opt] as unknown as T);
             }
+            onBlur?.();
           }}
         >
           {opt.label}

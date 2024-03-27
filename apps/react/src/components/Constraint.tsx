@@ -5,9 +5,12 @@ import {
   LockClosedIcon,
   LockOpenIcon,
 } from "@heroicons/react/24/outline";
+import React, { useCallback } from "react";
 import { COMMON_FOCUS_CLASSES } from "../consts/classes.const";
 import { classNames } from "../utils/classNames";
+import { ConstraintContext } from "../contexts/ConstraintContext";
 import Container from "./Container";
+import { InputContext } from "../contexts/InputContext";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -16,8 +19,6 @@ import Container from "./Container";
 type Constraint_Input = {
   id?: string;
   label: React.ReactNode;
-  isLocked?: boolean;
-  onClickLock?: () => void;
   children?: React.ReactNode;
 };
 
@@ -25,13 +26,16 @@ type Constraint_Input = {
 /*                                  Function                                  */
 /* -------------------------------------------------------------------------- */
 
-const Constraint: React.FC<Constraint_Input> = ({
-  id,
-  label,
-  isLocked,
-  onClickLock,
-  children,
-}) => {
+const Constraint: React.FC<Constraint_Input> = ({ id, label, children }) => {
+  const constraintContext = React.useContext(ConstraintContext);
+
+  const isLocked = !!(id && constraintContext?.getIsLocked(id));
+
+  const onClickLock = useCallback(
+    () => void (id && constraintContext?.onClickLock(id)),
+    [id, constraintContext],
+  );
+
   return (
     <Disclosure defaultOpen={true}>
       {({ open }) => (
@@ -47,14 +51,17 @@ const Constraint: React.FC<Constraint_Input> = ({
               className={classNames(
                 COMMON_FOCUS_CLASSES,
                 "border ml-auto border-black rounded-full size-8 flex items-center justify-center",
+                [isLocked, "bg-blue-200"],
               )}
             >
-              {isLocked && <LockClosedIcon className="size-4" />}
+              {isLocked && <LockClosedIcon className="size-4 " />}
               {!isLocked && <LockOpenIcon className="size-4" />}
             </button>
           </Container>
           <Disclosure.Panel as={Container} makeGutter={true}>
-            {children}
+            <InputContext.Provider value={{ isLocked }}>
+              {children}
+            </InputContext.Provider>
           </Disclosure.Panel>
         </Container>
       )}
