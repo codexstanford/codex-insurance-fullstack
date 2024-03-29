@@ -1,11 +1,10 @@
+import { BasicOption } from "../types/basicOption";
 import { classNames } from "../utils/classNames";
 import { Button } from "./Button";
 
 type SpecialStatus = "none" | "disabled" | "green";
 
-interface Option {
-  id: number | string;
-  label: string;
+interface Option extends BasicOption {
   specialStatus?: SpecialStatus;
 }
 

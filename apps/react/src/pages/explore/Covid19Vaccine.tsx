@@ -11,6 +11,7 @@ import {
   IsConstraintLockedRecord,
   createConstraintContextData,
 } from "../../contexts/ConstraintContext";
+import { LOCATIONS } from "../../consts/locations.const";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -23,7 +24,7 @@ type FormData = {
   insurance: typeof insurers;
   services: typeof vaccines;
   when: Date;
-  where: typeof locations;
+  where: typeof LOCATIONS;
 };
 
 interface IsLockedRecord extends IsConstraintLockedRecord {
@@ -43,22 +44,11 @@ const vaccines = [
   { id: "moderna", label: "Moderna" },
   { id: "pfizer", label: "Pfizer" },
   { id: "astrazeneca", label: "AstraZeneca" },
-  { id: "johnson", label: "Johnson & Johnson" },
-  { id: "sinovac", label: "Sinovac" },
-  { id: "sinopharm", label: "Sinopharm" },
-  { id: "bharat", label: "Bharat Biotech" },
-  { id: "sputnik", label: "Sputnik V" },
 ] as const;
 
 const insurers = [
   { id: "cardinalCare", label: "Cardinal Care" },
   { id: "kaiserHMO", label: "Kaiser HMO" },
-] as const;
-
-const locations = [
-  { id: "facility", label: "Facility" },
-  { id: "physiciansOffice", label: "Physician's Office" },
-  { id: "other", label: "Any other location" },
 ] as const;
 
 /* -------------------------------------------------------------------------- */
@@ -175,14 +165,16 @@ const Covid19Vaccine: React.FC = () => {
             <Controller
               name="dob"
               control={control}
-              render={({ field }) => <InputDate {...field} />}
+              render={({ field: { ref, ...field } }) => (
+                <InputDate {...field} />
+              )}
             />
           </Constraint>
           <Constraint id="vaccinationHistory" label="Vaccination History">
             <Controller
               name="vaccinationHistory_vaccineType"
               control={control}
-              render={({ field }) => (
+              render={({ field: { ref, ...field } }) => (
                 <InputSelect
                   {...field}
                   options={vaccines}
@@ -193,14 +185,16 @@ const Covid19Vaccine: React.FC = () => {
             <Controller
               name="vaccinationHistory_date"
               control={control}
-              render={({ field }) => <InputDate {...field} />}
+              render={({ field: { ref, ...field } }) => (
+                <InputDate {...field} />
+              )}
             />
           </Constraint>
           <Constraint id="insurance" label="Insurance">
             <Controller
               name="insurance"
               control={control}
-              render={({ field }) => (
+              render={({ field: { ref, ...field } }) => (
                 <InputSelectButtons {...field} options={insurers} />
               )}
             />
@@ -209,7 +203,7 @@ const Covid19Vaccine: React.FC = () => {
             <Controller
               name="services"
               control={control}
-              render={({ field }) => (
+              render={({ field: { ref, ...field } }) => (
                 <InputSelectButtons {...field} options={vaccines} />
               )}
             />
@@ -218,15 +212,17 @@ const Covid19Vaccine: React.FC = () => {
             <Controller
               name="when"
               control={control}
-              render={({ field }) => <InputDate {...field} />}
+              render={({ field: { ref, ...field } }) => (
+                <InputDate {...field} />
+              )}
             />
           </Constraint>
           <Constraint id="where" label="Where">
             <Controller
               name="where"
               control={control}
-              render={({ field }) => (
-                <InputSelectButtons {...field} options={locations} />
+              render={({ field: { ref, ...field } }) => (
+                <InputSelectButtons {...field} options={LOCATIONS} />
               )}
             />
           </Constraint>

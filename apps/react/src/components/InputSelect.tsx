@@ -7,14 +7,13 @@ import {
 import { classNames } from "../utils/classNames";
 import { useContext } from "react";
 import { InputContext } from "../contexts/InputContext";
+import { BasicOption } from "../types/basicOption";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
 /* -------------------------------------------------------------------------- */
 
-interface Option {
-  id: number | string;
-  label: string;
+interface Option extends BasicOption {
   disabled?: boolean;
 }
 

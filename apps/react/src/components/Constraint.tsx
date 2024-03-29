@@ -58,10 +58,12 @@ const Constraint: React.FC<Constraint_Input> = ({ id, label, children }) => {
               {!isLocked && <LockOpenIcon className="size-4" />}
             </button>
           </Container>
-          <Disclosure.Panel as={Container} makeGutter={true}>
-            <InputContext.Provider value={{ isLocked }}>
-              {children}
-            </InputContext.Provider>
+          <Disclosure.Panel>
+            <Container makeGutter={true}>
+              <InputContext.Provider value={{ isLocked }}>
+                {children}
+              </InputContext.Provider>
+            </Container>
           </Disclosure.Panel>
         </Container>
       )}

@@ -1,3 +1,4 @@
+export const EPILOG_RULESET = `
 covered(C):-
     claim.policy(C,P) &
     policy.type(P,T) &
@@ -425,91 +426,6 @@ exception(C,P):-
   minor_or_dependent(C,Cl) &
   claim.family_member_present(C,no).
 
-
-%%%%%%%%%%%%%%%%%%% Example Data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-policy_year_startdate(01_08_2023).
-
-valid_hospital(stanford_medical_center).
-valid_hospital(menlo_medical_clinic).
-valid_hospital(sutter_health).
-yearly_visit_limit(routine_physical,0,22,0).
-yearly_visit_limit(routine_physical,22,200,1)
-yearly_visit_limit(gynecological_exam,0,200,1).
-yearly_visit_limit(home_health_care,0,200,100).
-
-valid_location(routine_physical,phys_office).
-valid_location(preventive_care,phys_office).
-valid_location(preventive_care,facility).
-valid_location(gynecological_exam,phys_office).
-valid_location(gynecological_exam,ob_office).
-valid_location(gynecological_exam,gyn_office).
-valid_location(gynecological_exam,ob_gyn).
-valid_location(physician_consultation,telemedicine)
-valid_location(physician_consultation,phys_office)
-valid_location(physician_consultation,sp_office)
-valid_location(allergy,phys_office)
-valid_location(allergy,allergy_specialist)
-valid_location(inpatient_surgical_services,hospital)
-valid_location(inpatient_surgical_services,birthing_center)
-valid_location(outpatient_surgical_services,phys_office)
-valid_location(outpatient_surgical_services,sp_office)
-valid_location(outpatient_surgical_services,outpatient_dept)
-valid_location(outpatient_surgical_services,surgery_center)
-valid_location(inpatient_care,hospital)
-valid_location(inpatient_care,birthing_center)
-valid_location(outpatient_surgery_facility_charges,outpatient_dept)
-valid_location(outpatient_surgery_facility_charges,surgery_center)
-valid_location(home_health_care,home)
-valid_location(non_surgical_physican_service,hospital)
-
-contraceptive_location_check(Service, contra_office).
-contraceptive_location_check(sterilization_surgery_for_women,L).
-contraceptive_location_check(sterilization_surgery_for_men,L).
-
-valid_service_provider(inpatient_surgical_services, operating_surgeon)
-valid_service_provider(inpatient_surgical_services, anesthetist)
-valid_service_provider(inpatient_surgical_services, surgical_assistant)
-valid_service_provider(outpatient_surgical_services, operating_surgeon)
-valid_service_provider(outpatient_surgical_services, anesthetist)
-valid_service_provider(outpatient_surgical_services, surgical_assistant)
-
-
-valid_screening_list([obesity,healthy_diet,alcohol_misuse,tobacco_missuse,depression,sti,
-genetic_risk_cancer,stress_management,chronic_condition,lactation,prenatal_postpartum]).
-covered_list_with_location([physician_consultation,allergy,inpatient_care,non_surgical_physican_service,inpatient_surgical_services])
-covered_list([breast_pump_supplies,hospice,skilled_nursing,skilled_nursing]).
-home_not_covered_list([transportation,homemaker_service,home_delivery,maintenance_therapy]).
-age_range_limit(vaccine,covid,0,200,3).
-age_range_limit(vaccine,polio,0,5,5).
-age_range_limit(vaccine,polio,5,100,0).
-age_range_limit(vaccine,tb,0,24,1).
-age_range_limit(vaccine,tb,24,200,0).
-age_range_limit(cancer,prostate,0,200,1). 
-age_range_limit(cancer,breast,0,200,1).
-
-fda_approved(counseling).
-fda_approved(rod).
-fda_approved(larc).
-fda_approved(oral).
-fda_approved(iud_with_preogestin).
-fda_approved(sterilization_surgery_for_women).
-fda_approved(sterilization_surgery_for_men).
-fda_approved(implantable_rod).
-fda_approved(progestin_shot_injection).
-fda_approved(the_pill_estrogen_and_progestin).
-fda_approved(the_mini_pill_progestin).
-fda_approved(patch).
-fda_approved(vaginal_contraceptive_ring).
-fda_approved(diaphragm_with_spermicide).
-fda_approved(sponge_with_spermicide).
-fda_approved(cervical_cap_with_spermicide).
-fda_approved(male_condom).
-fda_approved(female_condom).
-fda_approved(spermicide).
-fda_approved(levonorgestrel_15_mg).
-fda_approved(ulipristal_acetate).
-
 %%%%%%%%%%%%%%%%%%% Helper Functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 get_timestamp_from_datetime(DATE,TIME,STAMP) :-
@@ -555,3 +471,4 @@ minor_or_dependent(C,Cl):-
   claim.time(C,C_D,C_T) &
   get_date_diff(C_D, DOB, Age) &
   leq(Age,17).
+`;
