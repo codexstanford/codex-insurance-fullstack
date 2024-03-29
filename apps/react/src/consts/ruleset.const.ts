@@ -1,4 +1,4 @@
-export const EPILOG_RULESET = `
+const EPILOG_RULESET_STRING = `
 covered(C):-
     claim.policy(C,P) &
     policy.type(P,T) &
@@ -472,3 +472,8 @@ minor_or_dependent(C,Cl):-
   get_date_diff(C_D, DOB, Age) &
   leq(Age,17).
 `;
+
+export const EPILOG_RULESET = definemorerules(
+  [],
+  readdata(EPILOG_RULESET_STRING),
+);

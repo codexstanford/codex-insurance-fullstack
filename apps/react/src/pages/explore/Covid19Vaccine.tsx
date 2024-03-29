@@ -6,12 +6,15 @@ import EpilogFormContainer from "../../components/EpilogFormContainer";
 import InputDate from "../../components/InputDate";
 import InputSelect from "../../components/InputSelect";
 import InputSelectButtons from "../../components/InputSelectButtons";
+import { LOCATIONS } from "../../consts/locations.const";
 import {
   ConstraintContext,
   IsConstraintLockedRecord,
   createConstraintContextData,
 } from "../../contexts/ConstraintContext";
-import { LOCATIONS } from "../../consts/locations.const";
+import { dateToString, getFirstOrNextId } from "../../utils/epilogUtils";
+import { EPILOG_COMMON_DATASET } from "../../consts/dataset.const";
+import { EPILOG_RULESET } from "../../consts/ruleset.const";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -151,6 +154,71 @@ const Covid19Vaccine: React.FC = () => {
     [watch("where")],
   );
 
+  // Whenever a constraint gets locked or unlocked, update the representation
+
+  const epilogRepresentation = useMemo(() => {
+    const person = getFirstOrNextId("person", []);
+    const policy = getFirstOrNextId("policy", []);
+    const claim = getFirstOrNextId("claim", []);
+
+    const dob = dateToString(getValues("dob"));
+
+    const vaccine = getValues("services.0.id") || "nil";
+
+    const location = getValues("where.0.id") || "nil";
+
+    return `
+    person(${person})
+    policy(${policy})
+    claim(${claim})
+
+    person.dob(${person}, ${dob})
+    person.occupation(${person}, other)
+    person.immunocompromised(${person}, no)
+
+    policy.type(${policy}, cardinal)
+    policy.insuree(${policy}, ${person})
+    policy.startdate(${policy}, ${person}, 01_08_2023)
+    policy.enddate(${policy}, ${person}, 30_06_2024)
+
+    claim.policy(${claim}, ${policy})
+    claim.claimant(${claim}, ${person})
+    claim.hosp_start_time(${claim}, 03_09_2023, 00_00)
+    claim.hosp_end_time(${claim}, 03_09_2023, 01_13)
+    claim.hospital(${claim}, stanford_medical_center)
+    claim.reason(${claim}, preventive_care)
+    claim.vaccine(${claim}, covid)
+    claim.vaccine_brand(${claim}, ${vaccine})
+    claim.vaccine_dose_count(${claim}, 2)
+    claim.consequence_of_occupation(${claim}, no)
+    claim.location(${claim}, ${location})
+    claim.previous_vaccines_pfizer(${claim}, 0)
+    claim.previous_vaccines_moderna(${claim}, 0)
+    claim.previous_vaccines_other(${claim}, 0)
+    `;
+  }, [isLockedRecord]);
+
+  const isCovered = useMemo(() => {
+    const claim = getFirstOrNextId("claim", []);
+
+    const query = read(`covered(${claim})`);
+
+    const facts = definemorefacts(
+      EPILOG_COMMON_DATASET,
+      readdata(epilogRepresentation),
+    );
+
+    console.log("QUERY", query);
+    console.log("FACTS", facts);
+    console.log("RULESET", EPILOG_RULESET);
+
+    const result = compfinds(query, query, facts, EPILOG_RULESET);
+
+    console.log(result);
+
+    return result.length > 0;
+  }, [epilogRepresentation]);
+
   /* -------------------------------- Rendering ------------------------------- */
 
   return (
@@ -228,6 +296,8 @@ const Covid19Vaccine: React.FC = () => {
           </Constraint>
         </ConstraintContainer>
       </ConstraintContext.Provider>
+      <pre>{isCovered}</pre>
+      <pre>{epilogRepresentation}</pre>
     </EpilogFormContainer>
   );
 };

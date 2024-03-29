@@ -1,5 +1,22 @@
 import { BasicOption } from "../types/basicOption";
 
+/* -------------------------------------------------------------------------- */
+/*                                    Const                                   */
+/* -------------------------------------------------------------------------- */
+
+const PERSON_ID_PREFIX = "person" as const;
+const POLICY_ID_PREFIX = "policy" as const;
+const CLAIM_ID_PREFIX = "claim" as const;
+
+type ID_PREFIX =
+  | typeof PERSON_ID_PREFIX
+  | typeof POLICY_ID_PREFIX
+  | typeof CLAIM_ID_PREFIX;
+
+/* -------------------------------------------------------------------------- */
+/*                                    Read                                    */
+/* -------------------------------------------------------------------------- */
+
 export const removeEscapedDoubleQoutes = (str: string) => str.replace(/"/g, "");
 
 export const compfindsReturnToBasicOptions = (
@@ -33,3 +50,70 @@ export const compfindsReturnToBasicOptions = (
       );
     })
     .sort((a, b) => a.label.localeCompare(b.label));
+
+/* -------------------------------------------------------------------------- */
+/*                                    Write                                   */
+/* -------------------------------------------------------------------------- */
+
+export const dateToString = (date: Date) => {
+  const options = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  } as const;
+
+  const dateString = date.toLocaleDateString("de-DE", options);
+
+  const formattedDate = dateString.split(".").join("_");
+
+  return formattedDate;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                   Create                                   */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------------- Id ----------------------------------- */
+
+/** @returns eg "person0" */
+export const composeId = (idPrefix: ID_PREFIX, index: number) =>
+  idPrefix + index;
+
+/** @returns eg ["person0"] */
+export const getExistingIds = (
+  idPrefix: ID_PREFIX,
+  userDataset: ReturnType<typeof definemorefacts> = [],
+) => {
+  const X = "X";
+  const query = read(`${idPrefix}(${X})`);
+  const existingIds = compfinds(X, query, userDataset, []) as string[];
+  return existingIds.sort();
+};
+
+/** @returns eg "person0" */
+export const getNextId = (
+  idPrefix: ID_PREFIX,
+  userDataset: ReturnType<typeof definemorefacts> = [],
+) => {
+  const existingIds = getExistingIds(idPrefix, userDataset);
+
+  let nextIndex = 0;
+
+  while (existingIds.includes(composeId(idPrefix, nextIndex))) nextIndex++;
+
+  return composeId(idPrefix, nextIndex);
+};
+
+/** @returns eg "person0" */
+export const getFirstOrNextId = (
+  idPrefix: ID_PREFIX,
+  userDataset: ReturnType<typeof definemorefacts> = [],
+) => {
+  const existingIds = getExistingIds(idPrefix, userDataset);
+
+  if (existingIds.length) return existingIds[0];
+
+  return getNextId(idPrefix, userDataset);
+};
+
+/* --------------------------------- Person --------------------------------- */
