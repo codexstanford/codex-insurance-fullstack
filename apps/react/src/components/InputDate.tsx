@@ -37,33 +37,35 @@ const InputDate: React.FC<InputDate_Input> = ({
   const [show, setShow] = useState(false);
 
   return (
-    <Datepicker
-      {...props}
-      show={show}
-      setShow={setShow}
-      onChange={(date) => {
-        onChange?.(date);
-        onBlur?.();
-      }}
-      options={{
-        clearBtn: false,
-        ...options,
-        theme: {
-          background: "rounded-none",
-          todayBtn: buttonClassNames,
-          clearBtn: buttonClassNames,
-          icons: "",
-          text: "text-black",
-          disabledText: "",
-          input: classNames(COMMON_INPUT_CLASSES, [
-            !!inputContext?.isLocked,
-            "bg-blue-200",
-          ]),
-          inputIcon: "hidden",
-          selected: "bg-blue-200 hover:bg-blue-100 text-black",
-        },
-      }}
-    />
+    <div className="relative">
+      <Datepicker
+        {...props}
+        show={show}
+        setShow={setShow}
+        onChange={(date) => {
+          onChange?.(date);
+          onBlur?.();
+        }}
+        options={{
+          clearBtn: false,
+          ...options,
+          theme: {
+            background: "rounded-none",
+            todayBtn: buttonClassNames,
+            clearBtn: buttonClassNames,
+            icons: "",
+            text: "text-black",
+            disabledText: "",
+            input: classNames(COMMON_INPUT_CLASSES, [
+              !!inputContext?.isLocked,
+              "bg-blue-200",
+            ]),
+            inputIcon: "hidden",
+            selected: "bg-blue-200 hover:bg-blue-100 text-black",
+          },
+        }}
+      />
+    </div>
   );
 };
 

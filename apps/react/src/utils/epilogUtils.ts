@@ -69,6 +69,19 @@ export const dateToString = (date: Date) => {
   return formattedDate;
 };
 
+export const timeOfDateToString = (date: Date) => {
+  const options = {
+    hour: "2-digit",
+    minute: "2-digit",
+  } as const;
+
+  const timeString = date.toLocaleTimeString("de-DE", options);
+
+  const formattedTime = timeString.replace(":", "_");
+
+  return formattedTime;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                   Create                                   */
 /* -------------------------------------------------------------------------- */

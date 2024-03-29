@@ -12,7 +12,12 @@ import {
   IsConstraintLockedRecord,
   createConstraintContextData,
 } from "../../contexts/ConstraintContext";
-import { dateToString, getFirstOrNextId } from "../../utils/epilogUtils";
+import {
+  dateToString,
+  getFirstOrNextId,
+  timeOfDateToString,
+} from "../../utils/epilogUtils";
+import { DateTime } from "luxon";
 import { EPILOG_COMMON_DATASET } from "../../consts/dataset.const";
 import { EPILOG_RULESET } from "../../consts/ruleset.const";
 
@@ -22,12 +27,12 @@ import { EPILOG_RULESET } from "../../consts/ruleset.const";
 
 type FormData = {
   dob: Date;
-  vaccinationHistory_vaccineType: string | null;
+  vaccinationHistory_vaccineType: (typeof vaccines)[number] | null;
   vaccinationHistory_date: Date;
-  insurance: typeof insurers;
-  services: typeof vaccines;
+  insurance: (typeof insurers)[number] | null; // Remove [number] | null to allow multiple selection later on
+  services: (typeof vaccines)[number] | null;
   when: Date;
-  where: typeof LOCATIONS;
+  where: (typeof LOCATIONS)[number] | null;
 };
 
 interface IsLockedRecord extends IsConstraintLockedRecord {
@@ -63,13 +68,13 @@ const Covid19Vaccine: React.FC = () => {
 
   const { control, watch, getValues, formState } = useForm<FormData>({
     defaultValues: {
-      dob: new Date(),
+      dob: DateTime.now().minus({ years: 25 }).toJSDate(),
       vaccinationHistory_vaccineType: null,
       vaccinationHistory_date: new Date(),
-      insurance: [],
-      services: [],
+      insurance: null,
+      services: null,
       when: new Date(),
-      where: [],
+      where: null,
     },
   });
 
@@ -115,7 +120,10 @@ const Covid19Vaccine: React.FC = () => {
         formState.touchedFields.insurance &&
         setIsLockedRecord((prev) => ({
           ...prev,
-          insurance: getValues("insurance").length > 0,
+          insurance:
+            !!getValues(
+              "insurance",
+            ) /* if changed to multiple again: remove !! and append .length > 0 */,
         }))
       ),
     [watch("insurance")],
@@ -127,7 +135,10 @@ const Covid19Vaccine: React.FC = () => {
         formState.touchedFields.services &&
         setIsLockedRecord((prev) => ({
           ...prev,
-          services: getValues("services").length > 0,
+          services:
+            !!getValues(
+              "services",
+            ) /* if changed to multiple again: remove !! and append .length > 0 */,
         }))
       ),
     [watch("services")],
@@ -148,24 +159,35 @@ const Covid19Vaccine: React.FC = () => {
         formState.touchedFields.where &&
         setIsLockedRecord((prev) => ({
           ...prev,
-          where: getValues("where").length > 0,
+          where:
+            !!getValues(
+              "where",
+            ) /* if changed to multiple again: remove !! and append .length > 0 */,
         }))
       ),
     [watch("where")],
   );
 
-  // Whenever a constraint gets locked or unlocked, update the representation
+  /* --------------------------------- Epilog --------------------------------- */
 
   const epilogRepresentation = useMemo(() => {
     const person = getFirstOrNextId("person", []);
     const policy = getFirstOrNextId("policy", []);
     const claim = getFirstOrNextId("claim", []);
 
+    const claimDate = new Date();
+    const claimDateStr = dateToString(claimDate);
+    const claimTimeStr = timeOfDateToString(claimDate);
+
     const dob = dateToString(getValues("dob"));
 
-    const vaccine = getValues("services.0.id") || "nil";
+    const vaccine = getValues("services.id") || "nil";
 
-    const location = getValues("where.0.id") || "nil";
+    const location = getValues("where.id") || "nil";
+
+    const vaccinationHistory_vaccineType = getValues(
+      "vaccinationHistory_vaccineType",
+    );
 
     return `
     person(${person})
@@ -183,6 +205,7 @@ const Covid19Vaccine: React.FC = () => {
 
     claim.policy(${claim}, ${policy})
     claim.claimant(${claim}, ${person})
+    claim.time(${claim}, ${claimDateStr}, ${claimTimeStr})
     claim.hosp_start_time(${claim}, 03_09_2023, 00_00)
     claim.hosp_end_time(${claim}, 03_09_2023, 01_13)
     claim.hospital(${claim}, stanford_medical_center)
@@ -192,11 +215,11 @@ const Covid19Vaccine: React.FC = () => {
     claim.vaccine_dose_count(${claim}, 2)
     claim.consequence_of_occupation(${claim}, no)
     claim.location(${claim}, ${location})
-    claim.previous_vaccines_pfizer(${claim}, 0)
-    claim.previous_vaccines_moderna(${claim}, 0)
-    claim.previous_vaccines_other(${claim}, 0)
+    claim.previous_vaccines_pfizer(${claim}, ${vaccinationHistory_vaccineType?.id === "pfizer" ? 1 : 0})
+    claim.previous_vaccines_moderna(${claim}, ${vaccinationHistory_vaccineType?.id === "moderna" ? 1 : 0})
+    claim.previous_vaccines_other(${claim}, ${vaccinationHistory_vaccineType && vaccinationHistory_vaccineType.id !== "pfizer" && vaccinationHistory_vaccineType?.id !== "moderna" ? 1 : 0})
     `;
-  }, [isLockedRecord]);
+  }, [watch()]);
 
   const isCovered = useMemo(() => {
     const claim = getFirstOrNextId("claim", []);
@@ -212,11 +235,12 @@ const Covid19Vaccine: React.FC = () => {
     console.log("FACTS", facts);
     console.log("RULESET", EPILOG_RULESET);
 
-    const result = compfinds(query, query, facts, EPILOG_RULESET);
+    // TODO The following will make the browser crash
+    // const result = compfinds(query, query, facts, EPILOG_RULESET);
 
-    console.log(result);
+    // console.log("RESULT", result);
 
-    return result.length > 0;
+    return false;
   }, [epilogRepresentation]);
 
   /* -------------------------------- Rendering ------------------------------- */
