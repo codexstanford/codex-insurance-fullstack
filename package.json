@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db:push": "pnpm --filter db push",
+    "db:studio": "pnpm --filter db studio",
     "dev:server": "pnpm --filter server dev",
     "dev:react": "pnpm --filter react watch",
     "dev": "npm-run-all --parallel dev:*"
