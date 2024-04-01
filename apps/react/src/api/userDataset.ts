@@ -58,7 +58,10 @@ export const useUserDataset = (userId: number) => {
         success: "Saved!",
         error: "Could not save",
       }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => {
+      console.log("Invalidating query", queryKey);
+      queryClient.invalidateQueries({ queryKey });
+    },
   });
 
   return {

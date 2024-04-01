@@ -1,8 +1,9 @@
-import { getLoginWithRedirectUrl } from "common/src/routes";
 import { ReactNode, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/loginContext";
 import useSessionUser from "../hooks/useSessionUser";
+import { ROUTES } from "common";
+import { setAfterLoginAction } from "../utils/storage";
 
 export default function RequiresLogin({ children }: { children: ReactNode }) {
   const sessionUser = useSessionUser();
@@ -11,7 +12,8 @@ export default function RequiresLogin({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!sessionUser) {
-      navigate(getLoginWithRedirectUrl(location.pathname));
+      setAfterLoginAction({ redirectPath: location.pathname });
+      navigate(ROUTES.LOGIN);
     }
   }, [sessionUser]);
 

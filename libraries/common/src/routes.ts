@@ -25,11 +25,6 @@ export const INDEX = "/";
 
 export const LOGIN = "/login";
 
-export const LOGIN_PARAM_REDIRECT_URL = "redirectUrl";
-
-export const getLoginWithRedirectUrl = (redirectUrl: string) =>
-  `${LOGIN}?${LOGIN_PARAM_REDIRECT_URL}=${encodeURIComponent(redirectUrl)}`;
-
 export const SERVICE = "/service";
 
 export const CLAIM = "/claim";

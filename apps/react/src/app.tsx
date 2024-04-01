@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { Toaster } from "react-hot-toast";
 import { RouterProvider } from "react-router-dom";
 import router from "./router";
-import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +19,7 @@ const App: React.FC = () => {
     </React.StrictMode>
   );
 };
+
 
 // Init React app
 

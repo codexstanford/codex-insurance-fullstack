@@ -10,7 +10,7 @@ import { LoginContext } from "../contexts/loginContext";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
 import { Covid19Vaccine } from "../epilog/form-adapters/_formAdapter";
 import useSessionUser from "../hooks/useSessionUser";
-import { setPreservedUserDataset } from "../utils/storage";
+import { setAfterLoginAction } from "../utils/storage";
 
 export default function ExplorePage() {
   // TODO Infer the correct form from service param.
@@ -42,12 +42,11 @@ export default function ExplorePage() {
   const onClickSave = useCallback(
     (formValues: Covid19Vaccine.FormValues) => {
       const formDataset = formAdapter.formValuesToEpilog(formValues);
-      setPreservedUserDataset(formDataset);
-      navigate(
-        ROUTES.getLoginWithRedirectUrl(
-          ROUTES.getClaimUrl(formValues.claim.id + ""),
-        ),
-      );
+      setAfterLoginAction({
+        saveToUserDataset: formDataset,
+        redirectPath: ROUTES.getClaimUrl(formValues.claim.id + ""),
+      });
+      navigate(ROUTES.LOGIN);
     },
     [formAdapter, navigate],
   );

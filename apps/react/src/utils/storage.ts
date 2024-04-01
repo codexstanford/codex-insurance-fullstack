@@ -1,15 +1,18 @@
-const PRESERVED_USER_DATASET_KEY = "preservedUserDataset";
+const AFTER_LOGIN_ACTION_KEY = "afterLoginAction";
 
-export const setPreservedUserDataset = (
-  dataset: ReturnType<typeof definemorefacts>,
-) => {
-  localStorage.setItem(PRESERVED_USER_DATASET_KEY, JSON.stringify(dataset));
+export interface AfterLoginAction {
+  redirectPath?: string;
+  saveToUserDataset?: ReturnType<typeof definemorefacts>;
+}
+
+export const setAfterLoginAction = (action: AfterLoginAction | null) => {
+  localStorage.setItem(AFTER_LOGIN_ACTION_KEY, JSON.stringify(action));
 };
 
-export const getPreservedUserDataset = () => {
-  const dataset = localStorage.getItem(PRESERVED_USER_DATASET_KEY);
-  if (dataset) {
-    return JSON.parse(dataset) as ReturnType<typeof definemorefacts>;
+export const getAfterLoginAction = () => {
+  const action = localStorage.getItem(AFTER_LOGIN_ACTION_KEY);
+  if (action) {
+    return JSON.parse(action) as AfterLoginAction;
   }
   return null;
 };
