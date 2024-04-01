@@ -25,8 +25,13 @@ export const INDEX = "/";
 
 export const LOGIN = "/login";
 
+export const LOGIN_PARAM_REDIRECT_URL = "redirectUrl";
+
+export const getLoginWithRedirectUrl = (redirectUrl: string) =>
+  `${LOGIN}?${LOGIN_PARAM_REDIRECT_URL}=${encodeURIComponent(redirectUrl)}`;
+
 export const SERVICE = "/service";
 
-export const SERVICE_COVID19VACCINE = SERVICE + "/covid19vaccine";
-
 export const CLAIM = "/claim";
+
+export const getClaimUrl = (claimId: string) => `${CLAIM}/${claimId}`;

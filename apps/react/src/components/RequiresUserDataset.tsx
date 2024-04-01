@@ -8,7 +8,7 @@ import { UserDatasetContext } from "../contexts/userDatasetContext";
 export default function RequiresUserDataset({
   children,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   /* ------------------------ Environmental conditions ------------------------ */
 

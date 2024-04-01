@@ -27,7 +27,7 @@ const Index: React.FC = () => {
             options={SITUATIONS}
             // TODO Redirect to service form that was actually selected
             onChange={(situation) => {
-              if (situation) navigate(ROUTES.SERVICE_COVID19VACCINE);
+              if (situation) navigate(ROUTES.SERVICE + "/" + situation);
             }}
           />
           <div className="flex gap-3 justify-center items-center">
