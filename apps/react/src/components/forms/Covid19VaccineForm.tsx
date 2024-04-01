@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Constraint from "../../components/Constraint";
 import ConstraintContainer from "../../components/ConstraintContainer";
@@ -11,12 +11,8 @@ import {
   ConstraintContext,
   IsConstraintLockedRecord,
   createConstraintContextData,
-} from "../../contexts/constraintContext.ts";
-import {
-  Covid19Vaccine,
-  useFormAdapter,
-} from "../../epilog/form-adapters/_formAdapter";
-import useClaimIdParam from "../../hooks/useClaimIdParam";
+} from "../../contexts/constraintContext";
+import { Covid19Vaccine } from "../../epilog/form-adapters/_formAdapter";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -31,40 +27,34 @@ interface IsLockedRecord extends IsConstraintLockedRecord {
   where: boolean;
 }
 
+type Input = {
+  defaultValues: Covid19Vaccine.FormValues;
+  onClickSave: (formValues: Covid19Vaccine.FormValues) => void;
+};
+
 /* -------------------------------------------------------------------------- */
-/*                                  Functions                                 */
+/*                                 Compontnet                                 */
 /* -------------------------------------------------------------------------- */
 
-const Covid19VaccineComponent: React.FC = () => {
-  const claimId = useClaimIdParam();
-
-  const {
-    query,
-    initialFormValues,
-    setFormValues,
-    formEpilogString,
-    saveChanges,
-  } = useFormAdapter(Covid19Vaccine.formAdapter, claimId);
-
+export default function Covid19VaccineForm({
+  defaultValues,
+  onClickSave,
+}: Input) {
   /* ------------------------------- Form logic ------------------------------- */
 
-  const { control, watch, getValues, reset, formState } =
+  const { control, watch, getValues, formState } =
     useForm<Covid19Vaccine.FormValues>({
-      defaultValues: initialFormValues,
+      defaultValues,
     });
 
-  useEffect(() => {
-    console.log("isFetched", initialFormValues);
-    reset(initialFormValues);
-  }, [query.isFetched]);
-
-  useEffect(() => {
-    setFormValues(getValues());
-  }, [JSON.stringify(watch())]);
+  const onClickSaveCallback = useCallback(
+    () => onClickSave(getValues()),
+    [onClickSave, getValues],
+  );
 
   /* --------------------------- Constraint locking --------------------------- */
 
-  const [isLockedRecord, setIsLockedRecord] = React.useState<IsLockedRecord>({
+  const [isLockedRecord, setIsLockedRecord] = useState<IsLockedRecord>({
     dob: false,
     vaccinationHistory: false,
     insurance: false,
@@ -197,7 +187,7 @@ const Covid19VaccineComponent: React.FC = () => {
   return (
     <EpilogFormContainer
       title="COVID-19 Vaccine"
-      onSave={saveChanges}
+      onSave={onClickSaveCallback}
       __debugFormData={watch()}
     >
       <ConstraintContext.Provider value={constraintContextData}>
@@ -275,9 +265,6 @@ const Covid19VaccineComponent: React.FC = () => {
           </Constraint>
         </ConstraintContainer>
       </ConstraintContext.Provider>
-      <pre>{formEpilogString}</pre>
     </EpilogFormContainer>
   );
-};
-
-export default Covid19VaccineComponent;
+}

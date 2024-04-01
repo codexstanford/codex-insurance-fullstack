@@ -17,16 +17,20 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
+    "@tanstack/react-query": "^5.28.9",
     "common": "workspace:*",
     "luxon": "^3.4.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.1",
+    "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.22.3",
     "tailwind-datepicker-react": "^1.4.3",
-    "tailwind-merge": "^2.2.2"
+    "tailwind-merge": "^2.2.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.28.6",
     "@types/luxon": "^3.4.2",
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",

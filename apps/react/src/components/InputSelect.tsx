@@ -6,7 +6,7 @@ import {
 } from "../consts/classes.const";
 import { classNames } from "../utils/classNames";
 import { useContext } from "react";
-import { InputContext } from "../contexts/InputContext";
+import { InputContext } from "../contexts/inputContext.ts";
 import { BasicOption } from "../types/basicOption";
 
 /* -------------------------------------------------------------------------- */

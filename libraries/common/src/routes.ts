@@ -14,6 +14,9 @@ export const API_AUTH_LOGIN_GOOGLE = API_AUTH + SUBSET_LOGIN_GOOGLE;
 export const SUBSET_LOGUT = "/logout";
 export const API_AUTH_LOGUT = API_AUTH + SUBSET_LOGUT;
 
+export const SUBSET_USER_DATASET = "/userDataset";
+export const API_USER_DATASET = API + SUBSET_USER_DATASET;
+
 /* -------------------------------------------------------------------------- */
 /*                                   CLIENT                                   */
 /* -------------------------------------------------------------------------- */
@@ -25,3 +28,5 @@ export const LOGIN = "/login";
 export const SERVICE = "/service";
 
 export const SERVICE_COVID19VACCINE = SERVICE + "/covid19vaccine";
+
+export const CLAIM = "/claim";

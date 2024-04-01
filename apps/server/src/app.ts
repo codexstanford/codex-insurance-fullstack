@@ -1,12 +1,13 @@
 // https://expressjs.com/en/starter/hello-world.html
 
+import { CLIENT_SESSION_USER_WINDOW_FIELD, ROUTES } from "common";
 import "dotenv/config";
+import { renderFile } from "ejs";
 import express from "express";
 import path from "path";
-import addAuthMiddleware from "./auth/addAuthMiddleware";
 import authRouter from "./api/auth";
-import { CLIENT_SESSION_USER_WINDOW_FIELD, ROUTES } from "common";
-import { renderFile } from "ejs";
+import userDatasetRouter from "./api/userDataset";
+import addAuthMiddleware from "./auth/addAuthMiddleware";
 
 /* -------------------------------------------------------------------------- */
 /*                                   Config                                   */
@@ -24,9 +25,12 @@ const app = express();
 // Serve the static files from the React app
 app.use(express.static(pathToClient));
 
+app.use(express.json());
+
 addAuthMiddleware(app);
 
 app.use(ROUTES.API_AUTH, authRouter);
+app.use(ROUTES.API_USER_DATASET, userDatasetRouter);
 
 // Handles any requests that don't match the ones above and forwards them to the React app
 app.get("*", (req, res, next) => {

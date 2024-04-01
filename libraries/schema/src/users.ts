@@ -10,6 +10,7 @@ export const users = sqliteTable("users", {
   id: integer("id").primaryKey(),
   ...basicUserInfoSchema,
   email: text("email").unique(),
+  epilogDataset: text("epilogDataset"),
 });
 
 // https://orm.drizzle.team/docs/rqb

@@ -1,7 +1,9 @@
+import { useContext } from "react";
 import { classNames } from "../utils/classNames";
 import { Button } from "./Button";
 import Container from "./Container";
 import FormDataSpy from "./FormDataSpy";
+import { ExistingClaimContext } from "../contexts/existingClaimContext";
 
 type Input = {
   containerProps?: React.ComponentProps<typeof Container>;
@@ -18,6 +20,8 @@ const EpilogFormContainer: React.FC<Input> = ({
   children,
   __debugFormData,
 }) => {
+  const claimId = useContext(ExistingClaimContext);
+
   return (
     <>
       <Container
@@ -28,8 +32,11 @@ const EpilogFormContainer: React.FC<Input> = ({
         className={classNames("max-w-3xl", containerProps?.className)}
       >
         <div className={"flex gap-3 items-center p-3 bg-blue-200"}>
-          <h1 className="font-bold text-xl mr-auto ">{title}</h1>
-          <Button onClick={() => void (onSave && onSave())}>Save</Button>
+          <h1 className="font-bold text-xl">{title}</h1>
+          {claimId && <span className="font-mono">{claimId}</span>}
+          <Button className="ml-auto" onClick={() => void (onSave && onSave())}>
+            Save
+          </Button>
         </div>
         {children}
         {__debugFormData && <FormDataSpy data={__debugFormData} />}

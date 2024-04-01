@@ -8,9 +8,9 @@ import {
 import React, { useCallback } from "react";
 import { COMMON_FOCUS_CLASSES } from "../consts/classes.const";
 import { classNames } from "../utils/classNames";
-import { ConstraintContext } from "../contexts/ConstraintContext";
+import { ConstraintContext } from "../contexts/constraintContext.ts";
 import Container from "./Container";
-import { InputContext } from "../contexts/InputContext";
+import { InputContext } from "../contexts/inputContext.ts";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */

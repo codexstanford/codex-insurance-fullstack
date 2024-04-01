@@ -51,6 +51,76 @@ export const compfindsReturnToBasicOptions = (
     })
     .sort((a, b) => a.label.localeCompare(b.label));
 
+/**
+ * @param dateString has to follow the format dd_MM_yyyy
+ * @param timeString has to follow the format hh_mm
+ * */
+export const stringToDate = (dateString: string, timeString?: string) => {
+  const [day, month, year] = dateString.split("_").map(Number);
+
+  if (!day || !month || !year)
+    throw new Error(
+      `stringToDate expects a string in the format dd_MM_yyyy. Got instead: ${dateString}`,
+    );
+
+  if (!timeString) return new Date(year, month - 1, day);
+
+  const [hours, minutes] = timeString.split("_").map(Number);
+
+  if (!hours || !minutes)
+    throw new Error(
+      `stringToDate expects a string in the format hh_mm. Got instead: ${timeString}`,
+    );
+
+  return new Date(year, month - 1, day, hours, minutes);
+};
+
+/* ---------------------------------- Claim --------------------------------- */
+
+export const getPolicyOfClaim = (
+  claimId: string,
+  userDataset: ReturnType<typeof definemorefacts>,
+) => {
+  const [policyId] = compfinds(
+    "X",
+    read(`claim.policy(${claimId}, X)`),
+    userDataset,
+    [],
+  ) as string[];
+
+  return policyId;
+};
+
+export const getReasonOfClaim = (
+  claimId: string,
+  userDataset: ReturnType<typeof definemorefacts>,
+) => {
+  const [reason] = compfinds(
+    "X",
+    read(`claim.reason(${claimId}, X)`),
+    userDataset,
+    [],
+  ) as string[];
+
+  return reason;
+};
+
+/* --------------------------------- Policy --------------------------------- */
+
+export const getTypeOfPolicy = (
+  policyId: string,
+  userDataset: ReturnType<typeof definemorefacts>,
+) => {
+  const [policyType] = compfinds(
+    "X",
+    read(`policy.type(${policyId}, X)`),
+    userDataset,
+    [],
+  ) as string[];
+
+  return policyType;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                    Write                                   */
 /* -------------------------------------------------------------------------- */
@@ -122,9 +192,9 @@ export const getFirstOrNextId = (
   idPrefix: ID_PREFIX,
   userDataset: ReturnType<typeof definemorefacts> = [],
 ) => {
-  const existingIds = getExistingIds(idPrefix, userDataset);
+  const [firstId] = getExistingIds(idPrefix, userDataset);
 
-  if (existingIds.length) return existingIds[0];
+  if (firstId) return firstId;
 
   return getNextId(idPrefix, userDataset);
 };
