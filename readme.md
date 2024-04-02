@@ -18,3 +18,7 @@ Node.js and [pnpm](https://pnpm.io/installation) must be installed. This project
 # Misc
 
 - The ORM we use, [Drizzle](https://orm.drizzle.team), includes an admin interface called Drizzle Studio. It allows you to read and edit the database. Start it by running `pnpm db:studio`. The link to the studio will appear in the command prompt.
+
+# Known bugs
+
+- If you are not logged in, press save in the claim form, and login, you'll be redirected to the respective /claim/... url. It might happen that the changes you have saved before become reflected in the form only after you refresh the page.

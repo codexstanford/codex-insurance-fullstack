@@ -9,6 +9,7 @@ type Input = {
   containerProps?: React.ComponentProps<typeof Container>;
   title?: React.ReactNode;
   onSave?: () => void;
+  isCovered?: boolean;
   children?: React.ReactNode;
   __debugFormData?: Record<string, unknown>;
 };
@@ -17,6 +18,7 @@ const EpilogFormContainer: React.FC<Input> = ({
   containerProps,
   title,
   onSave,
+  isCovered = false,
   children,
   __debugFormData,
 }) => {
@@ -31,7 +33,12 @@ const EpilogFormContainer: React.FC<Input> = ({
         {...containerProps}
         className={classNames("max-w-3xl", containerProps?.className)}
       >
-        <div className={"flex gap-3 items-center p-3 bg-blue-200"}>
+        <div
+          className={classNames(
+            "flex gap-3 items-center p-3 ",
+            isCovered ? "bg-green-400" : "bg-blue-200",
+          )}
+        >
           <h1 className="font-bold text-xl">{title}</h1>
           {claimId && <span className="font-mono">{claimId}</span>}
           <Button className="ml-auto" onClick={() => void (onSave && onSave())}>

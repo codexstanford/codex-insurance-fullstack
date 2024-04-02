@@ -13,6 +13,7 @@ import {
   createConstraintContextData,
 } from "../../contexts/constraintContext";
 import { Covid19Vaccine } from "../../epilog/form-adapters/_formAdapter";
+import useIsCovered from "../../hooks/useIsCovered";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -182,12 +183,22 @@ export default function Covid19VaccineForm({
     [watch("where")],
   );
 
+  /* -------------------------------- IsCovered ------------------------------- */
+
+  const formDataset = useMemo(
+    () => Covid19Vaccine.formAdapter.formValuesToEpilog(getValues()),
+    [JSON.stringify(watch())],
+  );
+
+  const isCovered = useIsCovered(defaultValues.claim.id + "", formDataset);
+
   /* -------------------------------- Rendering ------------------------------- */
 
   return (
     <EpilogFormContainer
       title="COVID-19 Vaccine"
       onSave={onClickSaveCallback}
+      isCovered={isCovered}
       __debugFormData={watch()}
     >
       <ConstraintContext.Provider value={constraintContextData}>

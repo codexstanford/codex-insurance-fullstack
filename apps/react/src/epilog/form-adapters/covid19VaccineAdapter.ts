@@ -242,8 +242,11 @@ export const formAdapter: FormAdapter<FormValues> = {
     claim.previous_vaccines_other(${claimId}, ${typeof vaccinationHistory_vaccineType !== undefined && vaccinationHistory_vaccineType !== "pfizer" && vaccinationHistory_vaccineType !== "moderna" ? 1 : 0})
     `;
 
-    // console.debug("Generated Epilog string:", epilogString);
+    const formDataset = definemorefacts([], readdata(epilogString));
 
-    return definemorefacts([], readdata(epilogString));
+    console.debug("Generated Epilog string:", epilogString);
+    console.debug("Generated Epilog dataset:", formDataset);
+
+    return formDataset;
   },
 } as const;
