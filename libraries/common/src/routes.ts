@@ -30,3 +30,5 @@ export const SERVICE = "/service";
 export const CLAIM = "/claim";
 
 export const getClaimUrl = (claimId: string) => `${CLAIM}/${claimId}`;
+
+export const DASHBOARD = "/dashboard";

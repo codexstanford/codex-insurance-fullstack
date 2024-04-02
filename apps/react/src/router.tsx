@@ -7,6 +7,8 @@ import ExplorePage from "./pages/Explore";
 import Index from "./pages/Index";
 import Root from "./pages/Root";
 import Login from "./pages/auth/Login";
+import RequiresLogin from "./components/RequiresLogin";
+import Dasboard from "./pages/dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
       {
         path: ROUTES.LOGIN,
         element: <Login />,
+      },
+      {
+        path: ROUTES.DASHBOARD,
+        element: (
+          <RequiresLogin>
+            <Dasboard />
+          </RequiresLogin>
+        ),
       },
       {
         path: ROUTES.SERVICE + "/:service",

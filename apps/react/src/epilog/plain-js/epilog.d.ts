@@ -14,4 +14,11 @@ declare const compfinds: (
   ruleset: ReturnType<typeof readdata>,
 ) => string[] | string[][];
 
+declare const debugfinds: (
+  aspect: ReturnType<typeof read> | string,
+  query: ReturnType<typeof read>,
+  dataset: ReturnType<typeof readdata>,
+  ruleset: ReturnType<typeof readdata>,
+) => string[] | string[][];
+
 declare const definemorerules: Function;

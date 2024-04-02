@@ -220,7 +220,7 @@ export const formAdapter: FormAdapter<FormValues> = {
     person.occupation(${personId}, other)
     person.immunocompromised(${personId}, no)
 
-    policy.type(${policyId}, ${policyType})
+    policy.type(${policyId}, ${"cardinal" /* policyType */})
     policy.insuree(${policyId}, ${personId})
     policy.startdate(${policyId}, ${personId}, 01_08_2023)
     policy.enddate(${policyId}, ${personId}, 30_06_2024)
@@ -244,8 +244,8 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const formDataset = definemorefacts([], readdata(epilogString));
 
-    console.debug("Generated Epilog string:", epilogString);
-    console.debug("Generated Epilog dataset:", formDataset);
+    // console.debug("Generated Epilog string:", epilogString);
+    // console.debug("Generated Epilog dataset:", formDataset.length);
 
     return formDataset;
   },

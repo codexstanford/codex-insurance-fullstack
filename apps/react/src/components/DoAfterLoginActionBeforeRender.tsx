@@ -1,8 +1,8 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserDataset } from "../api/userDataset";
-import { getAfterLoginAction, setAfterLoginAction } from "../utils/storage";
 import useSessionUser from "../hooks/useSessionUser";
-import { useEffect, useState } from "react";
+import { getAfterLoginAction, setAfterLoginAction } from "../utils/storage";
 import Spinner from "./Spinner";
 
 export default function DoAfterLoginActionBeforeRender({
@@ -43,9 +43,13 @@ export default function DoAfterLoginActionBeforeRender({
         if (actionInfo.redirectPath) navigate(actionInfo.redirectPath);
       });
     } else {
-      if (actionInfo.redirectPath) navigate(actionInfo.redirectPath);
+      if (actionInfo.redirectPath) {
+        setWasHandled(true);
+        setAfterLoginAction(null);
+        navigate(actionInfo.redirectPath);
+      }
     }
-  });
+  }, [actionInfo, sessionUser, userDataset, wasHandled, mutation, navigate]);
 
   if (sessionUser && actionInfo) {
     // If the user is logged in and there is an action to be done after login

@@ -64,9 +64,14 @@ export const useUserDataset = (userId: number) => {
     },
   });
 
-  return {
-    query,
-    mutation,
-    userDataset: query.data,
-  };
+  const returnValue = useMemo(
+    () => ({
+      query,
+      mutation,
+      userDataset: query.data,
+    }),
+    [query, query.data, mutation],
+  );
+
+  return returnValue;
 };

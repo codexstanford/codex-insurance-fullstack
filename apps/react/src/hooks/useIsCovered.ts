@@ -18,7 +18,7 @@ export default function useIsCovered(
   console.log("mergedDataset", mergedDataset);
 
   const result = useMemo(
-    () => compfinds(query, query, mergedDataset, EPILOG_RULESET) as string[][],
+    () => debugfinds(query, query, mergedDataset, EPILOG_RULESET) as string[][],
     [query, mergedDataset],
   );
 
