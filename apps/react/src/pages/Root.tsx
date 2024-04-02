@@ -1,23 +1,22 @@
-import { Link, Outlet } from "react-router-dom";
-import Container from "../components/Container";
-import useSessionUser from "../hooks/useSessionUser";
 import { ROUTES } from "common";
+import { useMemo, useState } from "react";
+import { Outlet } from "react-router-dom";
 import { ButtonLink } from "../components/Button";
-import {
-  SIDEBAR_COLLAPSED_MAIN_CONTAINER_ML,
-  SIDEBAR_NOT_COLLAPSED_MAIN_CONTAINER_ML,
-  MAIN_CONTAINER_MT,
-  Z_INDEX_NAVBAR,
-  SIDEBAR_COLLAPSED_NAVBAR_LEFT,
-  SIDEBAR_NOT_COLLAPSED_NAVBAR_LEFT,
-  NAVBAR_HEIGHT,
-  NAVBAR_PADDING,
-} from "../consts/classes.const";
 import DoAfterLoginActionBeforeRender from "../components/DoAfterLoginActionBeforeRender";
 import Sidebar from "../components/Sidebar";
-import { classNames } from "../utils/classNames";
-import { useMemo, useState } from "react";
+import {
+  MAIN_CONTAINER_MT,
+  NAVBAR_HEIGHT,
+  NAVBAR_PADDING,
+  SIDEBAR_COLLAPSED_MAIN_CONTAINER_ML,
+  SIDEBAR_COLLAPSED_NAVBAR_LEFT,
+  SIDEBAR_NOT_COLLAPSED_MAIN_CONTAINER_ML,
+  SIDEBAR_NOT_COLLAPSED_NAVBAR_LEFT,
+  Z_INDEX_NAVBAR,
+} from "../consts/classes.const";
 import { IsSidebarCollapsedContext } from "../contexts/isSidebarCollapsedContext";
+import useSessionUser from "../hooks/useSessionUser";
+import { classNames } from "../utils/classNames";
 
 const Root: React.FC = () => {
   const user = useSessionUser();
