@@ -35,7 +35,7 @@ const Root: React.FC = () => {
           {user && <Sidebar />}
           <header
             className={classNames(
-              "bg-blue-200 text-black fixed top-0 right-0 items-center flex justify-end",
+              "border-b-2 border-gray-200 text-black fixed top-0 right-0 items-center flex",
               Z_INDEX_NAVBAR,
               NAVBAR_HEIGHT,
               NAVBAR_PADDING,
@@ -48,7 +48,8 @@ const Root: React.FC = () => {
               ],
             )}
           >
-            <div className="py-3 flex gap-3 items-center">
+            
+            <div className="py-3 flex gap-3 items-center ml-auto">
               {!user && <ButtonLink href={ROUTES.LOGIN}>Login</ButtonLink>}
               {user && (
                 <ButtonLink

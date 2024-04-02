@@ -21,7 +21,7 @@ authRouter.get(
     failureMessage: true,
   }),
   (_, res) => {
-    res.redirect(ROUTES.INDEX);
+    res.redirect(ROUTES.DASHBOARD);
   },
 );
 
