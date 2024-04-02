@@ -1,3 +1,4 @@
+import { PlusCircleIcon as FilledPlusCircleIcon } from "@heroicons/react/20/solid";
 import {
   BookOpenIcon,
   ChevronDoubleLeftIcon,
@@ -10,7 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { ROUTES } from "common";
 import { ReactNode, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   NAVBAR_HEIGHT,
   NAVBAR_PADDING,
@@ -55,19 +56,38 @@ export default function Sidebar() {
           {!isCollapsed && <ChevronDoubleLeftIcon className="w-6 h-6" />}
         </button>
       </div>
-      <SidebarLink icon={<HomeIcon className="w-6 h-6" />} isActive={true}>
+      <SidebarLink
+        icon={<HomeIcon className="w-6 h-6" />}
+        to={ROUTES.DASHBOARD}
+      >
         Dashboard
       </SidebarLink>
-      <SidebarLink icon={<DocumentIcon className="w-6 h-6" />} linkPlusTo="#">
+      <SidebarLink
+        icon={<DocumentIcon className="w-6 h-6" />}
+        to={ROUTES.DASHBOARD_CLAIMS}
+        linkPlusTo="#"
+      >
         Claims
       </SidebarLink>
-      <SidebarLink icon={<BookOpenIcon className="w-6 h-6" />} linkPlusTo="#">
+      <SidebarLink
+        icon={<BookOpenIcon className="w-6 h-6" />}
+        to={ROUTES.DASHBOARD_POLICIES}
+        linkPlusTo="#"
+      >
         Policies
       </SidebarLink>
-      <SidebarLink icon={<UserIcon className="w-6 h-6" />} linkPlusTo="#">
+      <SidebarLink
+        icon={<UserIcon className="w-6 h-6" />}
+        to={ROUTES.DASHBOARD_PEOPLE}
+        linkPlusTo="#"
+      >
         People
       </SidebarLink>
-      <SidebarLink icon={<GiftIcon className="w-6 h-6" />} linkPlusTo="#">
+      <SidebarLink
+        icon={<GiftIcon className="w-6 h-6" />}
+        to={ROUTES.DASHBOARD_PROPERTY}
+        linkPlusTo="#"
+      >
         Property
       </SidebarLink>
     </aside>
@@ -79,23 +99,26 @@ function SidebarLink({
   to = "#",
   icon,
   linkPlusTo,
-  isActive = false,
 }: {
   children?: ReactNode;
   to?: string;
   icon?: ReactNode;
   linkPlusTo?: string;
-  isActive?: boolean;
 }) {
   const { isSidebarCollapsed: isCollapsed } = useContext(
     IsSidebarCollapsedContext,
   );
 
+  const { pathname } = useLocation();
+
+  const isActive = pathname.endsWith(to);
+
   return (
     <>
-      <div
+      <Link
+        to={to}
         className={classNames(
-          "px-3 mx-3 py-2 text-gray-400 font-semibold hover:text-gray-500 border-2 hover:border-gray-500 rounded-lg cursor-pointer flex flex-row gap-2 items-center",
+          " px-3 mx-3 py-2 text-gray-400 font-semibold hover:text-gray-500 border-2 hover:border-gray-500 rounded-lg cursor-pointer flex flex-row gap-2 items-center",
           [
             isActive,
             "text-black border-black hover:text-black hover:border-black",
@@ -104,13 +127,14 @@ function SidebarLink({
         )}
       >
         {icon}
-        {!isCollapsed && <Link to={to}>{children}</Link>}
+        {!isCollapsed && children}
         {!isCollapsed && linkPlusTo && (
-          <Link to={linkPlusTo} className="ml-auto">
-            <PlusCircleIcon className="w-6 h-6" />
+          <Link to={linkPlusTo} className="group ml-auto hover:fill-black">
+            <PlusCircleIcon className="w-6 h-6 group-hover:hidden" />
+            <FilledPlusCircleIcon className="w-6 h-6 hidden group-hover:block" />
           </Link>
         )}
-      </div>
+      </Link>
     </>
   );
 }

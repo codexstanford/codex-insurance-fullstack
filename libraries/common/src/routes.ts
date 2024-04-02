@@ -32,3 +32,7 @@ export const CLAIM = "/claim";
 export const getClaimUrl = (claimId: string) => `${CLAIM}/${claimId}`;
 
 export const DASHBOARD = "/dashboard";
+export const DASHBOARD_CLAIMS = DASHBOARD + "/claims";
+export const DASHBOARD_POLICIES = DASHBOARD + "/policies";
+export const DASHBOARD_PEOPLE = DASHBOARD + "/people";
+export const DASHBOARD_PROPERTY = DASHBOARD + "/property";
