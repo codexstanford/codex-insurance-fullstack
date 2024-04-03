@@ -42,18 +42,20 @@ export default function Dasboard() {
         <ResourceList
           heading="Claims"
           items={claimItems}
-          linkToOverivew={ROUTES.CLAIM}
-          linkAddNewTo={ROUTES.INDEX}
+          linkToListPage={ROUTES.CLAIM}
+          linkToAddNew={ROUTES.CLAIM_NEW}
         />
         <ResourceList
           heading="Policies"
           items={policyItems}
-          linkToOverivew={ROUTES.POLICY}
+          linkToListPage={ROUTES.POLICY}
+          linkToAddNew={ROUTES.POLICY_NEW}
         />
         <ResourceList
           heading="People"
           items={personItems}
-          linkToOverivew={ROUTES.PERSON}
+          linkToListPage={ROUTES.PERSON}
+          linkToAddNew={ROUTES.PERSON_NEW}
         />
       </Container>
     </>

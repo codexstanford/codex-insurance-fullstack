@@ -29,12 +29,18 @@ export const INDEX = "/";
 
 export const LOGIN = "/login";
 
+export const DASHBOARD = "/dashboard";
+
 export const SERVICE = "/service";
 
-export const CLAIM = "/claim";
-export const POLICY = "/policy";
-export const PERSON = "/person";
+export const NEW_KEYOWRD = "new";
 
+export const CLAIM = "/claim";
+export const CLAIM_NEW = "/claim" + "/" + NEW_KEYOWRD;
 export const getClaimUrl = (claimId: string) => `${CLAIM}/${claimId}`;
 
-export const DASHBOARD = "/dashboard";
+export const POLICY = "/policy";
+export const POLICY_NEW = POLICY + "/" + NEW_KEYOWRD;
+
+export const PERSON = "/person";
+export const PERSON_NEW = PERSON + "/" + NEW_KEYOWRD;

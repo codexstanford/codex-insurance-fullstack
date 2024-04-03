@@ -117,7 +117,7 @@ function SidebarLink({
     <>
       <div
         className={classNames(
-          " px-3 mx-3 py-2 text-gray-400 font-semibold hover:text-gray-500 border-2 hover:border-gray-500 rounded-lg cursor-pointer flex flex-row gap-2 items-center",
+          "px-3 mx-3 text-gray-400 font-semibold hover:text-gray-500 border-2 hover:border-gray-500 rounded-lg cursor-pointer flex flex-row gap-2 items-center",
           [
             isActive,
             "text-black border-black hover:text-black hover:border-black",
@@ -125,16 +125,18 @@ function SidebarLink({
           [isCollapsed, "justify-center"],
         )}
       >
-        <Link to={to}>{icon}</Link>
+        <Link to={to} className="py-2">
+          {icon}
+        </Link>
         {!isCollapsed && (
-          <Link to={to} className="flex-grow">
+          <Link to={to} className="flex-grow py-2">
             {children}
           </Link>
         )}
         {!isCollapsed && linkPlusTo && (
           <button
             onClick={onClickPlus}
-            className="group ml-auto hover:fill-black"
+            className="group ml-auto hover:fill-black  py-2"
           >
             <PlusCircleIcon className="w-6 h-6 group-hover:hidden" />
             <FilledPlusCircleIcon className="w-6 h-6 hidden group-hover:block" />

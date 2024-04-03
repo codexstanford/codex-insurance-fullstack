@@ -9,14 +9,14 @@ import { ResourceListItem } from "../types/resourceListItem";
 export default function ResourceList({
   heading,
   items = [],
-  linkToOverivew = "#",
-  linkAddNewTo = "#",
+  linkToListPage,
+  linkToAddNew,
   expanded = false,
 }: {
-  heading: string;
+  heading?: string;
   items?: ResourceListItem[];
-  linkToOverivew?: string;
-  linkAddNewTo?: string;
+  linkToListPage: string;
+  linkToAddNew?: string;
   expanded?: boolean;
 }) {
   return (
@@ -24,10 +24,12 @@ export default function ResourceList({
       {!expanded && (
         <div className="flex flex-row gap-3 items-center">
           <Heading level={expanded ? 1 : 2}>{heading}</Heading>
-          <Link to={linkToOverivew} className="font-semibold text-xl ml-auto">
-            {items.length === 0 && <>See page</>}
-            {items.length > 0 && <>See all ({items.length})</>}
-          </Link>
+          {linkToListPage && (
+            <Link to={linkToListPage} className="font-semibold text-xl ml-auto">
+              {items.length === 0 && <>See page</>}
+              {items.length > 0 && <>See all ({items.length})</>}
+            </Link>
+          )}
         </div>
       )}
       <div
@@ -37,11 +39,13 @@ export default function ResourceList({
           [expanded, "flex-wrap"],
         )}
       >
-        <ResourceCard isAddNewCard={true} linkTo={linkAddNewTo} />
+        {linkToAddNew && (
+          <ResourceCard isAddNewCard={true} linkTo={linkToAddNew} />
+        )}
         {items.map((item) => (
           <ResourceCard
             label={item.label}
-            linkTo={linkToOverivew + "/" + item.id}
+            linkTo={linkToListPage + "/" + item.id}
           />
         ))}
       </div>

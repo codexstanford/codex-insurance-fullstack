@@ -8,7 +8,7 @@ const PERSON_ID_PREFIX = "person" as const;
 const POLICY_ID_PREFIX = "policy" as const;
 const CLAIM_ID_PREFIX = "claim" as const;
 
-type ID_PREFIX =
+export type ID_PREFIX =
   | typeof PERSON_ID_PREFIX
   | typeof POLICY_ID_PREFIX
   | typeof CLAIM_ID_PREFIX;
