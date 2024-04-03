@@ -2,13 +2,16 @@
 
 import { ROUTES } from "common";
 import { createBrowserRouter } from "react-router-dom";
-import ClaimPage from "./pages/Claim";
+import ClaimPage from "./pages/ClaimSingle";
 import ExplorePage from "./pages/Explore";
 import Index from "./pages/Index";
 import Root from "./pages/Root";
 import Login from "./pages/auth/Login";
 import RequiresLogin from "./components/RequiresLogin";
-import Dasboard from "./pages/dashboard/Dashboard";
+import Dasboard from "./pages/Dashboard";
+import RequiresUserDataset from "./components/RequiresUserDataset";
+import ClaimListPage from "./pages/ClaimList";
+import Container from "./components/Container";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +23,10 @@ const router = createBrowserRouter([
         element: <Index />,
       },
       {
+        path: ROUTES.SERVICE + "/:service",
+        element: <ExplorePage />,
+      },
+      {
         path: ROUTES.LOGIN,
         element: <Login />,
       },
@@ -27,17 +34,45 @@ const router = createBrowserRouter([
         path: ROUTES.DASHBOARD,
         element: (
           <RequiresLogin>
-            <Dasboard />
+            <RequiresUserDataset>
+              <Dasboard />
+            </RequiresUserDataset>
           </RequiresLogin>
         ),
       },
       {
-        path: ROUTES.SERVICE + "/:service",
-        element: <ExplorePage />,
+        path: ROUTES.CLAIM,
+        element: (
+          <RequiresLogin>
+            <RequiresUserDataset>
+              <ClaimListPage />
+            </RequiresUserDataset>
+          </RequiresLogin>
+        ),
       },
       {
         path: ROUTES.CLAIM + "/:claimId",
         element: <ClaimPage />,
+      },
+      {
+        path: ROUTES.POLICY + "/:policyId?",
+        element: (
+          <RequiresLogin>
+            <RequiresUserDataset>
+              <Container makeBoxed="narrow">WIP</Container>
+            </RequiresUserDataset>
+          </RequiresLogin>
+        ),
+      },
+      {
+        path: ROUTES.PERSON + "/:personId?",
+        element: (
+          <RequiresLogin>
+            <RequiresUserDataset>
+              <Container makeBoxed="narrow">WIP</Container>
+            </RequiresUserDataset>
+          </RequiresLogin>
+        ),
       },
     ],
   },

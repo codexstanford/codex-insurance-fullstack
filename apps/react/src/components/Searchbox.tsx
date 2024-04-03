@@ -14,6 +14,7 @@ import {
 export type Searchbox_Input<T extends Record<string | number, string>> = {
   options: T;
   onChange?: (key?: keyof T) => void;
+  placehoder?: string;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -23,6 +24,7 @@ export type Searchbox_Input<T extends Record<string | number, string>> = {
 export function Searchbox<T extends Record<string | number, string>>({
   options,
   onChange,
+  placehoder,
 }: Searchbox_Input<T>) {
   const [selected, setSelected] = useState<keyof typeof options | undefined>();
   const [query, setQuery] = useState("");
@@ -59,7 +61,7 @@ export function Searchbox<T extends Record<string | number, string>>({
           <Combobox.Input
             className="w-full border-none py-2 pr-3 pl-10 text-sm leading-5 text-black focus:ring-0"
             displayValue={(id: keyof typeof options) => options[id] || ""}
-            placeholder="eg: contraceptives"
+            placeholder={placehoder || "Search..."}
             onChange={(event) => setQuery(event.target.value)}
           />
         </div>

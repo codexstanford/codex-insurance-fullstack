@@ -1,15 +1,10 @@
-import { ROUTES } from "common";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { ButtonLink } from "../components/Button";
 import Container from "../components/Container";
 import Heading from "../components/Heading";
-import Searchbox from "../components/Searchbox";
-import { SITUATIONS } from "../consts/situations.const";
+import SearchboxClaimReason from "../components/SearchboxClaimReason";
 
 const Index: React.FC = () => {
-  const navigate = useNavigate();
-
   return (
     <>
       <Container
@@ -23,13 +18,7 @@ const Index: React.FC = () => {
             <Heading level={1}>Explore Coverage</Heading>
             <p className="text-xl">search by category or situation</p>
           </div>
-          <Searchbox
-            options={SITUATIONS}
-            // TODO Redirect to service form that was actually selected
-            onChange={(situation) => {
-              if (situation) navigate(ROUTES.SERVICE + "/" + situation);
-            }}
-          />
+          <SearchboxClaimReason placeholder="eg: contraceptives" />
           <div className="flex gap-3 justify-center items-center">
             <ButtonLink href={"/"} color="gray" className="min-w-40">
               Wave Cardinal Care

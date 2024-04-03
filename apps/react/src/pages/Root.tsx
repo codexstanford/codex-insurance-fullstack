@@ -1,10 +1,11 @@
 import { ROUTES } from "common";
 import { useMemo, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { ButtonLink } from "../components/Button";
 import DoAfterLoginActionBeforeRender from "../components/DoAfterLoginActionBeforeRender";
 import Sidebar from "../components/Sidebar";
 import {
+  CODEX_BRAND_CLASSES,
   MAIN_CONTAINER_MT,
   NAVBAR_HEIGHT,
   NAVBAR_PADDING,
@@ -17,6 +18,7 @@ import {
 import { IsSidebarCollapsedContext } from "../contexts/isSidebarCollapsedContext";
 import useSessionUser from "../hooks/useSessionUser";
 import { classNames } from "../utils/classNames";
+import SearchboxClaimReason from "../components/SearchboxClaimReason";
 
 const Root: React.FC = () => {
   const user = useSessionUser();
@@ -25,6 +27,10 @@ const Root: React.FC = () => {
     () => ({ isSidebarCollapsed, setIsSidebarCollapsed }),
     [isSidebarCollapsed, setIsSidebarCollapsed],
   );
+
+  const { pathname } = useLocation();
+
+  const showSearchbar = pathname !== ROUTES.INDEX;
 
   return (
     <>
@@ -35,7 +41,7 @@ const Root: React.FC = () => {
           {user && <Sidebar />}
           <header
             className={classNames(
-              "border-b-2 border-gray-200 text-black fixed top-0 right-0 items-center flex",
+              "border-b-2 border-gray-200 bg-white text-black fixed top-0 right-0 items-center flex gap-3",
               Z_INDEX_NAVBAR,
               NAVBAR_HEIGHT,
               NAVBAR_PADDING,
@@ -48,7 +54,14 @@ const Root: React.FC = () => {
               ],
             )}
           >
-            
+            {!user && (
+              <Link to={ROUTES.INDEX} className={CODEX_BRAND_CLASSES}>
+                CodeX
+              </Link>
+            )}
+            {showSearchbar && (
+              <SearchboxClaimReason placeholder="Explore Coverage" />
+            )}
             <div className="py-3 flex gap-3 items-center ml-auto">
               {!user && <ButtonLink href={ROUTES.LOGIN}>Login</ButtonLink>}
               {user && (

@@ -23,6 +23,8 @@ export const SIDEBAR_NOT_COLLAPSED_NAVBAR_LEFT = "left-60";
 export const NAVBAR_HEIGHT = "h-16";
 export const NAVBAR_PADDING = "p-3";
 
+export const CODEX_BRAND_CLASSES = "font-bold text-xl text-gray-600";
+
 /* -------------------------------------------------------------------------- */
 /*                                   Navbar                                   */
 /* -------------------------------------------------------------------------- */

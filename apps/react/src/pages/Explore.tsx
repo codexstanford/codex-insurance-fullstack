@@ -11,6 +11,7 @@ import { UserDatasetContext } from "../contexts/userDatasetContext";
 import { Covid19Vaccine } from "../epilog/form-adapters/_formAdapter";
 import useSessionUser from "../hooks/useSessionUser";
 import { setAfterLoginAction } from "../utils/storage";
+import Container from "../components/Container";
 
 export default function ExplorePage() {
   // TODO Infer the correct form from service param.
@@ -104,9 +105,11 @@ function RenderNewClaimFormLoggedIn() {
   );
 
   return (
-    <Covid19VaccineForm
-      defaultValues={initialFormValues}
-      onClickSave={onClickSave}
-    />
+    <Container addVerticalPadding={true}>
+      <Covid19VaccineForm
+        defaultValues={initialFormValues}
+        onClickSave={onClickSave}
+      />
+    </Container>
   );
 }

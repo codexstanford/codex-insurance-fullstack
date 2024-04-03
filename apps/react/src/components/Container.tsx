@@ -20,7 +20,7 @@ export const fluidBoxedClasses = classNames("max-w-[2000px] mx-auto", fluid_px);
 /*                                   Gutter                                   */
 /* -------------------------------------------------------------------------- */
 
-export const gutter = "flex-wrap flex-col items-stretch";
+export const gutter = "flex-col items-stretch";
 
 /* -------------------------------------------------------------------------- */
 /*                                 Full height                                */

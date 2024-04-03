@@ -4,15 +4,15 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
   DocumentIcon,
-  GiftIcon,
   HomeIcon,
   PlusCircleIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import { ROUTES } from "common";
-import { ReactNode, useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { ReactNode, useCallback, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
+  CODEX_BRAND_CLASSES,
   NAVBAR_HEIGHT,
   NAVBAR_PADDING,
   SIDEBAR_W_COLLAPSED,
@@ -38,7 +38,8 @@ export default function Sidebar() {
     >
       <div
         className={classNames(
-          "flex items-center w-full font-bold text-xl text-gray-600",
+          "flex items-center w-full",
+          CODEX_BRAND_CLASSES,
           NAVBAR_HEIGHT,
           NAVBAR_PADDING,
           [isCollapsed, "justify-center justify-items-center"],
@@ -64,31 +65,24 @@ export default function Sidebar() {
       </SidebarLink>
       <SidebarLink
         icon={<DocumentIcon className="w-6 h-6" />}
-        to={ROUTES.DASHBOARD_CLAIMS}
-        linkPlusTo="#"
+        to={ROUTES.CLAIM}
+        linkPlusTo={ROUTES.INDEX}
       >
         Claims
       </SidebarLink>
       <SidebarLink
         icon={<BookOpenIcon className="w-6 h-6" />}
-        to={ROUTES.DASHBOARD_POLICIES}
+        to={ROUTES.POLICY}
         linkPlusTo="#"
       >
         Policies
       </SidebarLink>
       <SidebarLink
         icon={<UserIcon className="w-6 h-6" />}
-        to={ROUTES.DASHBOARD_PEOPLE}
+        to={ROUTES.PERSON}
         linkPlusTo="#"
       >
         People
-      </SidebarLink>
-      <SidebarLink
-        icon={<GiftIcon className="w-6 h-6" />}
-        to={ROUTES.DASHBOARD_PROPERTY}
-        linkPlusTo="#"
-      >
-        Property
       </SidebarLink>
     </aside>
   );
@@ -109,14 +103,19 @@ function SidebarLink({
     IsSidebarCollapsedContext,
   );
 
+  const navigate = useNavigate();
+  const onClickPlus = useCallback(
+    () => void (linkPlusTo && navigate(linkPlusTo)),
+    [navigate, linkPlusTo],
+  );
+
   const { pathname } = useLocation();
 
   const isActive = pathname.endsWith(to);
 
   return (
     <>
-      <Link
-        to={to}
+      <div
         className={classNames(
           " px-3 mx-3 py-2 text-gray-400 font-semibold hover:text-gray-500 border-2 hover:border-gray-500 rounded-lg cursor-pointer flex flex-row gap-2 items-center",
           [
@@ -126,15 +125,22 @@ function SidebarLink({
           [isCollapsed, "justify-center"],
         )}
       >
-        {icon}
-        {!isCollapsed && children}
-        {!isCollapsed && linkPlusTo && (
-          <Link to={linkPlusTo} className="group ml-auto hover:fill-black">
-            <PlusCircleIcon className="w-6 h-6 group-hover:hidden" />
-            <FilledPlusCircleIcon className="w-6 h-6 hidden group-hover:block" />
+        <Link to={to}>{icon}</Link>
+        {!isCollapsed && (
+          <Link to={to} className="flex-grow">
+            {children}
           </Link>
         )}
-      </Link>
+        {!isCollapsed && linkPlusTo && (
+          <button
+            onClick={onClickPlus}
+            className="group ml-auto hover:fill-black"
+          >
+            <PlusCircleIcon className="w-6 h-6 group-hover:hidden" />
+            <FilledPlusCircleIcon className="w-6 h-6 hidden group-hover:block" />
+          </button>
+        )}
+      </div>
     </>
   );
 }

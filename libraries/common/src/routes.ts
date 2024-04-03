@@ -28,11 +28,9 @@ export const LOGIN = "/login";
 export const SERVICE = "/service";
 
 export const CLAIM = "/claim";
+export const POLICY = "/policy";
+export const PERSON = "/person";
 
 export const getClaimUrl = (claimId: string) => `${CLAIM}/${claimId}`;
 
 export const DASHBOARD = "/dashboard";
-export const DASHBOARD_CLAIMS = DASHBOARD + "/claims";
-export const DASHBOARD_POLICIES = DASHBOARD + "/policies";
-export const DASHBOARD_PEOPLE = DASHBOARD + "/people";
-export const DASHBOARD_PROPERTY = DASHBOARD + "/property";
