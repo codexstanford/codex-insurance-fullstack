@@ -25,6 +25,23 @@ authRouter.get(
   },
 );
 
+/* ---------------------------------- Dummy --------------------------------- */
+
+authRouter.post(
+  ROUTES.SUBSET_LOGIN_DUMMY,
+  (req, _, next) => {
+    console.log(req.body);
+    next();
+  },
+  passport.authenticate("local", {
+    failureRedirect: ROUTES.LOGIN,
+    failureMessage: true,
+  }),
+  (_, res) => {
+    res.redirect(ROUTES.DASHBOARD);
+  },
+);
+
 /* --------------------------------- Logout --------------------------------- */
 
 authRouter.get(ROUTES.SUBSET_LOGUT, (req, res, next) => {

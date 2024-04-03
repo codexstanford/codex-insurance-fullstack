@@ -25,6 +25,7 @@ const app = express();
 // Serve the static files from the React app
 app.use(express.static(pathToClient));
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 addAuthMiddleware(app);

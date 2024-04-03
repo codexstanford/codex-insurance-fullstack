@@ -5,6 +5,7 @@ import { Express } from "express";
 import session from "express-session";
 import passport from "passport";
 import { createGoogleStrategy } from "./googleStrategy";
+import { createDummyStrategy } from "./dummyStrategy";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -44,6 +45,8 @@ function configurePassport() {
   });
 
   passport.use(createGoogleStrategy());
+
+  passport.use(createDummyStrategy());
 }
 
 /* -------------------------------------------------------------------------- */

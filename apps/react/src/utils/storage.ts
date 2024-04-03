@@ -1,4 +1,5 @@
 const AFTER_LOGIN_ACTION_KEY = "afterLoginAction";
+const DUMMY_USER_ID_KEY = "dummyUserKey";
 
 export interface AfterLoginAction {
   redirectPath?: string;
@@ -15,4 +16,13 @@ export const getAfterLoginAction = () => {
     return JSON.parse(action) as AfterLoginAction;
   }
   return null;
+};
+
+export const getDummyUserId = () => {
+  let dummyUserId = localStorage.getItem(DUMMY_USER_ID_KEY);
+  if (!dummyUserId) {
+    dummyUserId = "dummyUser_" + Math.random().toString(36).substring(7);
+    localStorage.setItem(DUMMY_USER_ID_KEY, dummyUserId);
+  }
+  return dummyUserId;
 };
