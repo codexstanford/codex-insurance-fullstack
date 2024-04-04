@@ -1,18 +1,33 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { classNames } from "../utils/classNames";
+import { Z_INDEX_MODAL } from "../consts/classes.const";
+import { XCircleIcon } from "@heroicons/react/24/outline";
+import { Button } from "./Button";
 
 type Input = {
   isOpen: boolean;
   onClose: () => void;
   title?: React.ReactNode;
   children?: React.ReactNode;
+  button?: { label: string; onClick: () => void };
 };
 
-export default function Modal({ isOpen, onClose, title, children }: Input) {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  button,
+}: Input) {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={onClose}>
+        <Dialog
+          as="div"
+          className={classNames("relative", Z_INDEX_MODAL)}
+          onClose={onClose}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -36,23 +51,24 @@ export default function Modal({ isOpen, onClose, title, children }: Input) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    {title}
-                  </Dialog.Title>
-                  <div className="mt-2">{children}</div>
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={onClose}
+                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+                  <div className="bg-gray-200 p-6 flex items-center flex-row gap-3">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-xl font-semibold mr-auto"
                     >
-                      Close
+                      {title}
+                    </Dialog.Title>
+                    <button onClick={onClose}>
+                      <XCircleIcon className="w-8 h-8" />
                     </button>
                   </div>
+                  <div className="p-6">{children}</div>
+                  {button && (
+                    <div className="p-6 flex flex-row justify-end items-center gap-3">
+                      <Button onClick={button.onClick}>{button.label}</Button>
+                    </div>
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import ResourceListPage from "./pages/ResourceListPage";
 import Root from "./pages/Root";
 import Login from "./pages/auth/Login";
+import { ROUTES_ID_PARAM_PLACEHOLDER } from "./consts/routes.const";
 
 const router = createBrowserRouter([
   {
@@ -64,14 +65,14 @@ const router = createBrowserRouter([
       },
       // Read
       {
-        path: ROUTES.CLAIM + "/:claimId",
+        path: ROUTES.CLAIM + "/:" + ROUTES_ID_PARAM_PLACEHOLDER,
         element: <ClaimPage />,
       },
       /* -------------------------------------------------------------------------- */
       /*                                   Policy                                   */
       /* -------------------------------------------------------------------------- */
       {
-        path: ROUTES.POLICY + "/:policyId?",
+        path: ROUTES.POLICY + `/:${ROUTES_ID_PARAM_PLACEHOLDER}?`,
         element: (
           <RequiresLogin>
             <RequiresUserDataset>
@@ -88,7 +89,7 @@ const router = createBrowserRouter([
       /*                                   Person                                   */
       /* -------------------------------------------------------------------------- */
       {
-        path: ROUTES.PERSON + "/:personId?",
+        path: ROUTES.PERSON + `/:${ROUTES_ID_PARAM_PLACEHOLDER}?`,
         element: (
           <RequiresLogin>
             <RequiresUserDataset>

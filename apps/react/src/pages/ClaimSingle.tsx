@@ -8,7 +8,7 @@ import Covid19VaccineForm from "../components/forms/Covid19VaccineForm";
 import { ExistingClaimContext } from "../contexts/existingClaimContext";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
 import { Covid19Vaccine } from "../epilog/form-adapters/_formAdapter";
-import useClaimIdParam from "../hooks/useClaimIdParam";
+import useIdParam from "../hooks/useClaimIdParam";
 import { useUserDataset } from "../api/userDataset";
 import { LoginContext } from "../contexts/loginContext";
 import Container from "../components/Container";
@@ -18,7 +18,7 @@ import Container from "../components/Container";
 /* -------------------------------------------------------------------------- */
 
 export default function ClaimPage() {
-  const claimId = useClaimIdParam();
+  const claimId = useIdParam("claim");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,7 +59,6 @@ function RenderClaimForm() {
   // TODO Infer the correct form from the claim reason etc. If not enough info is available in the dataset, show the corrupted callout below.
 
   const { formAdapter } = Covid19Vaccine;
-  
 
   const initialFormValues = formAdapter.epilogToFormValues(
     userDataset,

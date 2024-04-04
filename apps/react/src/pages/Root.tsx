@@ -65,12 +65,15 @@ const Root: React.FC = () => {
             <div className="py-3 flex gap-3 items-center ml-auto">
               {!user && <ButtonLink href={ROUTES.LOGIN}>Login</ButtonLink>}
               {user && (
-                <ButtonLink
-                  href={ROUTES.API_AUTH_LOGUT}
-                  renderAsReactRouterLink={false}
-                >
-                  Logout
-                </ButtonLink>
+                <>
+                  <span>{user.displayName}</span>
+                  <ButtonLink
+                    href={ROUTES.API_AUTH_LOGUT}
+                    renderAsReactRouterLink={false}
+                  >
+                    Logout
+                  </ButtonLink>
+                </>
               )}
             </div>
           </header>

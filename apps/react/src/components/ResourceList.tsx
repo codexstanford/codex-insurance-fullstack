@@ -42,8 +42,9 @@ export default function ResourceList({
         {linkToAddNew && (
           <ResourceCard isAddNewCard={true} linkTo={linkToAddNew} />
         )}
-        {items.map((item) => (
+        {items.map((item, key) => (
           <ResourceCard
+            key={key}
             label={item.label}
             linkTo={linkToListPage + "/" + item.id}
           />

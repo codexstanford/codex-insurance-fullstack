@@ -4,8 +4,9 @@ import { classNames } from "../utils/classNames";
 /*                                  Z-Indexs                                  */
 /* -------------------------------------------------------------------------- */
 
-export const Z_INDEX_SIDEBAR = "z-50";
-export const Z_INDEX_NAVBAR = "z-40";
+export const Z_INDEX_MODAL = "z-50";
+export const Z_INDEX_SIDEBAR = "z-40";
+export const Z_INDEX_NAVBAR = "z-30";
 
 /* -------------------------------------------------------------------------- */
 /*                                   Sidebar                                  */
