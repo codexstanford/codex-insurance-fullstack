@@ -15,7 +15,7 @@ const ConstraintContainer: React.FC<ConstraintContainer_Input> = ({
     <>
       <Container
         makeGutter={true}
-        className={classNames(className, "p-3 bg-teal-200")}
+        className={classNames(className, "p-3 bg-gray-200")}
         {...props}
       >
         <p className="text-right">Constraints</p>

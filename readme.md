@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Node.js and [pnpm](https://pnpm.io/installation) must be installed. This project uses [pnpm's workspace](https://pnpm.io/workspaces) feature for the monorepo structure.
+Node.js and [pnpm]() must be installed. This project uses [pnpm's workspace](https://pnpm.io/workspaces) feature for the monorepo structure.
 
 ## Commands
 

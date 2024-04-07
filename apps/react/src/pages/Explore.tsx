@@ -1,11 +1,12 @@
 import { ROUTES } from "common";
 import { getClaimUrl } from "common/src/routes";
 import { useCallback, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserDataset } from "../api/userDataset";
 import RequiresLogin from "../components/RequiresLogin";
 import RequiresUserDataset from "../components/RequiresUserDataset";
 import Covid19VaccineForm from "../components/forms/Covid19VaccineForm";
+import ContraceptivesForm from "../components/forms/ContraceptivesForm";
 import { LoginContext } from "../contexts/loginContext";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
 import { Covid19Vaccine } from "../epilog/form-adapters/_formAdapter";
@@ -21,7 +22,7 @@ export default function ExplorePage() {
   // Second, the save action differs. Either we merge with the exisitng user dataset and upload it
   // or we save the form values to the local storage and send to user to the login.
   // In any case, we then need to redirect the user to the /claim/(claimId) page.
-
+  const { service } = useParams();
   const sessionUser = useSessionUser();
 
   const navigate = useNavigate();
@@ -51,13 +52,27 @@ export default function ExplorePage() {
     },
     [formAdapter, navigate],
   );
+  console.log("initialFormValues", initialFormValues);
+  console.log("service", service);
 
-  return (
-    <Covid19VaccineForm
-      defaultValues={initialFormValues}
-      onClickSave={onClickSave}
-    />
-  );
+
+  if (service === "covidVaccine") {
+    return (
+      <Covid19VaccineForm
+        defaultValues={initialFormValues}
+        onClickSave={onClickSave}
+      />
+    );
+  } else if (service === "contraceptives") {
+    return (
+      <ContraceptivesForm
+        defaultValues={initialFormValues}
+        onClickSave={onClickSave}
+      />
+    );
+  } else {
+    return <div>Service not recognized.</div>;
+  }
 }
 
 function RenderNewClaimFormLoggedIn() {

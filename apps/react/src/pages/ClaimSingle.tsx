@@ -45,6 +45,7 @@ export default function ClaimPage() {
 function RenderClaimForm() {
   /* ------------------------ Environmental conditions ------------------------ */
 
+  console.log("render claim form is being called")
   const sessionUser = useContext(LoginContext);
   const userDataset = useContext(UserDatasetContext);
   const existingClaimId = useContext(ExistingClaimContext);
@@ -64,6 +65,7 @@ function RenderClaimForm() {
     userDataset,
     existingClaimId,
   );
+
 
   const { mutation } = useUserDataset(sessionUser.id);
 

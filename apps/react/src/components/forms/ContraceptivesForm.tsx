@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import Constraint from "../Constraint";
-import ConstraintContainer from "../ConstraintContainer";
-import EpilogFormContainer from "../EpilogFormContainer";
-import InputDate from "../InputDate";
-import InputSelect from "../InputSelect";
-import InputSelectButtons from "../InputSelectButtons";
+import Constraint from "../../components/Constraint";
+import ConstraintContainer from "../../components/ConstraintContainer";
+import EpilogFormContainer from "../../components/EpilogFormContainer";
+import InputDate from "../../components/InputDate";
+import InputSelect from "../../components/InputSelect";
+import InputSelectButtons from "../../components/InputSelectButtons";
 import { LOCATIONS } from "../../consts/locations.const";
 import {
   ConstraintContext,
@@ -37,7 +37,7 @@ type Input = {
 /*                                 Compontnet                                 */
 /* -------------------------------------------------------------------------- */
 
-export default function Covid19VaccineForm({
+export default function ContraceptivesForm({
   defaultValues,
   onClickSave,
 }: Input) {
@@ -196,7 +196,7 @@ export default function Covid19VaccineForm({
 
   return (
     <EpilogFormContainer
-      title="COVID-19 Vaccine"
+      title="Contraceptives"
       onSave={onClickSaveCallback}
       isCovered={isCovered}
       __debugFormData={watch()}
