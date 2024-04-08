@@ -20,12 +20,12 @@ const Index: React.FC = () => {
           </div>
           <SearchboxClaimReason placeholder="eg: contraceptives" />
           <div className="flex gap-3 justify-center items-center">
-            <ButtonLink href={"/"} color="gray" className="min-w-40">
+            <ButtonLink href={"/"} color="gray" className="min-w-50">
               Wave Cardinal Care
             </ButtonLink>
-            <ButtonLink href={"/"} color="gray" className="min-w-40">
+            {/*<ButtonLink href={"/"} color="gray" className="min-w-40">
               File a Claim
-            </ButtonLink>
+            </ButtonLink>*/}
           </div>
         </div>
       </Container>
