@@ -17,16 +17,16 @@ import { FormAdapter } from "./_formAdapter";
 
 export type FormValues = {
   person: BasicOption;
-  dob: Date;
+  dob: Date | null;
 
   policy: BasicOption;
   policyType: BasicOption | null;
 
   claim: BasicOption;
   vaccinationHistory_vaccineType: BasicOption | null;
-  vaccinationHistory_date: Date;
+  vaccinationHistory_date: Date | null;
   vaccineBrand: BasicOption | null;
-  when: Date;
+  when: Date | null;
   where: BasicOption | null;
 };
 
@@ -95,7 +95,7 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const dob = dobString
       ? stringToDate(dobString)
-      : DateTime.now().minus({ years: 25 }).toJSDate();
+      : null;
 
     /* --------------------------------- Policy --------------------------------- */
 
@@ -136,6 +136,7 @@ export const formAdapter: FormAdapter<FormValues> = {
           : null;
 
     // TODO Add vaccinationHistory_date, not yet represented in Epilog
+    vaccinationHistory_date: null;
 
     const [vaccineBrand] = compfinds(
       "X",
@@ -153,7 +154,7 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const when = dateTimeResult
       ? stringToDate(dateTimeResult[1], dateTimeResult[2])
-      : new Date();
+      : null;
 
     const [location] = compfinds(
       "X",

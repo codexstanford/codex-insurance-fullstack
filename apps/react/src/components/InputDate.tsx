@@ -1,9 +1,11 @@
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState, useRef, useEffect } from "react";
 import Datepicker from "tailwind-datepicker-react";
 import { getButtonClassNames } from "./Button";
 import { classNames } from "../utils/classNames";
 import { COMMON_INPUT_CLASSES } from "../consts/classes.const";
 import { InputContext } from "../contexts/inputContext.ts";
+import { DateTime } from "luxon";
+import { FaRegCalendarAlt } from 'react-icons/fa';
 
 // https://github.com/OMikkel/tailwind-datepicker-react
 
@@ -36,13 +38,12 @@ const InputDate: React.FC<InputDate_Input> = ({
 
   const [show, setShow] = useState(false);
 
-  const onChangeCallback = useCallback(
-    (date: Date) => {
-      onChange?.(date);
-      onBlur?.();
-    },
-    [onChange, onBlur],
-  );
+  const onChangeCallback = useCallback((date) => {
+    const dateString = DateTime.fromJSDate(date).toISODate();
+    setInputValue(dateString); // Updates the input with the selected date
+    setShow(false); // Close the calendar
+  }, []);
+  
 
   const opts = useMemo(
     () => ({
@@ -66,16 +67,56 @@ const InputDate: React.FC<InputDate_Input> = ({
     [options, buttonClassNames, inputContext?.isLocked],
   );
 
+  const [inputValue, setInputValue] = useState("");
+
+  const handleInputChange = useCallback((event) => {
+    const newInputValue = event.target.value;
+    setInputValue(newInputValue); // Update inputValue state
+    
+    const date = DateTime.fromISO(newInputValue).toJSDate();
+    if (date.toString() !== "Invalid Date") {
+      onChangeCallback(date); // Use the existing onChangeCallback for consistency
+    }
+  }, [onChangeCallback]);
+  
+
   return (
+    <>
+    <style>
+        {`
+        .date-picker-wrapper input[type="text"][readonly] {
+        border: none; /* Remove border */
+        background: transparent; /* Optional: Make background transparent */
+        }
+        `}
+    </style>
     <div className="relative">
+        <button 
+        onClick={() => setShow(!show)} 
+        className="absolute right-0 top-0 mr-3 mt-2" // Adjust styling as needed
+        >
+        <FaRegCalendarAlt className="text-xl"/> {/* Replace with your calendar icon component */}
+        </button>
+        <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onBlur={() => {}}
+        className={COMMON_INPUT_CLASSES + " w-full"}
+        placeholder="YYYY-MM-DD"
+      />
+      {show && (
+    <div className="date-picker-wrapper">
       <Datepicker
         {...props}
         show={show}
         setShow={setShow}
         onChange={onChangeCallback}
         options={opts}
-      />
+      /></div>
+      )}
     </div>
+    </>
   );
 };
 

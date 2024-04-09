@@ -132,9 +132,13 @@ export const dateToString = (date: Date) => {
     year: "numeric",
   } as const;
 
-  const dateString = date.toLocaleDateString("de-DE", options);
-
-  const formattedDate = dateString.split(".").join("_");
+  const formattedDate = (date) => {
+    if (date === null) {
+      return ""; // Or any other fallback value appropriate for your application
+    }
+    dateString = date.toLocaleDateString("de-DE", options);
+    return dateString.split(".").join("_");
+  };
 
   return formattedDate;
 };
@@ -145,9 +149,13 @@ export const timeOfDateToString = (date: Date) => {
     minute: "2-digit",
   } as const;
 
-  const timeString = date.toLocaleTimeString("de-DE", options);
-
-  const formattedTime = timeString.replace(":", "_");
+  const formattedTime = (date) => {
+    if (date === null) {
+      return ""; // Or any other fallback value appropriate for your application
+    }
+    timeString = date.toLocaleTimeString("de-DE", options);
+    return timeString.replace(":", "_");
+  };
 
   return formattedTime;
 };
