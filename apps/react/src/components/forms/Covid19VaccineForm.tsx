@@ -1,11 +1,7 @@
+import { MinusIcon } from "@heroicons/react/24/outline";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Constraint from "../Constraint";
-import ConstraintContainer from "../ConstraintContainer";
-import EpilogFormContainer from "../EpilogFormContainer";
-import InputDate from "../InputDate";
-import InputSelect from "../InputSelect";
-import InputSelectButtons from "../InputSelectButtons";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { COMMON_FOCUS_CLASSES } from "../../consts/classes.const";
 import { LOCATIONS, YES_OR_NO } from "../../consts/options.const";
 import {
   ConstraintContext,
@@ -13,7 +9,15 @@ import {
   createConstraintContextData,
 } from "../../contexts/constraintContext";
 import { Covid19Vaccine } from "../../epilog/form-adapters/_formAdapter";
+import { VACCINE_OPTIONS } from "../../epilog/form-adapters/covid19VaccineAdapter";
 import useIsCovered from "../../hooks/useIsCovered";
+import { BasicOption } from "../../types/basicOption";
+import { classNames } from "../../utils/classNames";
+import Constraint from "../Constraint";
+import ConstraintContainer from "../ConstraintContainer";
+import EpilogFormContainer from "../EpilogFormContainer";
+import InputDate from "../InputDate";
+import InputSelectButtons from "../InputSelectButtons";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -49,8 +53,23 @@ export default function Covid19VaccineForm({
       defaultValues,
     });
 
+  // https://react-hook-form.com/docs/usefieldarray
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "vaccinationHistory_vaccineTypes",
+  });
+
   const onClickSaveCallback = useCallback(
     () => onClickSave(getValues()),
+    [onClickSave, getValues],
+  );
+
+  const onClickAddVaccinationHistoryType = useCallback(
+    () =>
+      append(
+        VACCINE_OPTIONS.find((option) => option.id === "other") as BasicOption,
+      ),
     [onClickSave, getValues],
   );
 
@@ -93,16 +112,13 @@ export default function Covid19VaccineForm({
   useEffect(
     () =>
       void (
-        formState.touchedFields.vaccinationHistory_vaccineType &&
-        formState.touchedFields.vaccinationHistory_date &&
-        getValues("vaccinationHistory_vaccineType") &&
+        formState.touchedFields.vaccinationHistory_vaccineTypes &&
+        getValues("vaccinationHistory_vaccineTypes").length > 0 &&
         setIsLockedRecord((prev) => ({ ...prev, vaccinationHistory: true }))
       ),
     [
-      watch("vaccinationHistory_vaccineType"),
-      watch("vaccinationHistory_date"),
-      formState.touchedFields.vaccinationHistory_vaccineType,
-      formState.touchedFields.vaccinationHistory_date,
+      watch("vaccinationHistory_vaccineTypes"),
+      formState.touchedFields.vaccinationHistory_vaccineTypes,
     ],
   );
 
@@ -133,17 +149,6 @@ export default function Covid19VaccineForm({
         setIsLockedRecord((prev) => ({ ...prev, dob: true }))
       ),
     [watch("dob")],
-  );
-
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.vaccinationHistory_vaccineType &&
-        formState.touchedFields.vaccinationHistory_date &&
-        getValues("vaccinationHistory_vaccineType") &&
-        setIsLockedRecord((prev) => ({ ...prev, vaccinationHistory: true }))
-      ),
-    [watch("vaccinationHistory_vaccineType"), watch("vaccinationHistory_date")],
   );
 
   useEffect(
@@ -241,25 +246,36 @@ export default function Covid19VaccineForm({
               )}
             />
           </Constraint>
-          <Constraint id="vaccinationHistory" label="Vaccination History">
-            <Controller
-              name="vaccinationHistory_vaccineType"
-              control={control}
-              render={({ field: { ref, ...field } }) => (
-                <InputSelect
-                  {...field}
-                  options={Covid19Vaccine.VACCINE_OPTIONS}
-                  placeholder="Select your most recent vaccine"
-                />
-              )}
-            />
-            <Controller
-              name="vaccinationHistory_date"
-              control={control}
-              render={({ field: { ref, ...field } }) => (
-                <InputDate {...field} />
-              )}
-            />
+          <Constraint
+            id="vaccinationHistory"
+            label="Vaccination History"
+            onClickAddField={onClickAddVaccinationHistoryType}
+          >
+            <p>Add the types for all your Covid-19 vaccinations here. Click the plus button on the right to add an entry.</p>
+            {fields.map((field, index) => (
+              <Controller
+                key={field.id}
+                name={`vaccinationHistory_vaccineTypes.${index}`}
+                control={control}
+                render={({ field: { ref, ...field } }) => (
+                  <div className="last:border-b-0 border-b-2 pb-2 flex flex-row items-center">
+                    <InputSelectButtons
+                      {...field}
+                      options={Covid19Vaccine.VACCINE_OPTIONS}
+                    />
+                    <button
+                      onClick={() => remove(index)}
+                      className={classNames(
+                        COMMON_FOCUS_CLASSES,
+                        "border border-black rounded-full size-8 flex items-center justify-center ml-auto",
+                      )}
+                    >
+                      <MinusIcon className="size-4 " />
+                    </button>
+                  </div>
+                )}
+              />
+            ))}
           </Constraint>
           <Constraint id="insurance" label="Insurance">
             <Controller

@@ -76,7 +76,7 @@ export default function ContraceptivesForm({
   useEffect(
     () =>
       void (
-        formState.touchedFields.vaccinationHistory_vaccineType &&
+        formState.touchedFields.vaccinationHistory_vaccineTypes &&
         formState.touchedFields.vaccinationHistory_date &&
         getValues("vaccinationHistory_vaccineType") &&
         setIsLockedRecord((prev) => ({ ...prev, vaccinationHistory: true }))
@@ -84,7 +84,7 @@ export default function ContraceptivesForm({
     [
       watch("vaccinationHistory_vaccineType"),
       watch("vaccinationHistory_date"),
-      formState.touchedFields.vaccinationHistory_vaccineType,
+      formState.touchedFields.vaccinationHistory_vaccineTypes,
       formState.touchedFields.vaccinationHistory_date,
     ],
   );
@@ -121,7 +121,7 @@ export default function ContraceptivesForm({
   useEffect(
     () =>
       void (
-        formState.touchedFields.vaccinationHistory_vaccineType &&
+        formState.touchedFields.vaccinationHistory_vaccineTypes &&
         formState.touchedFields.vaccinationHistory_date &&
         getValues("vaccinationHistory_vaccineType") &&
         setIsLockedRecord((prev) => ({ ...prev, vaccinationHistory: true }))

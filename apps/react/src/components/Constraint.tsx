@@ -4,13 +4,14 @@ import {
   ChevronUpIcon,
   LockClosedIcon,
   LockOpenIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 import React, { useCallback } from "react";
 import { COMMON_FOCUS_CLASSES } from "../consts/classes.const";
 import { classNames } from "../utils/classNames";
-import { ConstraintContext } from "../contexts/constraintContext.ts";
+import { ConstraintContext } from "../contexts/constraintContext";
 import Container from "./Container";
-import { InputContext } from "../contexts/inputContext.ts";
+import { InputContext } from "../contexts/inputContext";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -20,13 +21,19 @@ type Constraint_Input = {
   id?: string;
   label: React.ReactNode;
   children?: React.ReactNode;
+  onClickAddField?: () => void;
 };
 
 /* -------------------------------------------------------------------------- */
 /*                                  Function                                  */
 /* -------------------------------------------------------------------------- */
 
-const Constraint: React.FC<Constraint_Input> = ({ id, label, children }) => {
+const Constraint: React.FC<Constraint_Input> = ({
+  id,
+  label,
+  children,
+  onClickAddField,
+}) => {
   const constraintContext = React.useContext(ConstraintContext);
 
   const isLocked = !!(id && constraintContext?.getIsLocked(id));
@@ -45,12 +52,25 @@ const Constraint: React.FC<Constraint_Input> = ({ id, label, children }) => {
               {open && <ChevronUpIcon className="size-6" />}
               {!open && <ChevronDownIcon className="size-6" />}
             </Disclosure.Button>
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id} className="mr-auto">
+              {label}
+            </label>
+            {onClickAddField && (
+              <button
+                onClick={onClickAddField}
+                className={classNames(
+                  COMMON_FOCUS_CLASSES,
+                  "border border-black rounded-full size-8 flex items-center justify-center",
+                )}
+              >
+                <PlusIcon className="size-4 " />
+              </button>
+            )}
             <button
               onClick={onClickLock}
               className={classNames(
                 COMMON_FOCUS_CLASSES,
-                "border ml-auto border-black rounded-full size-8 flex items-center justify-center",
+                "border border-black rounded-full size-8 flex items-center justify-center",
                 [isLocked, "bg-blue-200"],
               )}
             >

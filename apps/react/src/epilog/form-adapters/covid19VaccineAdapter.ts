@@ -24,8 +24,7 @@ export type FormValues = {
   policyType: BasicOption | null;
 
   claim: BasicOption;
-  vaccinationHistory_vaccineType: BasicOption | null;
-  vaccinationHistory_date: Date;
+  vaccinationHistory_vaccineTypes: BasicOption[];
   vaccineBrand: BasicOption | null;
   when: Date;
   where: BasicOption | null;
@@ -44,8 +43,8 @@ export const VACCINE_OPTIONS = [
 
 /** @deprecated Should be fetched from Epilog common dataset in the future */
 export const POLICY_TYPE_OPTIONS = [
-  { id: "cardinalCare", label: "Cardinal Care" },
-  { id: "kaiserHMO", label: "Kaiser HMO" },
+  { id: "cardinal", label: "Cardinal Care" },
+  { id: "kaiser", label: "Kaiser HMO" },
 ] as const;
 
 /* -------------------------------------------------------------------------- */
@@ -129,21 +128,28 @@ export const formAdapter: FormAdapter<FormValues> = {
         )?.[0] || "0",
       );
 
+    const getNOfVaccineTypeOption = (
+      vaccine: "pfizer" | "moderna" | "other",
+      n: number,
+    ) => {
+      const types: BasicOption[] = [];
+      for (let i = 0; i < n; i++) {
+        types.push(
+          VACCINE_OPTIONS.find((v) => v.id === vaccine) as BasicOption,
+        );
+      }
+      return types;
+    };
+
     const previous_vaccines_pfizerCount = getCount("pfizer");
     const previous_vaccines_modernaCount = getCount("moderna");
     const previous_vaccines_otherCount = getCount("other");
 
-    // TODO Handle cases where more than one vaccine was taken
-
-    const vaccinationHistory_vaccineType = previous_vaccines_pfizerCount
-      ? "pfizer"
-      : previous_vaccines_modernaCount
-        ? "moderna"
-        : previous_vaccines_otherCount
-          ? "other"
-          : null;
-
-    // TODO Add vaccinationHistory_date, not yet represented in Epilog
+    const vaccinationHistory_vaccineTypes = [
+      ...getNOfVaccineTypeOption("pfizer", previous_vaccines_pfizerCount),
+      ...getNOfVaccineTypeOption("moderna", previous_vaccines_modernaCount),
+      ...getNOfVaccineTypeOption("other", previous_vaccines_otherCount),
+    ];
 
     const [vaccineBrand] = compfinds(
       "X",
@@ -180,10 +186,7 @@ export const formAdapter: FormAdapter<FormValues> = {
       policyType: { id: "cardinal", label: "Cardinal" },
 
       claim: { id: claimId, label: claimId },
-      vaccinationHistory_vaccineType:
-        VACCINE_OPTIONS.find((v) => v.id === vaccinationHistory_vaccineType) ||
-        null,
-      vaccinationHistory_date: new Date(),
+      vaccinationHistory_vaccineTypes,
       vaccineBrand: VACCINE_OPTIONS.find((v) => v.id === vaccineBrand) || null,
       when,
       where: LOCATIONS.find((v) => v.id === location) || null,
@@ -210,10 +213,24 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const claimId = values.claim.id;
 
-    const vaccinationHistory_vaccineType =
-      values.vaccinationHistory_vaccineType?.id || "nil";
+    const getCount = (
+      typesArray: BasicOption[],
+      vaccine: "pfizer" | "moderna" | "other",
+    ) => typesArray.filter((v) => v.id === vaccine).length;
 
-    // TODO Add vaccinationHistory_date, not yet represented in Epilog
+    const vaccinationHistory_vaccineTypes_pfizer = getCount(
+      values.vaccinationHistory_vaccineTypes,
+      "pfizer",
+    );
+
+    const vaccinationHistory_vaccineTypes_moderna = getCount(
+      values.vaccinationHistory_vaccineTypes,
+      "moderna",
+    );
+    const vaccinationHistory_vaccineTypes_other = getCount(
+      values.vaccinationHistory_vaccineTypes,
+      "other",
+    );
 
     const vaccineBrand = values.vaccineBrand?.id || "nil";
 
@@ -232,7 +249,7 @@ export const formAdapter: FormAdapter<FormValues> = {
     person.occupation(${personId}, other)
     person.immunocompromised(${personId}, ${isPersonImmunocompromised})
 
-    policy.type(${policyId}, ${"cardinal" /* policyType */})
+    policy.type(${policyId}, ${policyType})
     policy.insuree(${policyId}, ${personId})
     policy.startdate(${policyId}, ${personId}, 01_08_2023)
     policy.enddate(${policyId}, ${personId}, 30_06_2024)
@@ -249,9 +266,9 @@ export const formAdapter: FormAdapter<FormValues> = {
     claim.vaccine_dose_count(${claimId}, 2)
     claim.consequence_of_occupation(${claimId}, no)
     claim.location(${claimId}, ${location})
-    claim.previous_vaccines_pfizer(${claimId}, ${vaccinationHistory_vaccineType === "pfizer" ? 1 : 0})
-    claim.previous_vaccines_moderna(${claimId}, ${vaccinationHistory_vaccineType === "moderna" ? 1 : 0})
-    claim.previous_vaccines_other(${claimId}, ${typeof vaccinationHistory_vaccineType !== undefined && vaccinationHistory_vaccineType !== "pfizer" && vaccinationHistory_vaccineType !== "moderna" ? 1 : 0})
+    claim.previous_vaccines_pfizer(${claimId}, ${vaccinationHistory_vaccineTypes_pfizer})
+    claim.previous_vaccines_moderna(${claimId}, ${vaccinationHistory_vaccineTypes_moderna})
+    claim.previous_vaccines_other(${claimId}, ${vaccinationHistory_vaccineTypes_other})
     `;
 
     const formDataset = definemorefacts([], readdata(epilogString));
