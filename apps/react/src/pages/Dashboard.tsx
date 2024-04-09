@@ -3,11 +3,12 @@ import Container from "../components/Container";
 import Heading from "../components/Heading";
 import ResourceList from "../components/ResourceList";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
-import { getExistingIds } from "../utils/epilogUtils";
+import { getExistingIds, getPersonDetailsById } from "../utils/epilogUtils";
 import { ROUTES } from "common";
 
 export default function Dasboard() {
   const dataset = useContext(UserDatasetContext);
+  console.log("dataset", dataset);
 
   if (!dataset) throw new Error("UserDatasetContext not found");
 
@@ -25,10 +26,33 @@ export default function Dasboard() {
     [policyIds],
   );
 
-  const personItems = useMemo(
-    () => personIds.map((id) => ({ id, label: id })),
-    [personIds],
-  );
+  const personItems = useMemo(() => personIds.map((id) => {
+    const details = getPersonDetailsById(id, dataset);
+  
+    // If details exist, structure them with separate fields
+    if (details) {
+      return {
+        id: details.id, // Assuming you always have an ID
+        label: details.id,
+        dob: details.dob,
+        occupation: details.occupation,
+        immunocompromised: details.immunocompromised
+      };
+    } else {
+      // Provide a fallback structure for missing details
+      return {
+        id: id,
+        label: id,
+        dob: 'Unknown',
+        occupation: 'Unknown',
+        immunocompromised: 'Unknown'
+      };
+    }
+  }), [personIds, dataset]);
+  
+
+
+  console.log("personItems", personItems);
 
   return (
     <>

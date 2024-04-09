@@ -1,4 +1,6 @@
 import { BasicOption } from "../types/basicOption";
+import { Person } from '../types/Person';
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    Const                                   */
@@ -208,3 +210,35 @@ export const getFirstOrNextId = (
 };
 
 /* --------------------------------- Person --------------------------------- */
+
+
+export const getPersonDetailsById = (userId, dataset) => {
+    // Initialize an object to hold the person's details
+    let personDetails = {
+      id: userId,
+      dob: '',
+      occupation: '',
+      immunocompromised: ''
+    };
+  
+    // Filter dataset for entries related to the person
+    dataset.forEach(entry => {
+      if (entry[1] === userId) {
+        switch (entry[0]) {
+          case 'person.dob':
+            personDetails.dob = entry[2];
+            break;
+          case 'person.occupation':
+            personDetails.occupation = entry[2];
+            break;
+          case 'person.immunocompromised':
+            personDetails.immunocompromised = entry[2] === 'yes' ? true : false;
+            break;
+          // Add cases for any other person-related entries
+        }
+      }
+    });
+  
+    // Return the aggregated details
+    return personDetails.dob ? personDetails : undefined;
+  };
