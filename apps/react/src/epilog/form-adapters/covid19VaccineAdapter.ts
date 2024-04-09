@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { LOCATIONS } from "../../consts/locations.const";
+import { LOCATIONS, YES_OR_NO } from "../../consts/options.const";
 import { BasicOption } from "../../types/basicOption";
 import {
   dateToString,
@@ -18,6 +18,7 @@ import { FormAdapter } from "./_formAdapter";
 export type FormValues = {
   person: BasicOption;
   dob: Date;
+  isPersonImmunocompromised: BasicOption | null;
 
   policy: BasicOption;
   policyType: BasicOption | null;
@@ -97,6 +98,13 @@ export const formAdapter: FormAdapter<FormValues> = {
       ? stringToDate(dobString)
       : DateTime.now().minus({ years: 25 }).toJSDate();
 
+    let [isPersonImmunocompromised] = compfinds(
+      "X",
+      read(`person.immunocompromised(${personId}, X)`),
+      epilogDataset,
+      [],
+    ) as string[];
+
     /* --------------------------------- Policy --------------------------------- */
 
     let policyId = getPolicyOfClaim(claimId, epilogDataset);
@@ -165,6 +173,8 @@ export const formAdapter: FormAdapter<FormValues> = {
     const formValues = {
       person: { id: personId, label: personId },
       dob,
+      isPersonImmunocompromised:
+        YES_OR_NO.find((v) => v.id === isPersonImmunocompromised) || null,
 
       policy: { id: policyId, label: policyId },
       policyType: { id: "cardinal", label: "Cardinal" },
@@ -188,6 +198,8 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const personId = values.person.id;
     const dob = dateToString(values.dob);
+    const isPersonImmunocompromised =
+      values.isPersonImmunocompromised?.id || "nil";
 
     /* --------------------------------- Policy --------------------------------- */
 
@@ -218,7 +230,7 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     person.dob(${personId}, ${dob})
     person.occupation(${personId}, other)
-    person.immunocompromised(${personId}, no)
+    person.immunocompromised(${personId}, ${isPersonImmunocompromised})
 
     policy.type(${policyId}, ${"cardinal" /* policyType */})
     policy.insuree(${policyId}, ${personId})

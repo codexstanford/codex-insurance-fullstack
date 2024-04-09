@@ -1,3 +1,4 @@
+import { BasicOption } from "../types/basicOption";
 import { compfindsReturnToBasicOptions } from "../utils/epilogUtils";
 import { EPILOG_COMMON_DATASET } from "./dataset.const";
 
@@ -10,3 +11,8 @@ export const LOCATIONS = (() => {
 
   return compfindsReturnToBasicOptions(locationNames);
 })();
+
+export const YES_OR_NO = [
+  { id: "yes", label: "Yes" },
+  { id: "no", label: "No" },
+] satisfies BasicOption[];

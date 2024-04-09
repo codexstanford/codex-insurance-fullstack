@@ -6,7 +6,7 @@ import EpilogFormContainer from "../../components/EpilogFormContainer";
 import InputDate from "../../components/InputDate";
 import InputSelect from "../../components/InputSelect";
 import InputSelectButtons from "../../components/InputSelectButtons";
-import { LOCATIONS } from "../../consts/locations.const";
+import { LOCATIONS } from "../../consts/options.const";
 import {
   ConstraintContext,
   IsConstraintLockedRecord,

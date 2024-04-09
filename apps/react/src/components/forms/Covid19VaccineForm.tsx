@@ -6,7 +6,7 @@ import EpilogFormContainer from "../EpilogFormContainer";
 import InputDate from "../InputDate";
 import InputSelect from "../InputSelect";
 import InputSelectButtons from "../InputSelectButtons";
-import { LOCATIONS } from "../../consts/locations.const";
+import { LOCATIONS, YES_OR_NO } from "../../consts/options.const";
 import {
   ConstraintContext,
   IsConstraintLockedRecord,
@@ -21,6 +21,7 @@ import useIsCovered from "../../hooks/useIsCovered";
 
 interface IsLockedRecord extends IsConstraintLockedRecord {
   dob: boolean;
+  isPersonImmunocompromised: boolean;
   vaccinationHistory: boolean;
   insurance: boolean;
   services: boolean;
@@ -57,6 +58,7 @@ export default function Covid19VaccineForm({
 
   const [isLockedRecord, setIsLockedRecord] = useState<IsLockedRecord>({
     dob: false,
+    isPersonImmunocompromised: false,
     vaccinationHistory: false,
     insurance: false,
     services: false,
@@ -71,6 +73,21 @@ export default function Covid19VaccineForm({
         setIsLockedRecord((prev) => ({ ...prev, dob: true }))
       ),
     [watch("dob"), formState.dirtyFields.dob],
+  );
+
+  useEffect(
+    () =>
+      void (
+        formState.dirtyFields.isPersonImmunocompromised &&
+        setIsLockedRecord((prev) => ({
+          ...prev,
+          isPersonImmunocompromised: true,
+        }))
+      ),
+    [
+      watch("isPersonImmunocompromised"),
+      formState.dirtyFields.isPersonImmunocompromised,
+    ],
   );
 
   useEffect(
@@ -209,6 +226,18 @@ export default function Covid19VaccineForm({
               control={control}
               render={({ field: { ref, ...field } }) => (
                 <InputDate {...field} />
+              )}
+            />
+          </Constraint>
+          <Constraint
+            id="isPersonImmunocompromised"
+            label="Is person immunocompromised?"
+          >
+            <Controller
+              name="isPersonImmunocompromised"
+              control={control}
+              render={({ field: { ref, ...field } }) => (
+                <InputSelectButtons {...field} options={YES_OR_NO} />
               )}
             />
           </Constraint>
