@@ -6,7 +6,7 @@ import { UserDatasetContext } from "../contexts/userDatasetContext";
 import { getExistingIds } from "../utils/epilogUtils";
 import { ROUTES } from "common";
 
-export default function Dasboard() {
+export default function Dashboard() {
   const dataset = useContext(UserDatasetContext);
 
   if (!dataset) throw new Error("UserDatasetContext not found");

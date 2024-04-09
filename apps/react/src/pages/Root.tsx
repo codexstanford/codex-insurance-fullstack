@@ -68,7 +68,7 @@ const Root: React.FC = () => {
                 <>
                   <span>{user.displayName}</span>
                   <ButtonLink
-                    href={ROUTES.API_AUTH_LOGUT}
+                    href={ROUTES.API_AUTH_LOGOUT}
                     renderAsReactRouterLink={false}
                   >
                     Logout

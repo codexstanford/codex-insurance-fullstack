@@ -44,7 +44,7 @@ authRouter.post(
 
 /* --------------------------------- Logout --------------------------------- */
 
-authRouter.get(ROUTES.SUBSET_LOGUT, (req, res, next) => {
+authRouter.get(ROUTES.SUBSET_LOGOUT, (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);

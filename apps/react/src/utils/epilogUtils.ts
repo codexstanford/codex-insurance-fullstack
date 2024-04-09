@@ -58,7 +58,7 @@ export const compfindsReturnToBasicOptions = (
 export const stringToDate = (dateString: string, timeString?: string) => {
   const [day, month, year] = dateString.split("_").map(Number);
 
-  if (!day || !month || !year)
+  if (day === undefined || month === undefined || year === undefined)
     throw new Error(
       `stringToDate expects a string in the format dd_MM_yyyy. Got instead: ${dateString}`,
     );
@@ -67,7 +67,7 @@ export const stringToDate = (dateString: string, timeString?: string) => {
 
   const [hours, minutes] = timeString.split("_").map(Number);
 
-  if (!hours || !minutes)
+  if (hours === undefined || minutes === undefined)
     throw new Error(
       `stringToDate expects a string in the format hh_mm. Got instead: ${timeString}`,
     );

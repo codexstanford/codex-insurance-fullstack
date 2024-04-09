@@ -5,7 +5,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import RequiresLogin from "./components/RequiresLogin";
 import RequiresUserDataset from "./components/RequiresUserDataset";
 import ClaimPage from "./pages/ClaimSingle";
-import Dasboard from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import ExplorePage from "./pages/Explore";
 import Index from "./pages/Index";
 import ResourceListPage from "./pages/ResourceListPage";
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         element: (
           <RequiresLogin>
             <RequiresUserDataset>
-              <Dasboard />
+              <Dashboard />
             </RequiresUserDataset>
           </RequiresLogin>
         ),

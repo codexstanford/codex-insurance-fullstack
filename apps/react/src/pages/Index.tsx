@@ -21,7 +21,7 @@ const Index: React.FC = () => {
           <SearchboxClaimReason placeholder="eg: contraceptives" />
           <div className="flex gap-3 justify-center items-center">
             <ButtonLink href={"/"} color="gray" className="min-w-40">
-              Wave Cardinal Care
+              Waive Cardinal Care
             </ButtonLink>
             <ButtonLink href={"/"} color="gray" className="min-w-40">
               File a Claim
