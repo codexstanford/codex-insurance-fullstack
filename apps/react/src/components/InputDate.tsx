@@ -28,96 +28,66 @@ const buttonClassNames = classNames(
   "rounded-none",
 );
 
-const InputDate: React.FC<InputDate_Input> = ({
-  options,
-  onChange,
-  onBlur,
-  ...props
-}) => {
-  const inputContext = useContext(InputContext);
-
-  const [show, setShow] = useState(false);
-
-  const onChangeCallback = useCallback((date) => {
-    const dateString = DateTime.fromJSDate(date).toISODate();
-    setInputValue(dateString); // Updates the input with the selected date
-    setShow(false); // Close the calendar
-  }, []);
+const InputDate: React.FC = ({
+    options,
+    onChange,
+    ...props
+  }) => {
+    const inputContext = useContext(InputContext);
   
-
-  const opts = useMemo(
-    () => ({
-      clearBtn: false,
+    const [show, setShow] = useState(false);
+    const datePickerWrapperRef = useRef(null);
+  
+    const onChangeCallback = useCallback((date) => {
+      const dateString = DateTime.fromJSDate(date).toISODate();
+      setInputValue(dateString);
+      // Keep the calendar open even after selecting a date
+    }, []);
+  
+    const opts = useMemo(() => ({
       ...options,
       theme: {
-        background: "rounded-none",
-        todayBtn: buttonClassNames,
-        clearBtn: buttonClassNames,
-        icons: "",
-        text: "text-black",
-        disabledText: "",
-        input: classNames(COMMON_INPUT_CLASSES, [
-          !!inputContext?.isLocked,
-          "bg-blue-200",
-        ]),
-        inputIcon: "hidden",
-        selected: "bg-blue-200 hover:bg-blue-100 text-black",
+        selected: "bg-blue-500 hover:bg-blue-700 text-white",
       },
-    }),
-    [options, buttonClassNames, inputContext?.isLocked],
-  );
-
-  const [inputValue, setInputValue] = useState("");
-
-  const handleInputChange = useCallback((event) => {
-    const newInputValue = event.target.value;
-    setInputValue(newInputValue); // Update inputValue state
-    
-    const date = DateTime.fromISO(newInputValue).toJSDate();
-    if (date.toString() !== "Invalid Date") {
-      onChangeCallback(date); // Use the existing onChangeCallback for consistency
-    }
-  }, [onChangeCallback]);
+    }), [options]);
   
-
-  return (
-    <>
-    <style>
-        {`
-        .date-picker-wrapper input[type="text"][readonly] {
-        border: none; /* Remove border */
-        background: transparent; /* Optional: Make background transparent */
-        }
-        `}
-    </style>
-    <div className="relative">
-        <button 
-        onClick={() => setShow(!show)} 
-        className="absolute right-0 top-0 mr-3 mt-2" // Adjust styling as needed
-        >
-        <FaRegCalendarAlt className="text-xl"/> {/* Replace with your calendar icon component */}
-        </button>
-        <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onBlur={() => {}}
-        className={COMMON_INPUT_CLASSES + " w-full"}
-        placeholder="YYYY-MM-DD"
-      />
-      {show && (
-    <div className="date-picker-wrapper">
-      <Datepicker
-        {...props}
-        show={show}
-        setShow={setShow}
-        onChange={onChangeCallback}
-        options={opts}
-      /></div>
-      )}
-    </div>
-    </>
-  );
-};
-
-export default InputDate;
+    const [inputValue, setInputValue] = useState("");
+  
+    return (
+      <>
+        <div className="relative">
+          <button 
+            onClick={() => setShow(!show)} 
+            className="absolute right-0 top-0 mr-3 mt-2"
+          >
+            <FaRegCalendarAlt className="text-xl"/> {/* Calendar icon */}
+          </button>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            className={COMMON_INPUT_CLASSES + " w-full"}
+            placeholder="YYYY-MM-DD"
+          />
+          {show && (
+            <div className="date-picker-wrapper" ref={datePickerWrapperRef}>
+              <Datepicker
+                {...props}
+                show={show}
+                setShow={setShow}
+                onChange={onChangeCallback}
+                options={opts}
+              />
+              <button 
+                onClick={() => setShow(false)} 
+                className="absolute top-0 right-0 mt-2 mr-2 text-lg"
+              >
+              </button>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+  
+  export default InputDate;
