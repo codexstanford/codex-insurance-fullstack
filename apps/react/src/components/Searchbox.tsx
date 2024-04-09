@@ -1,11 +1,11 @@
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Fragment, useEffect, useState } from "react";
-import { classNames } from "../utils/classNames";
 import {
   COMMON_BORDER_CLASSES,
   COMMON_INPUT_CLASSES,
 } from "../consts/classes.const";
+import { classNames } from "../utils/classNames";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -29,9 +29,7 @@ export function Searchbox<T extends Record<string | number, string>>({
   const [selected, setSelected] = useState<keyof typeof options | undefined>();
   const [query, setQuery] = useState("");
 
-  if (onChange) {
-    useEffect(() => void onChange(selected), [selected]);
-  }
+  useEffect(() => onChange?.(selected), [selected]);
 
   const filteredEntries =
     query === ""
@@ -63,6 +61,12 @@ export function Searchbox<T extends Record<string | number, string>>({
             displayValue={(id: keyof typeof options) => options[id] || ""}
             placeholder={placehoder || "Search..."}
             onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                onChange?.(selected);
+                console.log("ON CHANGE", selected);
+              }
+            }}
           />
         </div>
         <Transition
