@@ -15,6 +15,7 @@ type InputSelectButtons_Input<
   value: TValue;
   onChange?: (value: TValue) => void;
   onBlur?: () => void;
+  canDeselect?: boolean,
   options: TOptions;
 };
 
@@ -25,6 +26,7 @@ export default function InputSelectButtons<
   value,
   onChange,
   onBlur,
+  canDeselect = true,
   options,
 }: InputSelectButtons_Input<TOptions, TValue>) {
   const isSelected = (opt: TOptions[number]) =>
@@ -44,7 +46,7 @@ export default function InputSelectButtons<
           disabled={opt?.specialStatus === "disabled"}
           onClick={() => {
             if (opt.specialStatus === "disabled") return;
-            if (isSelected(opt)) {
+            if (isSelected(opt) && canDeselect) {
               // Now unselect
               onChange?.(
                 (Array.isArray(value)

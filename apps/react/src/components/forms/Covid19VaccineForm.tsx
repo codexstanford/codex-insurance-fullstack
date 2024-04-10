@@ -276,6 +276,7 @@ export default function Covid19VaccineForm({
                     <InputSelectButtons
                       {...field}
                       options={Covid19Vaccine.VACCINE_OPTIONS}
+                      canDeselect = {false}
                     />
                     <button
                       onClick={() => remove(index)}
