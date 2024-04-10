@@ -114,15 +114,6 @@ const WaiveCardinalCare = () => {
 
   // A simple function to validate form data (adjust according to your validation rules)
   const validateForm = () => {
-    // Start by checking if all required fields are filled
-    const allFieldsFilled = Object.values(formData).every(field => {
-      if (typeof field === 'boolean') return true; // checkboxes can be false
-      return field !== ''; // text/date fields should not be empty
-    });
-  
-    // Return false immediately if not all fields are filled
-    if (!allFieldsFilled) return false;
-  
     // Now, we apply the specific rules for coverage
     let covered = true;
   
@@ -154,6 +145,17 @@ const WaiveCardinalCare = () => {
               formData.offersPrescriptionDrugCoverage &&
               formData.coverageForNonEmergencyAndEmergencyCare &&
               formData.lifetimeAggregateMaxBenefit;
+
+    console.log("covered", covered);
+    console.log("academicYearCovered", academicYearCovered);
+    console.log("sfBayCareCovered", sfBayCareCovered);
+    console.log("deductibleCovered", deductibleCovered);
+    console.log("oopCovered", oopCovered);
+    console.log("formData.providesEMBPPACA", formData.providesEMBPPACA);
+    console.log("conditionsCovered", conditionsCovered);
+    console.log("formData.offersPrescriptionDrugCoverage", formData.offersPrescriptionDrugCoverage);
+    console.log("formData.coverageForNonEmergencyAndEmergencyCare", formData.coverageForNonEmergencyAndEmergencyCare);
+    console.log("formData.lifetimeAggregateMaxBenefit", formData.lifetimeAggregateMaxBenefit);
   
     return covered;
   };
@@ -167,7 +169,7 @@ const WaiveCardinalCare = () => {
       if (!formData.jVisaHolder && key.startsWith('jVisa')) {
         return true; 
       }
-        
+
       if (typeof value === 'boolean') return true; // checkboxes can be false
       return value !== ''; // ensure text fields are not empty
     });
