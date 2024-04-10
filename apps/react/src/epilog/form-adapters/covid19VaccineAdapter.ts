@@ -165,7 +165,7 @@ export const formAdapter: FormAdapter<FormValues> = {
       [],
     ) as [string, string, string][];
 
-    const when = dateTimeResult
+    const when = dateTimeResult?.length === 3
       ? stringToDate(dateTimeResult[1], dateTimeResult[2])
       : null;
 

@@ -199,22 +199,18 @@ export const getTypeOfPolicy = (
 /*                                    Write                                   */
 /* -------------------------------------------------------------------------- */
 
-export const dateToString = (date: Date) => {
+export const dateToString = (date: Date | null) => {
   const options = {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   } as const;
 
-  const formattedDate = (date) => {
-    if (date === null) {
-      return ""; // Or any other fallback value appropriate for your application
-    }
-    dateString = date.toLocaleDateString("de-DE", options);
-    return dateString.split(".").join("_");
-  };
-
-  return formattedDate;
+  if (date === null) {
+    return "nil"; // Or any other fallback value appropriate for your application
+  }
+  let dateString = date.toLocaleDateString("de-DE", options);
+  return dateString.split(".").join("_");
 };
 
 export const timeOfDateToString = (date: Date) => {
@@ -223,15 +219,11 @@ export const timeOfDateToString = (date: Date) => {
     minute: "2-digit",
   } as const;
 
-  const formattedTime = (date) => {
-    if (date === null) {
-      return ""; // Or any other fallback value appropriate for your application
-    }
-    timeString = date.toLocaleTimeString("de-DE", options);
-    return timeString.replace(":", "_");
-  };
-
-  return formattedTime;
+  if (date === null) {
+    return "nil"; // Or any other fallback value appropriate for your application
+  }
+  let timeString = date.toLocaleTimeString("de-DE", options);
+  return timeString.replace(":", "_");
 };
 
 /* -------------------------------------------------------------------------- */
