@@ -80,6 +80,7 @@ export default async function getOrCreateSSOUser(
   policy.startdate(policy0,person0,01_08_2023)
   policy.enddate(policy0,person0,30_06_2024)
   claim.policy(claim0,policy0)
+  claim.service_type(claim0, "covidVaccine")
   claim.claimant(claim0,person0)
   claim.time(claim0,11_04_2024,00_00)
   claim.hosp_start_time(claim0,03_09_2023,00_00)

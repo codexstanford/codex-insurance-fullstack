@@ -5,9 +5,10 @@ import RequiresExistingClaim from "../components/RequiresExistingClaim";
 import RequiresLogin from "../components/RequiresLogin";
 import RequiresUserDataset from "../components/RequiresUserDataset";
 import Covid19VaccineForm from "../components/forms/Covid19VaccineForm";
+import ContraceptivesForm from "../components/forms/ContraceptivesForm";
 import { ExistingClaimContext } from "../contexts/existingClaimContext";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
-import { Covid19Vaccine } from "../epilog/form-adapters/_formAdapter";
+import { Covid19Vaccine, Contraceptives } from "../epilog/form-adapters/_formAdapter";
 import useIdParam from "../hooks/useClaimIdParam";
 import { useUserDataset } from "../api/userDataset";
 import { LoginContext } from "../contexts/loginContext";
@@ -59,7 +60,10 @@ function RenderClaimForm() {
 
   // TODO Infer the correct form from the claim reason etc. If not enough info is available in the dataset, show the corrupted callout below.
 
-  const { formAdapter } = Covid19Vaccine;
+  const service = compfinds("X", read(`claim.service_type(${existingClaimId}, X)`), definemorefacts([], userDataset), [])[0];
+
+  const { formAdapter } = service === "contraceptives" ? Contraceptives :
+    service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
 
   const initialFormValues = formAdapter.epilogToFormValues(
     userDataset,
@@ -79,14 +83,29 @@ function RenderClaimForm() {
     [formAdapter, mutation],
   );
 
-  return (
-    <Container addVerticalPadding={true}>
-      <Covid19VaccineForm
-        defaultValues={initialFormValues}
-        onClickSave={onClickSave}
-      />
-    </Container>
-  );
+  console.log("SERVICE:", service);
+
+  if (service === "\"covidVaccine\"") {
+    return (
+      <Container addVerticalPadding={true}>
+        <Covid19VaccineForm
+          defaultValues={initialFormValues}
+          onClickSave={onClickSave}
+        />
+      </Container>
+    );
+  } else if (service === "\"contraceptives\"") {
+    return (
+      <Container addVerticalPadding={true}>
+        <ContraceptivesForm
+          defaultValues={initialFormValues}
+          onClickSave={onClickSave}
+        />
+      </Container>
+    );
+  } else {
+    return <div>Service not recognized.</div>;
+  }
 }
 
 /* 

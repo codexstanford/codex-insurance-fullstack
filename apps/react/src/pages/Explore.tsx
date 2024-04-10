@@ -9,7 +9,7 @@ import Covid19VaccineForm from "../components/forms/Covid19VaccineForm";
 import ContraceptivesForm from "../components/forms/ContraceptivesForm";
 import { LoginContext } from "../contexts/loginContext";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
-import { Covid19Vaccine } from "../epilog/form-adapters/_formAdapter";
+import { Covid19Vaccine, Contraceptives } from "../epilog/form-adapters/_formAdapter";
 import useSessionUser from "../hooks/useSessionUser";
 import { setAfterLoginAction } from "../utils/storage";
 import Container from "../components/Container";
@@ -37,7 +37,8 @@ export default function ExplorePage() {
     );
   }
 
-  const { formAdapter } = Covid19Vaccine;
+  const { formAdapter } = service === "contraceptives" ? Contraceptives :
+    service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
 
   const initialFormValues = formAdapter.epilogToFormValues([]);
 
@@ -78,6 +79,7 @@ export default function ExplorePage() {
 function RenderNewClaimFormLoggedIn() {
   /* ------------------------ Environmental conditions ------------------------ */
   const sessionUser = useContext(LoginContext);
+  const { service } = useParams();
   const userDataset = useContext(UserDatasetContext);
 
   if (!sessionUser || !userDataset)
@@ -93,7 +95,8 @@ function RenderNewClaimFormLoggedIn() {
   // 1. The onClickSave function is different. It navigates to the claim page.
   // 2. The initialFormValues are generated differently. The second argument to epilogToFormValues is undefined, which makes the function generate a new distinct claimId.
 
-  const { formAdapter } = Covid19Vaccine;
+  const { formAdapter } = service === "contraceptives" ? Contraceptives :
+    service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
 
   // Passing undefined as the second argument to epilogToFormValues will
   // make the function generate a new distinct claimId
@@ -119,12 +122,25 @@ function RenderNewClaimFormLoggedIn() {
     [formAdapter, mutation],
   );
 
-  return (
-    <Container addVerticalPadding={true}>
-      <Covid19VaccineForm
-        defaultValues={initialFormValues}
-        onClickSave={onClickSave}
-      />
-    </Container>
-  );
+  if (service === "covidVaccine") {
+    return (
+      <Container addVerticalPadding={true}>
+        <Covid19VaccineForm
+          defaultValues={initialFormValues}
+          onClickSave={onClickSave}
+        />
+      </Container>
+    );
+  } else if (service === "contraceptives") {
+    return (
+      <Container addVerticalPadding={true}>
+        <ContraceptivesForm
+          defaultValues={initialFormValues}
+          onClickSave={onClickSave}
+        />
+      </Container>
+    );
+  } else {
+    return <div>Service not recognized.</div>;
+  }
 }

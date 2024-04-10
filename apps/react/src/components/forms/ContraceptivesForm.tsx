@@ -12,7 +12,7 @@ import {
   IsConstraintLockedRecord,
   createConstraintContextData,
 } from "../../contexts/constraintContext";
-import { Covid19Vaccine } from "../../epilog/form-adapters/_formAdapter";
+import { Contraceptives } from "../../epilog/form-adapters/_formAdapter";
 import useIsCovered from "../../hooks/useIsCovered";
 
 /* -------------------------------------------------------------------------- */
@@ -29,8 +29,8 @@ interface IsLockedRecord extends IsConstraintLockedRecord {
 }
 
 type Input = {
-  defaultValues: Covid19Vaccine.FormValues;
-  onClickSave: (formValues: Covid19Vaccine.FormValues) => void;
+  defaultValues: Contraceptives.FormValues;
+  onClickSave: (formValues: Contraceptives.FormValues) => void;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -44,7 +44,7 @@ export default function ContraceptivesForm({
   /* ------------------------------- Form logic ------------------------------- */
 
   const { control, watch, getValues, formState } =
-    useForm<Covid19Vaccine.FormValues>({
+    useForm<Contraceptives.FormValues>({
       defaultValues,
     });
 
@@ -186,7 +186,7 @@ export default function ContraceptivesForm({
   /* -------------------------------- IsCovered ------------------------------- */
 
   const formDataset = useMemo(
-    () => Covid19Vaccine.formAdapter.formValuesToEpilog(getValues()),
+    () => Contraceptives.formAdapter.formValuesToEpilog(getValues()),
     [JSON.stringify(watch())],
   );
 
@@ -219,7 +219,7 @@ export default function ContraceptivesForm({
               render={({ field: { ref, ...field } }) => (
                 <InputSelect
                   {...field}
-                  options={Covid19Vaccine.VACCINE_OPTIONS}
+                  options={Contraceptives.VACCINE_OPTIONS}
                   placeholder="Select your most recent vaccine"
                 />
               )}
@@ -239,7 +239,7 @@ export default function ContraceptivesForm({
               render={({ field: { ref, ...field } }) => (
                 <InputSelectButtons
                   {...field}
-                  options={Covid19Vaccine.POLICY_TYPE_OPTIONS}
+                  options={Contraceptives.POLICY_TYPE_OPTIONS}
                 />
               )}
             />
@@ -251,7 +251,7 @@ export default function ContraceptivesForm({
               render={({ field: { ref, ...field } }) => (
                 <InputSelectButtons
                   {...field}
-                  options={Covid19Vaccine.VACCINE_OPTIONS}
+                  options={Contraceptives.VACCINE_OPTIONS}
                 />
               )}
             />

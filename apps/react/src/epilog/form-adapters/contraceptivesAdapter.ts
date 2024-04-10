@@ -255,7 +255,7 @@ export const formAdapter: FormAdapter<FormValues> = {
     policy.enddate(${policyId}, ${personId}, 30_06_2024)
 
     claim.policy(${claimId}, ${policyId})
-    claim.service_type(${claimId}, "covidVaccine")
+    claim.service_type(${claimId}, "contraceptives")
     claim.claimant(${claimId}, ${personId})
     claim.time(${claimId}, ${whenDateStr}, ${whenTimeStr})
     claim.hosp_start_time(${claimId}, 03_09_2023, 00_00)
