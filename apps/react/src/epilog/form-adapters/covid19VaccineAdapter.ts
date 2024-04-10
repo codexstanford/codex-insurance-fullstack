@@ -93,7 +93,7 @@ export const formAdapter: FormAdapter<FormValues> = {
       [],
     ) as string[];
 
-    const dob = dobString
+    const dob = dobString && dobString !== "nil"
       ? stringToDate(dobString)
       : null;
 
@@ -165,7 +165,7 @@ export const formAdapter: FormAdapter<FormValues> = {
       [],
     ) as [string, string, string][];
 
-    const when = dateTimeResult?.length === 3
+    const when = dateTimeResult?.length === 3 && dateTimeResult[1] !== "nil" && dateTimeResult[2] !== "nil"
       ? stringToDate(dateTimeResult[1], dateTimeResult[2])
       : null;
 
