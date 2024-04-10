@@ -66,7 +66,7 @@ const Root: React.FC = () => {
               {!user && <ButtonLink href={ROUTES.LOGIN}>Login</ButtonLink>}
               {user && (
                 <>
-                  <span>{user.displayName}</span>
+                  <span>{user.displayName?.substring(0, 9) === "dummyUser" ? "Steve Squirrel" : user.displayName}</span>
                   <ButtonLink
                     href={ROUTES.API_AUTH_LOGOUT}
                     renderAsReactRouterLink={false}

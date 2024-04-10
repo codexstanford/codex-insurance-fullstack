@@ -16,7 +16,7 @@ export const fetchUserDataset = async (
 
   const dataset = definemorefacts([], readdata(epilogDataset || ""));
 
-  console.log("Fetched userDataset", dataset);
+  console.log("Fetched userDataset", epilogDataset);
 
   return dataset;
 };
