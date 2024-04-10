@@ -188,7 +188,7 @@ const WaiveCardinalCare = () => {
   const formStyle = {
     fontFamily: 'Arial, sans-serif',
     maxWidth: '600px',
-    margin: '5px auto 40px',
+    margin: '150px auto 40px',
     padding: '20px',
   };
 
@@ -198,6 +198,10 @@ const WaiveCardinalCare = () => {
     padding: '20px',
     alignItems: 'center',
     backgroundColor: buttonStatus === 'moreInfoRequired' ? '#cccccc' : buttonStatus === 'yes' ? '#4CAF50' : '#F44336', // Grey for more info, green for yes, red for no
+    position: 'fixed',
+    top: '60px',
+    width: '100%',
+    zIndex: 1000,
   };
 
   const titleStyle = {
