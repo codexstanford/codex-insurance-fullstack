@@ -292,7 +292,7 @@ const WaiveCardinalCare = () => {
         <label style={labelStyle}>
           How much medical evacuation coverage to your home country do you have?
           <br />
-          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
                 type="text"
@@ -335,7 +335,7 @@ const WaiveCardinalCare = () => {
         <label style={labelStyle}>
         How much repatriation coverage to your home country do you have?:
         <br />
-        <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
                 type="text"
@@ -398,7 +398,7 @@ const WaiveCardinalCare = () => {
             <label style={labelStyle}>
             If you are a J Visa holder, what is your insurance deductible?
             <br />
-            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
                 type="text"
