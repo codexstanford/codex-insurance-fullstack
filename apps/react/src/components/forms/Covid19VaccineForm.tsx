@@ -250,7 +250,7 @@ export default function Covid19VaccineForm({
           </Constraint>
           <Constraint
             id="isPersonImmunocompromised"
-            label="Is person immunocompromised?"
+            label="Are you immunocompromised?"
           >
             <Controller
               name="isPersonImmunocompromised"
@@ -304,7 +304,7 @@ export default function Covid19VaccineForm({
               )}
             />
           </Constraint>*/}
-          <Constraint id="services" label="Services">
+          <Constraint id="services" label="What brand of vaccine did you receive?">
             <Controller
               name="vaccineBrand"
               control={control}
@@ -316,7 +316,7 @@ export default function Covid19VaccineForm({
               )}
             />
           </Constraint>
-          <Constraint id="when" label="When">
+          <Constraint id="when" label="When was the vaccination performed?">
             <Controller
               name="when"
               control={control}
@@ -325,7 +325,7 @@ export default function Covid19VaccineForm({
               )}
             />
           </Constraint>
-          <Constraint id="where" label="Where">
+          <Constraint id="where" label="Where was the vaccine administered?">
             <Controller
               name="where"
               control={control}
