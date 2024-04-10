@@ -1,6 +1,6 @@
 import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ResourceListItem } from "../types/resourceListItem";
 import { classNames } from "../utils/classNames";
 import Container from "./Container";
@@ -76,6 +76,8 @@ function ResourceCard({
   const isPersonItem = item && "dob" in item;
   const isClaimItem = item && "policyId" in item; // Assuming 'policyId' indicates a claim item
 
+  const navigate = useNavigate();
+
   // Existing functions for formatting DOB and occupation
   const formatDOB = (dob: any) => {
     // Split the dob string by "_" and rearrange it to "YYYY-MM-DD" format
@@ -105,6 +107,7 @@ function ResourceCard({
     color: "#555",
     fontSize: "0.9rem",
     marginTop: "0.3rem",
+    textAlign: "left"
   };
 
   const capitalizeOccupation = (occupation: any) =>
@@ -122,8 +125,11 @@ function ResourceCard({
   }
 
   return (
-    <Link
-      to={linkTo}
+    <>
+    <button
+      onClick={() => {
+        navigate(linkTo);
+      }}
       className={classNames(
         "flex gap-3 flex-col border-2 hover:bg-gray-100 rounded-lg p-3 h-36 w-72 flex-shrink-0",
         [!isAddNewCard, "bg-gray-200"],
@@ -157,13 +163,17 @@ function ResourceCard({
         </div>
       ) : isClaimItem ? (
         // New block for rendering claim items
-        <div className="space-y-2">
-          <div className="flex flex-row items-center">
+        <div className="w-full">
+          <div className="flex flex-row justify-between">
             <h3 className="text-lg font-semibold text-gray-700">
               {getFriendlyId(item.id)}
             </h3>
             {onClickRemove && (
-              <button onClick={onClickRemove} className="ml-auto">
+              <button onClick={(e) => {
+                // TODO: Find a more elegant way of stopping clicking on the trash icon from navigating to the page for the just-deleted
+                e.stopPropagation();
+                onClickRemove();
+              }} className="ml-auto mr-0">
                 <TrashIcon className="w-6 h-6 text-red-500" />
               </button>
             )}
@@ -177,6 +187,7 @@ function ResourceCard({
         // Fallback for items that are neither person nor claim
         <div className="text-lg font-semibold text-gray-700">{label}</div>
       )}
-    </Link>
+    </button>
+    </>
   );
 }
