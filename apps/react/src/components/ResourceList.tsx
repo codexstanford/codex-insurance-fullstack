@@ -111,7 +111,7 @@ function ResourceCard({
     occupation.replace(/(?:^|\s)\S/g, (a: any) => a.toUpperCase());
 
   // Function to generate friendly ID for claims
-  const getFriendlyId = (id: any) => `Claim ${id.replace(/[^\d]/g, "")}`;
+  const getFriendlyId = (id: any) => {return "Claim " + (parseInt(id.substring(5))+1)};
 
   function formatLabel(label: any) {
     // Split the label by underscores, capitalize the first letter of each word, and join them back with spaces
