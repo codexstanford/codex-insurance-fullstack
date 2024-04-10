@@ -189,7 +189,7 @@ const WaiveCardinalCare = () => {
   const formStyle = {
     fontFamily: 'Arial, sans-serif',
     maxWidth: '600px',
-    margin: '5px auto 40px',
+    margin: '150px auto 40px',
     padding: '20px',
   };
 
@@ -199,6 +199,10 @@ const WaiveCardinalCare = () => {
     padding: '20px',
     alignItems: 'center',
     backgroundColor: buttonStatus === 'moreInfoRequired' ? '#cccccc' : buttonStatus === 'yes' ? '#4CAF50' : '#F44336', // Grey for more info, green for yes, red for no
+    position: 'fixed',
+    top: '60px',
+    width: '100%',
+    zIndex: 1000,
   };
 
   const titleStyle = {
@@ -301,7 +305,7 @@ const WaiveCardinalCare = () => {
         <label style={labelStyle}>
           How much medical evacuation coverage to your home country do you have?
           </label>
-          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
                 type="text"
@@ -345,7 +349,7 @@ const WaiveCardinalCare = () => {
         <label style={labelStyle}>
         How much repatriation coverage to your home country do you have?:
         </label>
-        <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
                 type="text"
@@ -410,7 +414,7 @@ const WaiveCardinalCare = () => {
             <label style={labelStyle}>
             If you are a J Visa holder, what is your insurance deductible?
             </label>
-            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
                 type="text"
