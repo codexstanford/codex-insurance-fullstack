@@ -13,12 +13,14 @@ type FormState = {
     internationalTranslated: boolean;
     coverageStartDate: string;
     coverageEndDate: string;
-    coversEntireAcademicYear: boolean;
+    //coversEntireAcademicYear: boolean;
     coversInpatientOutpatientMedicalSF: boolean;
     coversInpatientOutpatientMentalHealthSF: boolean;
-    annualDeductibleLessThanOrEqualTo1000: boolean;
+    //annualDeductibleLessThanOrEqualTo1000: boolean;
+    annualDeductibleInput: string;
     specialEmployerPlanAnnualDeductible: boolean;
-    annualOutOfPocketMaximumLessThanOrEqualTo9100: boolean;
+    //annualOutOfPocketMaximumLessThanOrEqualTo9100: boolean;
+    annualOutOfPocketMaximumInput: string;
     specialEmployerPlanAnnualOutOfPocketMaximum: boolean;
     providesEMBPPACA: boolean;
     covers100PercentPreventiveCarePPACA: boolean;
@@ -41,12 +43,14 @@ type FormState = {
     internationalTranslated: false,
     coverageStartDate: '',
     coverageEndDate: '',
-    coversEntireAcademicYear: false,
+    //coversEntireAcademicYear: false,
     coversInpatientOutpatientMedicalSF: false,
     coversInpatientOutpatientMentalHealthSF: false,
-    annualDeductibleLessThanOrEqualTo1000: false,
+    //annualDeductibleLessThanOrEqualTo1000: false,
+    annualDeductibleInput: '',
     specialEmployerPlanAnnualDeductible: false,
-    annualOutOfPocketMaximumLessThanOrEqualTo9100: false,
+    //annualOutOfPocketMaximumLessThanOrEqualTo9100: false,
+    annualOutOfPocketMaximumInput: '',
     specialEmployerPlanAnnualOutOfPocketMaximum: false,
     providesEMBPPACA: true, // Assuming true for US plans as mentioned
     covers100PercentPreventiveCarePPACA: true, // Assuming true for US plans as mentioned
@@ -132,6 +136,17 @@ const WaiveCardinalCare = () => {
   
     // Now, we apply the specific rules for coverage
     let covered = true;
+
+    const startDate = new Date(formData.coverageStartDate);
+    const endDate = new Date(formData.coverageEndDate);
+
+    const academicStart = new Date('2023-09-26');
+    const academicEnd = new Date('2024-06-12');
+
+    const academicYearCovered = startDate < academicStart && endDate > academicEnd;
+
+    const annualDeductibleAmount = Number(formData.annualDeductibleInput);
+    const annualOutOfPocketMaximumAmount = Number(formData.annualOutOfPocketMaximumInput); // Convert to number
   
     // Check for international student specific rules
     if (formData.international) {
@@ -144,10 +159,10 @@ const WaiveCardinalCare = () => {
     }
   
     // Common requirements for all students
-    const academicYearCovered = formData.coversEntireAcademicYear; // Simplification of date logic
+    
     const sfBayCareCovered = formData.coversInpatientOutpatientMedicalSF && formData.coversInpatientOutpatientMentalHealthSF;
-    const deductibleCovered = formData.annualDeductibleLessThanOrEqualTo1000 || formData.specialEmployerPlanAnnualDeductible;
-    const oopCovered = formData.annualOutOfPocketMaximumLessThanOrEqualTo9100 || formData.specialEmployerPlanAnnualOutOfPocketMaximum;
+    const deductibleCovered = !isNaN(annualDeductibleAmount) && annualDeductibleAmount <= 1000 || formData.specialEmployerPlanAnnualDeductible;
+    const oopCovered = (!isNaN(annualOutOfPocketMaximumAmount) && annualOutOfPocketMaximumAmount <= 9100) || formData.specialEmployerPlanAnnualOutOfPocketMaximum;
     const conditionsCovered = !formData.exclusionsForPreExistingConditions;
   
     covered = covered &&
@@ -524,9 +539,8 @@ const WaiveCardinalCare = () => {
             style={inputStyle}
             />
         </div>
-        
-
-        <label style={labelStyle}>
+        </label>
+        {/*<label style={labelStyle}>
         Does it Cover the Entire Academic Year?
         </label>
           <div style={inputContainerStyle}>
@@ -543,8 +557,8 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.coversEntireAcademicYear ? '#cccccc' : '#ffffff' }}
             />
             </div>
-
-            <label style={labelStyle}>
+            </label>*/}
+        <label style={labelStyle}>
         Does it Cover Inpatient and Outpatient Medical Care in the San Francisco Bay Area?
         </label>
           <div style={inputContainerStyle}>
@@ -580,7 +594,7 @@ const WaiveCardinalCare = () => {
             />
             </div>
 
-            <label style={labelStyle}>
+            {/*<label style={labelStyle}>
             Is your annual deductible $1000 USD or less?
             </label>
           <div style={inputContainerStyle}>
@@ -597,7 +611,31 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.annualDeductibleLessThanOrEqualTo1000 ? '#cccccc' : '#ffffff' }}
             />
             </div>
-
+            </label>*/}
+            <label style={labelStyle}>
+            What is your annual deductible?
+            <br />
+            <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
+                <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
+                <input
+                    type="text"
+                    name="annualDeductibleInput" // Corrected the name attribute
+                    value={formData.annualDeductibleInput}
+                    onChange={handleChange}
+                    placeholder="Enter amount"
+                    style={{
+                        flexGrow: 1,
+                        border: '2px solid #DDD',
+                        outline: 'none',
+                        color: '#333',
+                        fontSize: '16px',
+                        padding: '5px',
+                        borderRadius: '4px',
+                        backgroundColor: 'transparent',
+                    }}
+                />
+            </div>
+        </label>
             <label style={labelStyle}>
             Do you have a special employer plan with an annual deductible above $1000?
             </label>
@@ -615,8 +653,8 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.specialEmployerPlanAnnualDeductible ? '#cccccc' : '#ffffff' }}
             />
             </div>
-
-            <label style={labelStyle}>
+            </label>
+            {/*<label style={labelStyle}>
             Is your annual out of pocket maximum $9100 USD or less?
             </label>
           <div style={inputContainerStyle}>
@@ -633,6 +671,32 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.annualOutOfPocketMaximumLessThanOrEqualTo9100 ? '#cccccc' : '#ffffff' }}
             />
             </div>
+            </label>*/}
+
+            <label style={labelStyle}>
+            What is your annual out of pocket maximum?
+                    <br />
+                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
+                    <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
+                    <input
+                        type="text"
+                        name="annualOutOfPocketMaximumInput" // Corrected the name attribute
+                        value={formData.annualOutOfPocketMaximumInput}
+                        onChange={handleChange}
+                        placeholder="Enter amount"
+                        style={{
+                            flexGrow: 1,
+                            border: '2px solid #DDD',
+                            outline: 'none',
+                            color: '#333',
+                            fontSize: '16px',
+                            padding: '5px',
+                            borderRadius: '4px',
+                            backgroundColor: 'transparent',
+                        }}
+                    />
+                </div>
+            </label>
 
             <label style={labelStyle}>
             Do you have a special employer plan with an annual out of pocket maximum above $9100?
