@@ -106,7 +106,7 @@ export default function Dashboard() {
           linkToAddNew={ROUTES.CLAIM_NEW}
           onClickRemove={onClickRemoveClaim}
         />
-        <ResourceList
+        {/*<ResourceList
           heading="Policies"
           items={policyItems}
           linkToListPage={ROUTES.POLICY}
@@ -117,7 +117,7 @@ export default function Dashboard() {
           items={personItems}
           linkToListPage={ROUTES.PERSON}
           linkToAddNew={ROUTES.PERSON_NEW}
-        />
+  />*/}
       </Container>
     </>
   );

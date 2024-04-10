@@ -70,7 +70,7 @@ export default function Sidebar() {
       >
         Claims
       </SidebarLink>
-      <SidebarLink
+      {/*<SidebarLink
         icon={<BookOpenIcon className="w-6 h-6" />}
         to={ROUTES.POLICY}
         linkPlusTo="#"
@@ -83,7 +83,7 @@ export default function Sidebar() {
         linkPlusTo="#"
       >
         People
-      </SidebarLink>
+        </SidebarLink>*/}
     </aside>
   );
 }
