@@ -20,7 +20,7 @@ const Index: React.FC = () => {
           </div>
           <SearchboxClaimReason placeholder="eg: contraceptives" />
           <div className="flex gap-3 justify-center items-center">
-            <ButtonLink href={"/"} color="gray" className="min-w-40">
+            <ButtonLink href={"/waive_cardinal_care"} color="gray" className="min-w-40">
               Waive Cardinal Care
             </ButtonLink>
             {/*<ButtonLink href={"/"} color="gray" className="min-w-40">

@@ -35,6 +35,8 @@ export const SERVICE = "/service";
 
 export const NEW_KEYOWRD = "new";
 
+export const WAIVE_CARDINAL_CARE = "/waive_cardinal_care"
+
 export const CLAIM = "/claim";
 export const CLAIM_NEW = "/claim" + "/" + NEW_KEYOWRD;
 export const getClaimUrl = (claimId: string) => `${CLAIM}/${claimId}`;
