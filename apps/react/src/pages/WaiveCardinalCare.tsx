@@ -159,9 +159,17 @@ const WaiveCardinalCare = () => {
   };
 
   const allFieldsFilled = () => {
-    return Object.values(formData).every(field => {
-      if (typeof field === 'boolean') return true; // checkboxes can be false and still considered 'filled'
-      return field !== ''; // ensure text fields are not empty
+    return Object.entries(formData).every(([key, value]) => {
+      if (!formData.international && (key === 'evacCoverage' || key === 'repatriationCoverage' || key.startsWith('jVisa'))) {
+        return true; // Assume these are 'filled' if the user is not international
+      }
+  
+      if (!formData.jVisaHolder && key.startsWith('jVisa')) {
+        return true; 
+      }
+        
+      if (typeof value === 'boolean') return true; // checkboxes can be false
+      return value !== ''; // ensure text fields are not empty
     });
   };
 
