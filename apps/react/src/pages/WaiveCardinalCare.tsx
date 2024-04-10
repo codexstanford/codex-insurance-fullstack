@@ -188,7 +188,7 @@ const WaiveCardinalCare = () => {
   const formStyle = {
     fontFamily: 'Arial, sans-serif',
     maxWidth: '600px',
-    margin: '40px auto',
+    margin: '5px auto 40px',
     padding: '20px',
   };
 
@@ -255,6 +255,7 @@ const WaiveCardinalCare = () => {
     borderWidth: '1px',
     borderStyle: 'solid',
     borderRadius: '4px',
+    marginTop: '8px',
   };
 
   return (
