@@ -9,6 +9,9 @@ import { UserDatasetContext } from "../contexts/userDatasetContext";
 import useIdParam from "../hooks/useClaimIdParam";
 import { ID_PREFIX, getExistingIds } from "../utils/epilogUtils";
 import { NEW_KEYOWRD } from "common/src/routes";
+import { LoginContext } from "../contexts/loginContext";
+import { useUserDataset } from "../api/userDataset";
+import { removeFromDataset } from "../utils/removeFromDataset";
 
 export default function ResourceListPage({
   resourceType,
@@ -22,9 +25,11 @@ export default function ResourceListPage({
   /* -------------------------------------------------------------------------- */
   /*                                  Get items                                 */
   /* -------------------------------------------------------------------------- */
+  const sessionUser = useContext(LoginContext);
   const dataset = useContext(UserDatasetContext);
 
-  if (!dataset) throw new Error("UserDatasetContext not found");
+  if (!sessionUser || !dataset)
+    throw new Error("LoginContext or UserDatasetContext not found");
 
   const ids = useMemo(
     () => getExistingIds(resourceType, dataset),
@@ -32,6 +37,20 @@ export default function ResourceListPage({
   );
 
   const items = useMemo(() => ids.map((id) => ({ id, label: id })), [ids]);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Delete items                                */
+  /* -------------------------------------------------------------------------- */
+
+  const { mutation } = useUserDataset(sessionUser.id);
+
+  const onClickRemoveClaim = useCallback(
+    (claimId: string) => {
+      const newDataset = removeFromDataset(claimId, dataset);
+      mutation.mutate(newDataset);
+    },
+    [dataset, mutation],
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                    Modal                                   */
@@ -83,6 +102,9 @@ export default function ResourceListPage({
           linkToListPage={linkToListPage}
           linkToAddNew={linkToListPage + "/" + ROUTES.NEW_KEYOWRD}
           expanded={true}
+          onClickRemove={
+            resourceType === "claim" ? onClickRemoveClaim : undefined
+          }
         />
       </Container>
       <Modal

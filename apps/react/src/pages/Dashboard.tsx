@@ -1,16 +1,21 @@
-import { useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import Container from "../components/Container";
 import Heading from "../components/Heading";
 import ResourceList from "../components/ResourceList";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
 import { getExistingIds, getPersonDetailsById, getClaimDetailsById } from "../utils/epilogUtils";
 import { ROUTES } from "common";
+import { LoginContext } from "../contexts/loginContext";
+import { useUserDataset } from "../api/userDataset";
+import { removeFromDataset } from "../utils/removeFromDataset";
 
 export default function Dashboard() {
+  const sessionUser = useContext(LoginContext);
   const dataset = useContext(UserDatasetContext);
   console.log("dataset", dataset);
 
-  if (!dataset) throw new Error("UserDatasetContext not found");
+  if (!sessionUser || !dataset)
+    throw new Error("LoginContext or UserDatasetContext not found");
 
   const claimIds = useMemo(() => getExistingIds("claim", dataset), [dataset]);
   const policyIds = useMemo(() => getExistingIds("policy", dataset), [dataset]);
@@ -75,6 +80,16 @@ export default function Dashboard() {
   console.log("claimItems", claimItems);
   console.log("personItems", personItems);
 
+  const { mutation } = useUserDataset(sessionUser.id);
+
+  const onClickRemoveClaim = useCallback(
+    (claimId: string) => {
+      const newDataset = removeFromDataset(claimId, dataset);
+      mutation.mutate(newDataset);
+    },
+    [dataset, mutation],
+  );
+
   return (
     <>
       <Container
@@ -89,6 +104,7 @@ export default function Dashboard() {
           items={claimItems}
           linkToListPage={ROUTES.CLAIM}
           linkToAddNew={ROUTES.CLAIM_NEW}
+          onClickRemove={onClickRemoveClaim}
         />
         <ResourceList
           heading="Policies"
