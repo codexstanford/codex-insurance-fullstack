@@ -1,5 +1,6 @@
 import { BasicOption } from "../types/basicOption";
 import { Person } from '../types/Person';
+import { Claim } from '../types/Claim';
 
 
 /* -------------------------------------------------------------------------- */
@@ -106,6 +107,77 @@ export const getReasonOfClaim = (
 
   return reason;
 };
+
+
+export const getClaimDetailsById = (claimId: string, dataset: ReturnType<typeof definemorefacts>): Claim | undefined => {
+    // Initialize an object to hold the claim's details
+    let claimDetails: Partial<Claim> = {
+      id: claimId,
+    };
+  
+    // Filter dataset for entries related to the claim
+    dataset.forEach(entry => {
+      if (entry[1] === claimId) {
+        switch (entry[0]) {
+          case 'claim.policy':
+            claimDetails.policyId = entry[2];
+            break;
+          case 'claim.claimant':
+            claimDetails.claimantId = entry[2];
+            break;
+          case 'claim.time':
+            claimDetails.time = `${entry[2]} ${entry[3]}`;
+            break;
+          case 'claim.hosp_start_time':
+            claimDetails.hospitalStart = `${entry[2]} ${entry[3]}`;
+            break;
+          case 'claim.hosp_end_time':
+            claimDetails.hospitalEnd = `${entry[2]} ${entry[3]}`;
+            break;
+          case 'claim.hospital':
+            claimDetails.hospitalName = entry[2];
+            break;
+          case 'claim.reason':
+            claimDetails.reason = entry[2];
+            break;
+          case 'claim.vaccine':
+            claimDetails.vaccine = entry[2];
+            break;
+          case 'claim.vaccine_brand':
+            claimDetails.vaccineBrand = entry[2];
+            break;
+          case 'claim.vaccine_dose_count':
+            claimDetails.vaccineDoseCount = parseInt(entry[2], 10);
+            break;
+          case 'claim.consequence_of_occupation':
+            claimDetails.consequenceOfOccupation = entry[2];
+            break;
+          case 'claim.location':
+            claimDetails.location = entry[2];
+            break;
+          case 'claim.previous_vaccines_pfizer':
+            claimDetails.previousVaccinesPfizer = parseInt(entry[2], 10);
+            break;
+          case 'claim.previous_vaccines_moderna':
+            claimDetails.previousVaccinesModerna = parseInt(entry[2], 10);
+            break;
+          case 'claim.previous_vaccines_other':
+            claimDetails.previousVaccinesOther = parseInt(entry[2], 10);
+            break;
+          // Add cases for any other claim-related entries
+        }
+      }
+    });
+  
+    // Check if the required fields are present
+    if (!claimDetails.policyId || !claimDetails.claimantId) {
+      // If critical information is missing, consider this claim as undefined
+      return undefined;
+    }
+  
+    // Return the aggregated details as a full Claim object
+    return claimDetails as Claim;
+  };
 
 /* --------------------------------- Policy --------------------------------- */
 

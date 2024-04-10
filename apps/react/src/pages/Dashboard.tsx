@@ -3,7 +3,7 @@ import Container from "../components/Container";
 import Heading from "../components/Heading";
 import ResourceList from "../components/ResourceList";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
-import { getExistingIds, getPersonDetailsById } from "../utils/epilogUtils";
+import { getExistingIds, getPersonDetailsById, getClaimDetailsById } from "../utils/epilogUtils";
 import { ROUTES } from "common";
 
 export default function Dasboard() {
@@ -15,11 +15,6 @@ export default function Dasboard() {
   const claimIds = useMemo(() => getExistingIds("claim", dataset), [dataset]);
   const policyIds = useMemo(() => getExistingIds("policy", dataset), [dataset]);
   const personIds = useMemo(() => getExistingIds("person", dataset), [dataset]);
-
-  const claimItems = useMemo(
-    () => claimIds.map((id) => ({ id, label: id })),
-    [claimIds],
-  );
 
   const policyItems = useMemo(
     () => policyIds.map((id) => ({ id, label: id })),
@@ -49,9 +44,35 @@ export default function Dasboard() {
       };
     }
   }), [personIds, dataset]);
-  
+
+  const claimItems = useMemo(() => claimIds.map((id) => {
+    const details = getClaimDetailsById(id, dataset); // Use getClaimDetailsById
+    return details ? {
+      id: details.id,
+      label: details.reason || 'Unknown Reason',
+      policyId: details.policyId || 'Unknown Policy',
+      claimantId: details.claimantId || 'Unknown Claimant',
+      time: details.time || 'Unknown Time',
+      hospitalStart: details.hospitalStart || 'Unknown Start Time',
+      hospitalEnd: details.hospitalEnd || 'Unknown End Time',
+      hospitalName: details.hospitalName || 'Unknown Hospital',
+      vaccine: details.vaccine || 'Unknown Vaccine',
+      vaccineBrand: details.vaccineBrand || 'Unknown Brand',
+      vaccineDoseCount: details.vaccineDoseCount || 0,
+      consequenceOfOccupation: details.consequenceOfOccupation || 'Unknown',
+      location: details.location || 'Unknown Location',
+      previousVaccinesPfizer: details.previousVaccinesPfizer || 0,
+      previousVaccinesModerna: details.previousVaccinesModerna || 0,
+      previousVaccinesOther: details.previousVaccinesOther || 0,
+    } : {
+      id,
+      label: 'Missing Details',
+      // Default values for missing claim details
+    };
+  }), [claimIds, dataset]);
 
 
+  console.log("claimItems", claimItems);
   console.log("personItems", personItems);
 
   return (

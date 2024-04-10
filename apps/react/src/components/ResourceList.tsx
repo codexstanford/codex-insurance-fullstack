@@ -58,76 +58,87 @@ export default function ResourceList({
 }
 
 function ResourceCard({
-  isAddNewCard = false,
-  label = "Unnamed",
-  item,
-  linkTo = "#",
-}: {
-  isAddNewCard?: boolean;
-  label?: string;
-  item?: any;
-  linkTo?: string;
-}) {
-const isPersonItem = item && 'dob' in item;
-const formatDOB = (dob) => {
-    // Split the dob string by "_" and rearrange it to "YYYY-MM-DD" format
-    const [day, month, year] = dob.split("_");
-    const formattedDate = `${year}-${month}-${day}`;
+    isAddNewCard = false,
+    label = "Unnamed",
+    item,
+    linkTo = "#",
+  }: {
+    isAddNewCard?: boolean;
+    label?: string;
+    item?: any;
+    linkTo?: string;
+  }) {
+    const isPersonItem = item && 'dob' in item;
+    const isClaimItem = item && 'policyId' in item; // Assuming 'policyId' indicates a claim item
   
-    // Create a new date instance with the formatted date string
-    const date = new Date(formattedDate);
+    // Existing functions for formatting DOB and occupation
+    const formatDOB = (dob) => {
+        // Split the dob string by "_" and rearrange it to "YYYY-MM-DD" format
+        const [day, month, year] = dob.split("_");
+        const formattedDate = `${year}-${month}-${day}`;
+      
+        // Create a new date instance with the formatted date string
+        const date = new Date(formattedDate);
+      
+        // Use toLocaleDateString to format the date as desired
+        return date.toLocaleDateString("en-US", {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      };
+
+      const formatClaimTime = (time) => {
+        const [datePart, timePart] = time.split(' ');
+        const [day, month, year] = datePart.split('_').map(Number);
+        const [hours, minutes] = timePart.split('_').map(Number);
+        const date = new Date(year, month - 1, day, hours, minutes);
+        return format(date, 'PPPp'); // Formats datetime to something like "April 5, 2024, 12:00 AM"
+      };
+    
   
-    // Use toLocaleDateString to format the date as desired
-    return date.toLocaleDateString("en-US", {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const detailStyle = {
-    color: "#555",
-    fontSize: "0.9rem", // Tailwind text-sm equivalent
-    marginTop: "0.3rem",
-  };
-
+    const detailStyle = {
+      color: "#555",
+      fontSize: "0.9rem",
+      marginTop: "0.3rem",
+    };
   
-const capitalizeOccupation = (occupation) => 
-    occupation.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
+    const capitalizeOccupation = (occupation) => 
+      occupation.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
+  
+    // Function to generate friendly ID for claims
+    const getFriendlyId = (id) => `Claim ${id.replace(/[^\d]/g, '')}`;
 
-  return (
-    <>
-      <Link
-      to={linkTo}
-      className={classNames(
-        "flex gap-3 flex-col border-2 hover:bg-gray-100 rounded-lg p-3 h-36 w-72 flex-shrink-0",
-        [!isAddNewCard, "bg-gray-200"],
-        [
-          isAddNewCard,
-          "justify-center items-center border-gray-200 text-gray-400",
-        ],
-      )}
-    >
-      {isAddNewCard ? (
-        <div className="flex flex-col items-center justify-center space-y-2">
+    function formatLabel(label) {
+        // Split the label by underscores, capitalize the first letter of each word, and join them back with spaces
+        return label.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      }
+  
+    return (
+      <Link to={linkTo} className={classNames("flex gap-3 flex-col border-2 hover:bg-gray-100 rounded-lg p-3 h-36 w-72 flex-shrink-0", [!isAddNewCard, "bg-gray-200"], [isAddNewCard, "justify-center items-center border-gray-200 text-gray-400"])}>
+        {isAddNewCard ? (
           <PlusCircleIcon className="w-8 h-8" />
-          <span>Add New</span>
-        </div>
-      ) : item && 'dob' in item ? (
-        // Detailed rendering for person items
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-gray-700">{"Person " + item.id.slice(-1)}</h3>
-          <p style={detailStyle}>DOB: {formatDOB(item.dob)}</p>
-          <p style={detailStyle}>Occupation: {capitalizeOccupation(item.occupation)}</p>
-          <p style={detailStyle}>Immunocompromised: {item.immunocompromised ? "Yes" : "No"}</p>
-        </div>
-      ) : (
-        // Default case for non-person items
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-semibold text-gray-700">{item.label}</h3>
-        </div>
-      )}
-    </Link>
-    </>
-  );
-}
+        ) : isPersonItem ? (
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold text-gray-700">{"Person " + item.id.slice(-1)}</h3>
+            <p style={detailStyle}>DOB: {formatDOB(item.dob)}</p>
+            <p style={detailStyle}>Occupation: {capitalizeOccupation(item.occupation)}</p>
+            <p style={detailStyle}>Immunocompromised: {item.immunocompromised ? "Yes" : "No"}</p>
+          </div>
+        ) : isClaimItem ? (
+          // New block for rendering claim items
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold text-gray-700">{getFriendlyId(item.id)}</h3>
+            {/* Example detail, adjust according to your data structure */}
+            <p style={detailStyle}>Type of Service: {formatLabel(item.label)}</p>
+            {/* Format the date of the claim, assuming item.time exists and is an ISO string */}
+            <p style={detailStyle}>Date: {formatClaimTime(item.time)}</p>
+          </div>
+        ) : (
+          // Fallback for items that are neither person nor claim
+          <div className="text-lg font-semibold text-gray-700">{label}</div>
+        )}
+      </Link>
+    );
+  }
+  

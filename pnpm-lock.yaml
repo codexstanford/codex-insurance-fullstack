@@ -22,10 +22,13 @@ importers:
         version: 5.15.15(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(react-dom@18.2.0)(react@18.2.0)
       '@mui/x-date-pickers':
         specifier: ^7.1.1
-        version: 7.1.1(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(@mui/material@5.15.15)(react-dom@18.2.0)(react@18.2.0)
+        version: 7.1.1(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(@mui/material@5.15.15)(date-fns@3.6.0)(react-dom@18.2.0)(react@18.2.0)
       AdapterDayjs:
         specifier: link:@mui/x-date-pickers/AdapterDayjs
         version: link:@mui/x-date-pickers/AdapterDayjs
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
       react-datepicker:
         specifier: ^6.6.0
         version: 6.6.0(react-dom@18.2.0)(react@18.2.0)
@@ -1373,7 +1376,7 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /@mui/x-date-pickers@7.1.1(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(@mui/material@5.15.15)(react-dom@18.2.0)(react@18.2.0):
+  /@mui/x-date-pickers@7.1.1(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(@mui/material@5.15.15)(date-fns@3.6.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-doSaoNfYR4nAXSN2mz5MwktYUmPt37jZ8/t5QrPgFtEFc3KWZoBps0YEcno5qUynY1ISpOjvnVr18zqszzG+RA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -1418,6 +1421,7 @@ packages:
       '@mui/utils': 5.15.14(react@18.2.0)
       '@types/react-transition-group': 4.4.10
       clsx: 2.1.0
+      date-fns: 3.6.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
