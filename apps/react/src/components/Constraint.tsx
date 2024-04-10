@@ -66,7 +66,7 @@ const Constraint: React.FC<Constraint_Input> = ({
                 <PlusIcon className="size-4 " />
               </button>
             )}
-            <button
+            {/*<button
               onClick={onClickLock}
               className={classNames(
                 COMMON_FOCUS_CLASSES,
@@ -76,7 +76,7 @@ const Constraint: React.FC<Constraint_Input> = ({
             >
               {isLocked && <LockClosedIcon className="size-4 " />}
               {!isLocked && <LockOpenIcon className="size-4" />}
-            </button>
+            </button>*/}
           </Container>
           <Disclosure.Panel>
             <Container makeGutter={true}>
