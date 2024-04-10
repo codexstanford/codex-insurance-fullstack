@@ -62,7 +62,12 @@ const Root: React.FC = () => {
             {showSearchbar && (
               <SearchboxClaimReason placeholder="Explore Coverage" />
             )}
-            <div className="py-3 flex gap-3 items-center ml-auto">
+            <div className="flex gap-3 items-center ml-auto">
+            <ButtonLink href={"/waive_cardinal_care"} className="min-w-40 border-0 bg-gray-300">
+              See if I can waive Cardinal Care
+            </ButtonLink>
+          </div>
+            <div className="py-3 flex gap-3 items-center">
               {!user && <ButtonLink href={ROUTES.LOGIN}>Login</ButtonLink>}
               {user && (
                 <>

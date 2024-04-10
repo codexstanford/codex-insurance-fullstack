@@ -220,7 +220,7 @@ const WaiveCardinalCare = () => {
     color: '#000000',
     border: 'none',
     borderRadius: '4px',
-    cursor: 'pointer',
+    cursor: 'default',
     marginRight: '20px',
   };
 
