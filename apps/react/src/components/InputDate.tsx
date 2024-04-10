@@ -6,6 +6,7 @@ import { COMMON_INPUT_CLASSES } from "../consts/classes.const";
 import { InputContext } from "../contexts/inputContext.ts";
 import { DateTime } from "luxon";
 import { FaRegCalendarAlt } from 'react-icons/fa';
+import { stringToDate } from "../utils/epilogUtils";
 
 // https://github.com/OMikkel/tailwind-datepicker-react
 
@@ -41,8 +42,9 @@ const InputDate: React.FC = ({
     const onChangeCallback = useCallback((date) => {
       const dateString = DateTime.fromJSDate(date).toISODate();
       setInputValue(dateString);
+      onChange?.(date);
       // Keep the calendar open even after selecting a date
-    }, []);
+    }, [onChange]);
   
     const opts = useMemo(() => ({
       ...options,
@@ -65,7 +67,24 @@ const InputDate: React.FC = ({
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+            onBlur={(e) => {
+              // Check whether in correct format
+              const pattern: RegExp = /^\d{4}-\d{2}-\d{2}$/;
+              if (!pattern.test(inputValue)) {
+                return;
+              }
+              // Check whether it's a valid date
+              if (Number.isNaN(Date.parse(inputValue))) {
+                return;
+              }
+
+              const [year, month, day] = inputValue.split("-");
+
+              onChangeCallback(stringToDate(`${day}_${month}_${year}`));
+            }}
             className={COMMON_INPUT_CLASSES + " w-full"}
             placeholder="YYYY-MM-DD"
           />

@@ -212,7 +212,21 @@ export default function Covid19VaccineForm({
     [JSON.stringify(watch())],
   );
 
-  const isCovered = useIsCovered(defaultValues.claim.id + "", formDataset);
+  let allInputsEntered = useMemo(
+    () => {
+      const formValues = getValues();
+
+      return formValues.dob !== null && 
+        formValues.isPersonImmunocompromised !== null && 
+        formValues.vaccineBrand !== null &&
+        formValues.when !== null &&
+        formValues.where !== null;
+    },
+    [watch("dob"), watch("isPersonImmunocompromised"), watch("vaccineBrand"), watch("when"), watch("where")]
+  );
+
+  const isCovered = useIsCovered(defaultValues.claim.id + "", formDataset)
+
 
   /* -------------------------------- Rendering ------------------------------- */
 
@@ -220,7 +234,7 @@ export default function Covid19VaccineForm({
     <EpilogFormContainer
       title="COVID-19 Vaccine"
       onSave={onClickSaveCallback}
-      isCovered={isCovered}
+      isCovered={allInputsEntered ? isCovered : undefined}
       __debugFormData={watch()}
     >
       <ConstraintContext.Provider value={constraintContextData}>
@@ -277,7 +291,7 @@ export default function Covid19VaccineForm({
               />
             ))}
           </Constraint>
-          <Constraint id="insurance" label="Insurance">
+          {/*<Constraint id="insurance" label="Insurance">
             <Controller
               name="policyType"
               control={control}
@@ -288,7 +302,7 @@ export default function Covid19VaccineForm({
                 />
               )}
             />
-          </Constraint>
+          </Constraint>*/}
           <Constraint id="services" label="Services">
             <Controller
               name="vaccineBrand"

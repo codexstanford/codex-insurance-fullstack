@@ -18,7 +18,7 @@ const EpilogFormContainer: React.FC<Input> = ({
   containerProps,
   title,
   onSave,
-  isCovered = false,
+  isCovered,
   children,
   __debugFormData,
 }) => {
@@ -36,12 +36,15 @@ const EpilogFormContainer: React.FC<Input> = ({
         <div
           className={classNames(
             "flex gap-3 items-center p-3 ",
-            isCovered ? "bg-green-400" : "bg-blue-200",
+            isCovered === undefined ? "bg-blue-200" : 
+              isCovered ? "bg-green-400" : "bg-red-400",
           )}
         >
           <h1 className="font-bold text-xl">{title}</h1>
           {claimId && <span className="font-mono">{claimId}</span>}
-          <Button className="ml-auto" onClick={() => void (onSave && onSave())}>
+          <p className="font-bold text-xl ml-auto">{isCovered === undefined ? "need more info" : 
+              isCovered ? "covered" : "not covered"}</p>
+          <Button className="ml-0" onClick={() => void (onSave && onSave())}>
             Save
           </Button>
         </div>
