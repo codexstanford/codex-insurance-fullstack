@@ -539,7 +539,6 @@ const WaiveCardinalCare = () => {
             style={inputStyle}
             />
         </div>
-        </label>
         {/*<label style={labelStyle}>
         Does it Cover the Entire Academic Year?
         </label>
@@ -614,7 +613,7 @@ const WaiveCardinalCare = () => {
             </label>*/}
             <label style={labelStyle}>
             What is your annual deductible?
-            <br />
+            </label>
             <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
                 <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
                 <input
@@ -635,7 +634,7 @@ const WaiveCardinalCare = () => {
                     }}
                 />
             </div>
-        </label>
+        
             <label style={labelStyle}>
             Do you have a special employer plan with an annual deductible above $1000?
             </label>
@@ -653,7 +652,6 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.specialEmployerPlanAnnualDeductible ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
             {/*<label style={labelStyle}>
             Is your annual out of pocket maximum $9100 USD or less?
             </label>
@@ -675,7 +673,7 @@ const WaiveCardinalCare = () => {
 
             <label style={labelStyle}>
             What is your annual out of pocket maximum?
-                    <br />
+            </label>
                 <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
                     <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
                     <input
@@ -696,7 +694,7 @@ const WaiveCardinalCare = () => {
                         }}
                     />
                 </div>
-            </label>
+            
 
             <label style={labelStyle}>
             Do you have a special employer plan with an annual out of pocket maximum above $9100?
@@ -717,8 +715,8 @@ const WaiveCardinalCare = () => {
             </div>
 
             <label style={labelStyle}>
-            Does it provide the Essential Minimum Benefits required by the Patient Protection and Affordable Care Act (PPACA) with no annual or lifetime maximums
-          (Assume US-based policies do, for now.)
+            Does it provide the Essential Minimum Benefits required by the Patient Protection and Affordable Care Act (PPACA) with no annual or lifetime maximums?
+          (All US-based policies do.)
           </label>
           <div style={inputContainerStyle}>
             <input
@@ -737,7 +735,7 @@ const WaiveCardinalCare = () => {
 
             <label style={labelStyle}>
             Does it cover 100% of Preventive Care as defined by the PPACA? 
-          (Assume US-based policies do, for now.)
+          (All US-based policies do.)
           </label>
           <div style={inputContainerStyle}>
             <input
