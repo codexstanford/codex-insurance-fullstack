@@ -23,9 +23,9 @@ const Index: React.FC = () => {
             <ButtonLink href={"/"} color="gray" className="min-w-40">
               Waive Cardinal Care
             </ButtonLink>
-            <ButtonLink href={"/"} color="gray" className="min-w-40">
+            {/*<ButtonLink href={"/"} color="gray" className="min-w-40">
               File a Claim
-            </ButtonLink>
+  </ButtonLink>*/}
           </div>
         </div>
       </Container>

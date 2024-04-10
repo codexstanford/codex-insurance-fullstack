@@ -1,9 +1,11 @@
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState, useRef, useEffect } from "react";
 import Datepicker from "tailwind-datepicker-react";
 import { getButtonClassNames } from "./Button";
 import { classNames } from "../utils/classNames";
 import { COMMON_INPUT_CLASSES } from "../consts/classes.const";
 import { InputContext } from "../contexts/inputContext.ts";
+import { DateTime } from "luxon";
+import { FaRegCalendarAlt } from 'react-icons/fa';
 
 // https://github.com/OMikkel/tailwind-datepicker-react
 
@@ -26,57 +28,66 @@ const buttonClassNames = classNames(
   "rounded-none",
 );
 
-const InputDate: React.FC<InputDate_Input> = ({
-  options,
-  onChange,
-  onBlur,
-  ...props
-}) => {
-  const inputContext = useContext(InputContext);
-
-  const [show, setShow] = useState(false);
-
-  const onChangeCallback = useCallback(
-    (date: Date) => {
-      onChange?.(date);
-      onBlur?.();
-    },
-    [onChange, onBlur],
-  );
-
-  const opts = useMemo(
-    () => ({
-      clearBtn: false,
+const InputDate: React.FC = ({
+    options,
+    onChange,
+    ...props
+  }) => {
+    const inputContext = useContext(InputContext);
+  
+    const [show, setShow] = useState(false);
+    const datePickerWrapperRef = useRef(null);
+  
+    const onChangeCallback = useCallback((date) => {
+      const dateString = DateTime.fromJSDate(date).toISODate();
+      setInputValue(dateString);
+      // Keep the calendar open even after selecting a date
+    }, []);
+  
+    const opts = useMemo(() => ({
       ...options,
       theme: {
-        background: "rounded-none",
-        todayBtn: buttonClassNames,
-        clearBtn: buttonClassNames,
-        icons: "",
-        text: "text-black",
-        disabledText: "",
-        input: classNames(COMMON_INPUT_CLASSES, [
-          !!inputContext?.isLocked,
-          "bg-blue-200",
-        ]),
-        inputIcon: "hidden",
-        selected: "bg-blue-200 hover:bg-blue-100 text-black",
+        selected: "bg-blue-500 hover:bg-blue-700 text-white",
       },
-    }),
-    [options, buttonClassNames, inputContext?.isLocked],
-  );
-
-  return (
-    <div className="relative">
-      <Datepicker
-        {...props}
-        show={show}
-        setShow={setShow}
-        onChange={onChangeCallback}
-        options={opts}
-      />
-    </div>
-  );
-};
-
-export default InputDate;
+    }), [options]);
+  
+    const [inputValue, setInputValue] = useState("");
+  
+    return (
+      <>
+        <div className="relative">
+          <button 
+            onClick={() => setShow(!show)} 
+            className="absolute right-0 top-0 mr-3 mt-2"
+          >
+            <FaRegCalendarAlt className="text-xl"/> {/* Calendar icon */}
+          </button>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            className={COMMON_INPUT_CLASSES + " w-full"}
+            placeholder="YYYY-MM-DD"
+          />
+          {show && (
+            <div className="date-picker-wrapper" ref={datePickerWrapperRef}>
+              <Datepicker
+                {...props}
+                show={show}
+                setShow={setShow}
+                onChange={onChangeCallback}
+                options={opts}
+              />
+              <button 
+                onClick={() => setShow(false)} 
+                className="absolute top-0 right-0 mt-2 mr-2 text-lg"
+              >
+              </button>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+  
+  export default InputDate;

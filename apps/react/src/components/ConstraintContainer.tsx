@@ -18,7 +18,7 @@ const ConstraintContainer: React.FC<ConstraintContainer_Input> = ({
         className={classNames(className, "p-3 bg-gray-200")}
         {...props}
       >
-        <p className="text-right">Constraints</p>
+        <p className="text-center">Constraints</p>
         {children}
       </Container>
     </>

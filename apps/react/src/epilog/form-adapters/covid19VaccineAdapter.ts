@@ -17,8 +17,8 @@ import { FormAdapter } from "./_formAdapter";
 
 export type FormValues = {
   person: BasicOption;
-  dob: Date;
   isPersonImmunocompromised: BasicOption | null;
+  dob: Date | null;
 
   policy: BasicOption;
   policyType: BasicOption | null;
@@ -26,7 +26,7 @@ export type FormValues = {
   claim: BasicOption;
   vaccinationHistory_vaccineTypes: BasicOption[];
   vaccineBrand: BasicOption | null;
-  when: Date;
+  when: Date | null;
   where: BasicOption | null;
 };
 
@@ -95,7 +95,7 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const dob = dobString
       ? stringToDate(dobString)
-      : DateTime.now().minus({ years: 25 }).toJSDate();
+      : null;
 
     let [isPersonImmunocompromised] = compfinds(
       "X",
@@ -167,7 +167,7 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const when = dateTimeResult
       ? stringToDate(dateTimeResult[1], dateTimeResult[2])
-      : new Date();
+      : null;
 
     const [location] = compfinds(
       "X",
