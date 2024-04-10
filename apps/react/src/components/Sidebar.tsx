@@ -63,14 +63,14 @@ export default function Sidebar() {
       >
         Dashboard
       </SidebarLink>
-      <SidebarLink
+      {/*<SidebarLink
         icon={<DocumentIcon className="w-6 h-6" />}
         to={ROUTES.CLAIM}
         linkPlusTo={ROUTES.INDEX}
       >
         Claims
       </SidebarLink>
-      {/*<SidebarLink
+      <SidebarLink
         icon={<BookOpenIcon className="w-6 h-6" />}
         to={ROUTES.POLICY}
         linkPlusTo="#"
