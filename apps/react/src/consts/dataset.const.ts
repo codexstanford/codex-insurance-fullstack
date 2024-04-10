@@ -12,11 +12,11 @@ yearly_visit_limit(home_health_care,0,200,100).
 
 valid_location.name_string(phys_office,"Physician's Office").
 valid_location.name_string(facility,"Facility").
-valid_location.name_string(ob_office,"ob_office").
+valid_location.name_string(ob_office,"Obstetrician's Office").
 valid_location.name_string(gyn_office,"Gynecologist's Office").
-valid_location.name_string(ob_gyn,"ob_gyn").
+valid_location.name_string(ob_gyn,"OB/GYN").
 valid_location.name_string(telemedicine,"Telemedicine").
-valid_location.name_string(sp_office,"sp_office").
+valid_location.name_string(sp_office,"Specialist's Office").
 valid_location.name_string(allergy_specialist,"Allergy Specialist").
 valid_location.name_string(hospital,"Hospital").
 valid_location.name_string(birthing_center,"Birthing Center").
