@@ -171,7 +171,7 @@ function ResourceCard({
           {/* Example detail, adjust according to your data structure */}
           <p style={detailStyle}>Type of Service: {formatLabel(item.label)}</p>
           {/* Format the date of the claim, assuming item.time exists and is an ISO string */}
-          <p style={detailStyle}>Date: {formatClaimTime(item.time)}</p>
+          {item.name && <p style={detailStyle}>Date: {formatClaimTime(item.time)}</p>}
         </div>
       ) : (
         // Fallback for items that are neither person nor claim
