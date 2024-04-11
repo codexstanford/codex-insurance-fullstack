@@ -220,10 +220,10 @@ const WaiveCardinalCare = () => {
   };
 
   const titleStyle = {
-    fontSize: '32px', // Adjusted for a larger banner
+    fontSize: '36px', // Adjusted for a larger banner
     fontWeight: 'bold',
     flex: '1',
-    marginLeft: '20px',
+    marginLeft: '530px',
   };
 
   const infoButtonStyle = {
@@ -235,7 +235,7 @@ const WaiveCardinalCare = () => {
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
-    marginRight: '20px',
+    marginRight: '530px',
   };
 
   const labelStyle = {
