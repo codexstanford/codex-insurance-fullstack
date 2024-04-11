@@ -60,7 +60,7 @@ function RenderClaimForm() {
 
   // TODO Infer the correct form from the claim reason etc. If not enough info is available in the dataset, show the corrupted callout below.
 
-  const service = compfinds("X", read(`claim.service_type(${existingClaimId}, X)`), definemorefacts([], userDataset), [])[0];
+  const service = compfinds("X", read(`claim.service_type(${existingClaimId}, X)`), definemorefacts([], userDataset), [])[0]?.slice(1, -1);
 
   const { formAdapter } = service === "contraceptives" ? Contraceptives :
     service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
@@ -73,7 +73,7 @@ function RenderClaimForm() {
 
   const { mutation } = useUserDataset(sessionUser.id);
 
-  const onClickSave = useCallback(
+  const covid19OnClickSave = useCallback(
     (formValues: Covid19Vaccine.FormValues) => {
       const formDataset = formAdapter.formValuesToEpilog(formValues);
       const mergedDataset = definemorefacts(formDataset, userDataset);
@@ -83,9 +83,23 @@ function RenderClaimForm() {
     [formAdapter, mutation],
   );
 
+  const contraceptivesOnClickSave = useCallback(
+    (formValues: Contraceptives.FormValues) => {
+      const formDataset = formAdapter.formValuesToEpilog(formValues);
+      const mergedDataset = definemorefacts(formDataset, userDataset);
+      mutation.mutate(mergedDataset);
+      // TODO Test if, because of this mutation, a re-render of RequiresUserDataset is triggered.
+    },
+    [formAdapter, mutation],
+  );
+
+  const onClickSave = 
+  service === "contraceptives" ? contraceptivesOnClickSave : 
+    service === "covidVaccine" ? covid19OnClickSave : covid19OnClickSave;
+
   console.log("SERVICE:", service);
 
-  if (service === "\"covidVaccine\"") {
+  if (service === "covidVaccine") {
     return (
       <Container addVerticalPadding={true}>
         <Covid19VaccineForm
@@ -94,7 +108,7 @@ function RenderClaimForm() {
         />
       </Container>
     );
-  } else if (service === "\"contraceptives\"") {
+  } else if (service === "contraceptives") {
     return (
       <Container addVerticalPadding={true}>
         <ContraceptivesForm
