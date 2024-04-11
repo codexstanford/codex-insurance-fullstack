@@ -662,7 +662,7 @@ const WaiveCardinalCare = () => {
 
             <label style={labelStyle}>
             Does it provide the Essential Minimum Benefits required by the Patient Protection and Affordable Care Act (PPACA) with no annual or lifetime maximums?
-          (All US-based policies do.)
+          (Virtually all major US-based policies do.)
           </label>
           <div style={inputContainerStyle}>
             <input
@@ -680,8 +680,7 @@ const WaiveCardinalCare = () => {
             </div>
 
             <label style={labelStyle}>
-            Does it cover 100% of Preventive Care as defined by the PPACA? 
-          (All US-based policies do.)
+            Does it cover 100% of Preventive Care as defined by the PPACA?
           </label>
           <div style={inputContainerStyle}>
             <input
@@ -753,7 +752,7 @@ const WaiveCardinalCare = () => {
             </div>
 
             <label style={labelStyle}>
-            Does it have a lifetime aggregate maximum benefit of at least $2,000,000 USD?
+            Does it have a lifetime aggregate maximum benefit of at least $2,000,000 USD, OR a maximum per condition/per lifetime benefit of $500,000 USD?
             </label>
           <div style={inputContainerStyle}>
             <input
