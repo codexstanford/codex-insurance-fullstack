@@ -6,7 +6,7 @@ import EpilogFormContainer from "../../components/EpilogFormContainer";
 import InputDate from "../../components/InputDate";
 import InputSelect from "../../components/InputSelect";
 import InputSelectButtons from "../../components/InputSelectButtons";
-import { LOCATIONS } from "../../consts/options.const";
+import { CONTRACEPTIVE_OPTIONS, LOCATIONS } from "../../consts/options.const";
 import {
   ConstraintContext,
   IsConstraintLockedRecord,
@@ -20,8 +20,6 @@ import useIsCovered from "../../hooks/useIsCovered";
 /* -------------------------------------------------------------------------- */
 
 interface IsLockedRecord extends IsConstraintLockedRecord {
-  dob: boolean;
-  vaccinationHistory: boolean;
   insurance: boolean;
   services: boolean;
   when: boolean;
@@ -56,38 +54,11 @@ export default function ContraceptivesForm({
   /* --------------------------- Constraint locking --------------------------- */
 
   const [isLockedRecord, setIsLockedRecord] = useState<IsLockedRecord>({
-    dob: false,
-    vaccinationHistory: false,
     insurance: false,
     services: false,
     when: false,
     where: false,
   });
-
-  useEffect(
-    () =>
-      void (
-        formState.dirtyFields.dob &&
-        setIsLockedRecord((prev) => ({ ...prev, dob: true }))
-      ),
-    [watch("dob"), formState.dirtyFields.dob],
-  );
-
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.vaccinationHistory_vaccineTypes &&
-        formState.touchedFields.vaccinationHistory_date &&
-        getValues("vaccinationHistory_vaccineType") &&
-        setIsLockedRecord((prev) => ({ ...prev, vaccinationHistory: true }))
-      ),
-    [
-      watch("vaccinationHistory_vaccineType"),
-      watch("vaccinationHistory_date"),
-      formState.touchedFields.vaccinationHistory_vaccineTypes,
-      formState.touchedFields.vaccinationHistory_date,
-    ],
-  );
 
   useEffect(
     () =>
@@ -109,25 +80,6 @@ export default function ContraceptivesForm({
     [isLockedRecord, setIsLockedRecord],
   );
 
-  useEffect(
-    () =>
-      void (
-        formState.dirtyFields.dob &&
-        setIsLockedRecord((prev) => ({ ...prev, dob: true }))
-      ),
-    [watch("dob")],
-  );
-
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.vaccinationHistory_vaccineTypes &&
-        formState.touchedFields.vaccinationHistory_date &&
-        getValues("vaccinationHistory_vaccineType") &&
-        setIsLockedRecord((prev) => ({ ...prev, vaccinationHistory: true }))
-      ),
-    [watch("vaccinationHistory_vaccineType"), watch("vaccinationHistory_date")],
-  );
 
   useEffect(
     () =>
@@ -144,20 +96,6 @@ export default function ContraceptivesForm({
     [watch("policyType")],
   );
 
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.vaccineBrand &&
-        setIsLockedRecord((prev) => ({
-          ...prev,
-          services:
-            !!getValues(
-              "vaccineBrand.id",
-            ) /* if changed to multiple again: remove !! and append .length > 0 */,
-        }))
-      ),
-    [watch("vaccineBrand")],
-  );
 
   useEffect(
     () =>
@@ -190,6 +128,17 @@ export default function ContraceptivesForm({
     [JSON.stringify(watch())],
   );
 
+  let allInputsEntered = useMemo(
+    () => {
+      const formValues = getValues();
+
+      return formValues.contraceptiveService !== null && 
+        formValues.when !== null &&
+        formValues.where !== null;
+    },
+    [watch("contraceptiveService"), watch("when"), watch("where")]
+  );
+
   const isCovered = useIsCovered(defaultValues.claim.id + "", formDataset);
 
   /* -------------------------------- Rendering ------------------------------- */
@@ -198,41 +147,12 @@ export default function ContraceptivesForm({
     <EpilogFormContainer
       title="Contraceptives"
       onSave={onClickSaveCallback}
-      isCovered={isCovered}
+      isCovered={allInputsEntered ? isCovered : undefined}
       __debugFormData={watch()}
     >
       <ConstraintContext.Provider value={constraintContextData}>
         <ConstraintContainer>
-          <Constraint id="dob" label="Date of Birth">
-            <Controller
-              name="dob"
-              control={control}
-              render={({ field: { ref, ...field } }) => (
-                <InputDate {...field} />
-              )}
-            />
-          </Constraint>
-          <Constraint id="vaccinationHistory" label="Vaccination History">
-            <Controller
-              name="vaccinationHistory_vaccineType"
-              control={control}
-              render={({ field: { ref, ...field } }) => (
-                <InputSelect
-                  {...field}
-                  options={Contraceptives.VACCINE_OPTIONS}
-                  placeholder="Select your most recent vaccine"
-                />
-              )}
-            />
-            <Controller
-              name="vaccinationHistory_date"
-              control={control}
-              render={({ field: { ref, ...field } }) => (
-                <InputDate {...field} />
-              )}
-            />
-          </Constraint>
-          <Constraint id="insurance" label="Insurance">
+          {/*<Constraint id="insurance" label="Insurance">
             <Controller
               name="policyType"
               control={control}
@@ -243,20 +163,20 @@ export default function ContraceptivesForm({
                 />
               )}
             />
-          </Constraint>
-          <Constraint id="services" label="Services">
+          </Constraint>*/}
+          <Constraint id="services" label="What contraceptive service did you have performed?">
             <Controller
-              name="vaccineBrand"
+              name="contraceptiveService"
               control={control}
               render={({ field: { ref, ...field } }) => (
                 <InputSelectButtons
                   {...field}
-                  options={Contraceptives.VACCINE_OPTIONS}
+                  options={CONTRACEPTIVE_OPTIONS}
                 />
               )}
             />
           </Constraint>
-          <Constraint id="when" label="When">
+          <Constraint id="when" label="When was the service performed?">
             <Controller
               name="when"
               control={control}
@@ -265,7 +185,7 @@ export default function ContraceptivesForm({
               )}
             />
           </Constraint>
-          <Constraint id="where" label="Where">
+          <Constraint id="where" label="Where was the service performed?">
             <Controller
               name="where"
               control={control}

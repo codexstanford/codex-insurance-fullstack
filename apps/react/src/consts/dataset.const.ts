@@ -49,10 +49,6 @@ valid_location(outpatient_surgery_facility_charges,surgery_center)
 valid_location(home_health_care,home)
 valid_location(non_surgical_physican_service,hospital)
 
-contraceptive_location_check(Service, contra_office).
-contraceptive_location_check(sterilization_surgery_for_women,L).
-contraceptive_location_check(sterilization_surgery_for_men,L).
-
 valid_service_provider(inpatient_surgical_services, operating_surgeon)
 valid_service_provider(inpatient_surgical_services, anesthetist)
 valid_service_provider(inpatient_surgical_services, surgical_assistant)
@@ -67,9 +63,6 @@ covered_list([breast_pump_supplies,hospice,skilled_nursing,skilled_nursing]).
 home_not_covered_list([transportation,homemaker_service,home_delivery,maintenance_therapy]).
 
 fda_approved(counseling).
-fda_approved(rod).
-fda_approved(larc).
-fda_approved(oral).
 fda_approved(iud_with_preogestin).
 fda_approved(sterilization_surgery_for_women).
 fda_approved(sterilization_surgery_for_men).
@@ -87,6 +80,25 @@ fda_approved(female_condom).
 fda_approved(spermicide).
 fda_approved(levonorgestrel_15_mg).
 fda_approved(ulipristal_acetate).
+
+fda_approved.name_string(counseling, "Counseling").
+fda_approved.name_string(iud_with_preogestin, "IUD with Progestin").
+fda_approved.name_string(sterilization_surgery_for_women, "Sterilization Surgery For Women").
+fda_approved.name_string(sterilization_surgery_for_men, "Sterilization Surgery For Men").
+fda_approved.name_string(implantable_rod, "Implantable Rod").
+fda_approved.name_string(progestin_shot_injection, "Progestion Shot/Injection").
+fda_approved.name_string(the_pill_estrogen_and_progestin, "The Pill (Combined Estrogen and Progestin)").
+fda_approved.name_string(the_mini_pill_progestin, "The Pill (Progestin Only)").
+fda_approved.name_string(patch, "Hormone Patch").
+fda_approved.name_string(vaginal_contraceptive_ring, "Vaginal Contraceptive Ring").
+fda_approved.name_string(diaphragm_with_spermicide, "Diaphragm With Spermicide").
+fda_approved.name_string(sponge_with_spermicide, "Sponge with Spermicide").
+fda_approved.name_string(cervical_cap_with_spermicide, "Cervical Cap with Spermicide").
+fda_approved.name_string(male_condom, "Male Condom").
+fda_approved.name_string(female_condom, "Female Condom").
+fda_approved.name_string(spermicide, "Spermicide Alone").
+fda_approved.name_string(levonorgestrel_15_mg, "Levonorgestrel pill (15 mg)").
+fda_approved.name_string(ulipristal_acetate, "Ulipristal Acetate pills").
 
 type(chubb_hospital_cash,product)
 type(africa,continent)

@@ -407,6 +407,10 @@ visit_current_year(Service,Claim1,Claim2):-
   % &
   % covered(Claim2)
 
+contraceptive_location_check(Service, Office) :- member(Office, [phys_office, ob_office, gyn_office, ob_gyn, sp_office]).
+contraceptive_location_check(sterilization_surgery_for_women,L).
+contraceptive_location_check(sterilization_surgery_for_men,L).
+
 %%%%%%%%%%%%%%%%%%% Exceptions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 exception(C,P):-

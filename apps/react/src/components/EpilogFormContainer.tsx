@@ -44,7 +44,7 @@ const EpilogFormContainer: React.FC<Input> = ({
         >
           {claimId && <span className="font-bold text-2xl">{claimName + ":"}</span>}
           <h1 className=" text-xl">{title}</h1>
-          <p className="font-bold text-xl ml-auto">{isCovered === undefined ? "needs more info" : 
+          <p className="font-bold text-xl ml-auto">{isCovered === undefined ? "Needs More Info" : 
               isCovered ? "Covered" : "Not Covered"}</p>
           <Button className="ml-0" onClick={() => void (onSave && onSave())}>
             Save
