@@ -45,7 +45,7 @@ export const VACCINE_HISTORY_OPTIONS = [
   { id: "moderna", label: "Moderna" },
   { id: "pfizer", label: "Pfizer" },
   { id: "other", label: "Other" },
-  { id: "old_formulation", label: "Pre-September 11, 2023" },
+  { id: "new_formulation", label: "Since September 11, 2023" },
 ] as const;
 
 /** @deprecated Should be fetched from Epilog common dataset in the future */
@@ -136,7 +136,7 @@ export const formAdapter: FormAdapter<FormValues> = {
       );
 
     const getNOfVaccineTypeOption = (
-      vaccine: "pfizer" | "moderna" | "other" | "old_formulation",
+      vaccine: "pfizer" | "moderna" | "other" | "new_formulation",
       n: number,
     ) => {
       const types: BasicOption[] = [];
@@ -151,7 +151,7 @@ export const formAdapter: FormAdapter<FormValues> = {
     const previous_vaccines_pfizerCount = getCount("pfizer");
     const previous_vaccines_modernaCount = getCount("moderna");
     const previous_vaccines_otherCount = getCount("other");
-    const previous_vaccines_oldFormulationCount = parseInt(
+    const previous_vaccines_newFormulationCount = parseInt(
       (
         compfinds(
           "X",
@@ -163,10 +163,10 @@ export const formAdapter: FormAdapter<FormValues> = {
     );
     
     const vaccinationHistory_vaccineTypes = [
+      ...getNOfVaccineTypeOption("new_formulation", previous_vaccines_newFormulationCount),
       ...getNOfVaccineTypeOption("pfizer", previous_vaccines_pfizerCount),
       ...getNOfVaccineTypeOption("moderna", previous_vaccines_modernaCount),
       ...getNOfVaccineTypeOption("other", previous_vaccines_otherCount),
-      ...getNOfVaccineTypeOption("old_formulation", previous_vaccines_oldFormulationCount),
     ];
 
     const [vaccineBrand] = compfinds(
@@ -233,7 +233,7 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     const getCount = (
       typesArray: BasicOption[],
-      vaccine: "pfizer" | "moderna" | "other" | "old_formulation",
+      vaccine: "pfizer" | "moderna" | "other" | "new_formulation",
     ) => typesArray.filter((v) => v.id === vaccine).length;
 
     const vaccinationHistory_vaccineTypes_pfizer = getCount(
@@ -250,9 +250,9 @@ export const formAdapter: FormAdapter<FormValues> = {
       "other",
     );
 
-    const vaccinationHistory_vaccineTypes_old_formulation = getCount(
+    const vaccinationHistory_vaccineTypes_new_formulation = getCount(
       values.vaccinationHistory_vaccineTypes,
-      "old_formulation",
+      "new_formulation",
     );
 
     const vaccineBrand = values.vaccineBrand?.id || "nil";
@@ -281,13 +281,13 @@ export const formAdapter: FormAdapter<FormValues> = {
     claim.service_type(${claimId}, "covidVaccine")
     claim.claimant(${claimId}, ${personId})
     claim.time(${claimId}, ${whenDateStr}, ${whenTimeStr})
-    claim.hosp_start_time(${claimId}, 03_09_2023, 00_00)
+    claim.hosp_start_time(${claimId}, ${whenDateStr}, ${whenTimeStr})
     claim.hosp_end_time(${claimId}, 03_09_2023, 01_13)
     claim.hospital(${claimId}, stanford_medical_center)
     claim.reason(${claimId}, preventive_care)
     claim.vaccine(${claimId}, covid)
     claim.vaccine_brand(${claimId}, ${vaccineBrand})
-    claim.vaccine_dose_count(${claimId}, ${vaccinationHistory_vaccineTypes_old_formulation})
+    claim.vaccine_dose_count(${claimId}, ${vaccinationHistory_vaccineTypes_new_formulation})
     claim.consequence_of_occupation(${claimId}, no)
     claim.location(${claimId}, ${location})
     claim.previous_vaccines_pfizer(${claimId}, ${vaccinationHistory_vaccineTypes_pfizer})

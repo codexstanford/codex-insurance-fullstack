@@ -72,7 +72,7 @@ export default async function getOrCreateSSOUser(
   const TOUR_EPILOG_DATASET = `
   policy(policy0)
   claim(claim0)
-  person.dob(person0,10_04_2024)
+  person.dob(person0,06_04_1996)
   person.occupation(person0,other)
   person.immunocompromised(person0,no)
   policy.type(policy0,cardinal)
@@ -89,7 +89,7 @@ export default async function getOrCreateSSOUser(
   claim.reason(claim0,preventive_care)
   claim.vaccine(claim0,covid)
   claim.vaccine_brand(claim0,pfizer)
-  claim.vaccine_dose_count(claim0,2)
+  claim.vaccine_dose_count(claim0,1)
   claim.consequence_of_occupation(claim0,no)
   claim.location(claim0,facility)
   claim.previous_vaccines_pfizer(claim0,0)

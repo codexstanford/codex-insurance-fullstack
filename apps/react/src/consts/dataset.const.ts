@@ -11,7 +11,7 @@ yearly_visit_limit(gynecological_exam,0,200,1).
 yearly_visit_limit(home_health_care,0,200,100).
 
 valid_location.name_string(phys_office,"Physician's Office").
-valid_location.name_string(facility,"Facility").
+valid_location.name_string(facility,"Outpatient Center").
 valid_location.name_string(ob_office,"Obstetrician's Office").
 valid_location.name_string(gyn_office,"Gynecologist's Office").
 valid_location.name_string(ob_gyn,"OB/GYN").

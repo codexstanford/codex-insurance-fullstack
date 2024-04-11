@@ -265,7 +265,9 @@ export default function Covid19VaccineForm({
             label="Vaccination History"
             onClickAddField={onClickAddVaccinationHistoryType}
           >
-            <p>Add an entry for each Covid vaccine you've received. If it was the most recent formulation (i.e. since September 11, 2023), select its type. If you received it before September 11, 2023, indicate that instead.</p>
+            <p>Add an entry for each Covid vaccine you've received. 
+            If you received it before September 11, 2023, indicate its type.
+            If it was the most recent formulation (i.e. received since September 11, 2023), indicate that instead.</p>
             {fields.map((field, index) => (
               <Controller
                 key={field.id}
