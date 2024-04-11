@@ -291,7 +291,8 @@ const WaiveCardinalCare = () => {
       <header style={headerStyle}>
         <h1 style={titleStyle}>Can I waive goodbye to Cardinal Care?</h1>
         <button style={infoButtonStyle}>
-          {buttonStatus === 'moreInfoRequired' ? 'More Info Required' : buttonStatus}
+          {buttonStatus === 'moreInfoRequired' ? 'More Info Required' : 
+            buttonStatus === 'yes' ? 'Yes, You Can Waive!' : 'No, You Can\'t Waive'}
         </button>
       </header>
     <form onSubmit={handleSubmit} style={formStyle}>
