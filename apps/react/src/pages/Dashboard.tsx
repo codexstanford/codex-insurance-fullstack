@@ -51,10 +51,19 @@ export default function Dashboard() {
   }), [personIds, dataset]);
 
   const claimItems = useMemo(() => claimIds.map((id) => {
+    let serviceTypeToLabel = (serviceType : string) : string | false => {
+      let serviceTypeToLabelMap = new Map<string, string> ([
+        ["contraceptives", "Contraceptives"],
+        ["covidVaccine", "COVID-19 Vaccine"],
+      ]);
+  
+      return serviceTypeToLabelMap.has(serviceType) ? serviceTypeToLabelMap.get(serviceType) as string : false;
+      }
+
     const details = getClaimDetailsById(id, dataset); // Use getClaimDetailsById
     return details ? {
       id: details.id,
-      label: details.reason || 'Unknown Reason',
+      label: serviceTypeToLabel(details.serviceType) || 'Unknown Service Type',
       policyId: details.policyId || 'Unknown Policy',
       claimantId: details.claimantId || 'Unknown Claimant',
       time: details.time || 'Unknown Time',
