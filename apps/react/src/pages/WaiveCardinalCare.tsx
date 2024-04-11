@@ -3,12 +3,9 @@ import React, { useState, useEffect } from 'react';
 type FormState = {
     international: boolean;
     evacCoverage: string;
-    evacCoverageWorkaround: boolean;
     repatriationCoverage: string;
-    repatriationCoverageWorkaround: boolean;
     jVisaHolder: boolean;
     jVisaDeductible: string;
-    jVisaDeductibleWorkaround: boolean;
     visaCopy: boolean;
     internationalTranslated: boolean;
     coverageStartDate: string;
@@ -33,12 +30,9 @@ type FormState = {
   const initialState: FormState = {
     international: false,
     evacCoverage: '',
-    evacCoverageWorkaround: false,
     repatriationCoverage: '',
-    repatriationCoverageWorkaround: false,
     jVisaHolder: false,
     jVisaDeductible: '',
-    jVisaDeductibleWorkaround: false,
     visaCopy: false,
     internationalTranslated: false,
     coverageStartDate: '',
@@ -65,8 +59,6 @@ type ButtonStatus = 'moreInfoRequired' | 'yes' | 'no';
 const WaiveCardinalCare = () => {
   const [formData, setFormData] = useState<FormState>(initialState);
   const [buttonStatus, setButtonStatus] = useState<ButtonStatus>('moreInfoRequired');
-
-  console.log("buttonStatus", buttonStatus);
 
   // Handle input changes for various form elements
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,8 +108,26 @@ const WaiveCardinalCare = () => {
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
+  const allFieldsFilled = () => {
+    return Object.entries(formData).every(([key, value]) => {
+      if (!formData.international && (key === 'evacCoverage' || key === 'repatriationCoverage' || key.startsWith('jVisa'))) {
+        return true; // Assume these are 'filled' if the user is not international
+      }
+  
+      if (!formData.jVisaHolder && key.startsWith('jVisa')) {
+        return true; 
+      }
+
+      if (typeof value === 'boolean') return true; // checkboxes can be false
+      return value !== ''; // ensure text fields are not empty
+    });
+  };
+
   // A simple function to validate form data (adjust according to your validation rules)
   const validateForm = () => {
+    // Return false immediately if not all fields are filled
+    if (allFieldsFilled() === false) return false;
+  
     // Now, we apply the specific rules for coverage
     let covered = true;
 
@@ -132,14 +142,18 @@ const WaiveCardinalCare = () => {
     const annualDeductibleAmount = Number(formData.annualDeductibleInput);
     const annualOutOfPocketMaximumAmount = Number(formData.annualOutOfPocketMaximumInput); // Convert to number
   
+    const evacCoverageAmount = Number(formData.evacCoverage);
+    const repatriationCoverageAmount = Number(formData.repatriationCoverage);
+    const jVisaDeductibleAmount = Number(formData.jVisaDeductible);
+
     // Check for international student specific rules
     if (formData.international) {
       covered = covered &&
-                formData.evacCoverageWorkaround &&
-                formData.repatriationCoverageWorkaround &&
+                !isNaN(evacCoverageAmount) && evacCoverageAmount >= 50000 &&
+                !isNaN(repatriationCoverageAmount) && repatriationCoverageAmount >= 25000 &&
                 formData.visaCopy &&
                 formData.internationalTranslated &&
-                (formData.jVisaHolder ? formData.jVisaDeductibleWorkaround : true);
+                (formData.jVisaHolder ? !isNaN(jVisaDeductibleAmount) && jVisaDeductibleAmount <= 500 : true);
     }
   
     // Common requirements for all students
@@ -173,21 +187,6 @@ const WaiveCardinalCare = () => {
     console.log("formData.lifetimeAggregateMaxBenefit", formData.lifetimeAggregateMaxBenefit);
   
     return covered;
-  };
-
-  const allFieldsFilled = () => {
-    return Object.entries(formData).every(([key, value]) => {
-      if (!formData.international && (key === 'evacCoverage' || key === 'repatriationCoverage' || key.startsWith('jVisa'))) {
-        return true; // Assume these are 'filled' if the user is not international
-      }
-  
-      if (!formData.jVisaHolder && key.startsWith('jVisa')) {
-        return true; 
-      }
-
-      if (typeof value === 'boolean') return true; // checkboxes can be false
-      return value !== ''; // ensure text fields are not empty
-    });
   };
 
   useEffect(() => {
@@ -234,7 +233,7 @@ const WaiveCardinalCare = () => {
     color: '#000000',
     border: 'none',
     borderRadius: '4px',
-    cursor: 'pointer',
+    cursor: 'default',
     marginRight: '530px',
   };
 
@@ -243,6 +242,7 @@ const WaiveCardinalCare = () => {
     margin: '10px 0 20px',
     fontSize: '20px',
     fontWeight: 'normal',
+    marginBottom: '0px',
   };
 
 
@@ -274,7 +274,14 @@ const WaiveCardinalCare = () => {
     borderWidth: '1px',
     borderStyle: 'solid',
     borderRadius: '4px',
-    marginTop: '8px',
+    cursor: 'pointer',
+    marginTop: '0px',
+  };
+
+  const hrStyle = {
+    backgroundColor: '#000000',
+    color: '#000000',
+    height: '2px',
   };
 
   return (
@@ -282,12 +289,14 @@ const WaiveCardinalCare = () => {
       <header style={headerStyle}>
         <h1 style={titleStyle}>Can I waive goodbye to Cardinal Care?</h1>
         <button style={infoButtonStyle}>
-          {buttonStatus === 'moreInfoRequired' ? 'More Info Required' : buttonStatus}
+          {buttonStatus === 'moreInfoRequired' ? 'More Info Required' : 
+            buttonStatus === 'yes' ? 'Yes, You Can Waive!' : 'No, You Can\'t Waive'}
         </button>
       </header>
     <form onSubmit={handleSubmit} style={formStyle}>
       <label style={labelStyle}>
         Are you an international student?
+        </label>
       <div style={inputContainerStyle}>
         <input
           type="button"
@@ -302,7 +311,6 @@ const WaiveCardinalCare = () => {
           style={{ ...inputStyle, backgroundColor: !formData.international ? '#cccccc' : '#ffffff' }}
         />
       </div>
-      </label>
 
       <div style={{ display: formData.international ? 'block' : 'none' }}>
         <strong>Additional Questions For International Students</strong>
@@ -310,7 +318,7 @@ const WaiveCardinalCare = () => {
         <div>
         <label style={labelStyle}>
           How much medical evacuation coverage to your home country do you have?
-          <br />
+          </label>
           <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
@@ -331,29 +339,13 @@ const WaiveCardinalCare = () => {
                 }}
             />
         </div>
-        </label>
-          <label style={labelStyle}>Do you have $50,000 emergency evacuation coverage to home country?
-          <div style={inputContainerStyle}>
-            <input
-            type="button"
-            value="Yes"
-            onClick={() => setFormData({ ...formData, evacCoverageWorkaround: true })}
-
-            style={{ ...inputStyle, backgroundColor: formData.evacCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-            <input
-            type="button"
-            value="No"
-            onClick={() => setFormData({ ...formData, evacCoverageWorkaround: false })}
-            style={{ ...inputStyle, backgroundColor: !formData.evacCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-        </div>
-        </label>
+        
+        
         </div>
         <div>
         <label style={labelStyle}>
         How much repatriation coverage to your home country do you have?:
-        <br />
+        </label>
         <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
@@ -374,29 +366,14 @@ const WaiveCardinalCare = () => {
                 }}
             />
         </div>
-        </label>
-        <label style={labelStyle}>
-            Do you have $25,000 repatriation coverage to home country?
-          <div style={inputContainerStyle}>
-            <input
-            type="button"
-            value="Yes"
-            onClick={() => setFormData({ ...formData, repatriationCoverageWorkaround: true })}
-            style={{ ...inputStyle, backgroundColor: formData.repatriationCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-            <input
-            type="button"
-            value="No"
-            onClick={() => setFormData({ ...formData, evacCoverageWorkaround: false })}
-            style={{ ...inputStyle, backgroundColor: !formData.repatriationCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-            </div>
-            </label>
+        
+            
         </div>
         
         <div>
         <label style={labelStyle}>
           Are you a J Visa holder?
+          </label>
         <div style={inputContainerStyle}>
             <input
             type="button"
@@ -412,11 +389,11 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.jVisaHolder ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
+            
             <div style={{ display: formData.jVisaHolder ? 'block' : 'none' }}>
             <label style={labelStyle}>
             If you are a J Visa holder, what is your insurance deductible?
-            <br />
+            </label>
             <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
             <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
             <input
@@ -437,30 +414,13 @@ const WaiveCardinalCare = () => {
                 }}
             />
             </div>
-            </label>
-            <label style={labelStyle}>
-                Do you have an Insurance Deductible of $500 or less?
-            <div style={inputContainerStyle}>
-                <input
-                type="button"
-                value="Yes"
-                onClick={() => setFormData({ ...formData, jVisaDeductibleWorkaround: true })}
-
-                style={{ ...inputStyle, backgroundColor: formData.jVisaDeductibleWorkaround ? '#cccccc' : '#ffffff' }}
-                />
-                <input
-                type="button"
-                value="No"
-                onClick={() => setFormData({ ...formData, jVisaDeductibleWorkaround: false })}
-                style={{ ...inputStyle, backgroundColor: !formData.jVisaDeductibleWorkaround ? '#cccccc' : '#ffffff' }}
-                />
-                </div>
-                </label>
+                
             </div>
         </div>
         <div>
         <label style={labelStyle}>
         Can you submit a copy of your Visa?
+        </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -476,9 +436,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.visaCopy ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
+            
             <label style={labelStyle}>
             Can you submit a copy of all policy documents expressed in English, and under U.S. dollars?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -494,11 +455,13 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.internationalTranslated ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
+            
         </div>
       </div>
+      <hr style={hrStyle}/>
       <label style={labelStyle}>
         Coverage Start Date
+        </label>
         <div style={inputContainerStyle}>
             <input
             type="date"
@@ -508,10 +471,11 @@ const WaiveCardinalCare = () => {
             style={inputStyle}
             />
         </div>
-        </label>
+        
 
         <label style={labelStyle}>
         Coverage End Date
+        </label>
         <div style={inputContainerStyle}>
             <input
             type="date"
@@ -521,9 +485,9 @@ const WaiveCardinalCare = () => {
             style={inputStyle}
             />
         </div>
-        </label>
         {/*<label style={labelStyle}>
         Does it Cover the Entire Academic Year?
+        </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -541,6 +505,7 @@ const WaiveCardinalCare = () => {
             </label>*/}
         <label style={labelStyle}>
         Does it Cover Inpatient and Outpatient Medical Care in the San Francisco Bay Area?
+        </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -555,10 +520,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.coversInpatientOutpatientMedicalSF ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             <label style={labelStyle}>
         Does it Cover Inpatient and Outpatient Mental Health Care in the San Francisco Bay Area? 
+        </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -573,10 +538,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.coversInpatientOutpatientMentalHealthSF ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             {/*<label style={labelStyle}>
             Is your annual deductible $1000 USD or less?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -594,7 +559,7 @@ const WaiveCardinalCare = () => {
             </label>*/}
             <label style={labelStyle}>
             What is your annual deductible?
-            <br />
+            </label>
             <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
                 <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
                 <input
@@ -615,9 +580,10 @@ const WaiveCardinalCare = () => {
                     }}
                 />
             </div>
-        </label>
+        
             <label style={labelStyle}>
             Do you have a special employer plan with an annual deductible above $1000?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -632,9 +598,9 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.specialEmployerPlanAnnualDeductible ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
             {/*<label style={labelStyle}>
             Is your annual out of pocket maximum $9100 USD or less?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -653,7 +619,7 @@ const WaiveCardinalCare = () => {
 
             <label style={labelStyle}>
             What is your annual out of pocket maximum?
-                    <br />
+            </label>
                 <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#FFF', border: '1px solid #CCC', borderRadius: '4px', padding: '5px 10px', marginTop: '10px' }}>
                     <span style={{ marginRight: '10px', fontWeight: 'bold' }}>$</span>
                     <input
@@ -674,10 +640,11 @@ const WaiveCardinalCare = () => {
                         }}
                     />
                 </div>
-            </label>
+            
 
             <label style={labelStyle}>
             Do you have a special employer plan with an annual out of pocket maximum above $9100?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -692,11 +659,11 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.specialEmployerPlanAnnualOutOfPocketMaximum ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             <label style={labelStyle}>
-            Does it provide the Essential Minimum Benefits required by the Patient Protection and Affordable Care Act (PPACA) with no annual or lifetime maximums
-          (Assume US-based policies do, for now.)
+            Does it provide the Essential Minimum Benefits required by the Patient Protection and Affordable Care Act (PPACA) with no annual or lifetime maximums?
+          (Virtually all major US-based policies do.)
+          </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -711,11 +678,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.providesEMBPPACA ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             <label style={labelStyle}>
-            Does it cover 100% of Preventive Care as defined by the PPACA? 
-          (Assume US-based policies do, for now.)
+            Does it cover 100% of Preventive Care as defined by the PPACA?
+          </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -730,10 +696,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.covers100PercentPreventiveCarePPACA ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             <label style={labelStyle}>
             Does it contain ANY exclusions for pre-existing conditions?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -748,10 +714,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.exclusionsForPreExistingConditions ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             <label style={labelStyle}>
             Does it offer Prescription Drug Coverage?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -766,10 +732,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.offersPrescriptionDrugCoverage ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             <label style={labelStyle}>
             Does it offer coverage for both non-emergency AND emergency care?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -784,10 +750,10 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.coverageForNonEmergencyAndEmergencyCare ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
 
             <label style={labelStyle}>
-            Does it have a lifetime aggregate maximum benefit of at least $2,000,000 USD?
+            Does it have a lifetime aggregate maximum benefit of at least $2,000,000 USD, OR a maximum per condition/per lifetime benefit of $500,000 USD?
+            </label>
           <div style={inputContainerStyle}>
             <input
             type="button"
@@ -802,7 +768,6 @@ const WaiveCardinalCare = () => {
             style={{ ...inputStyle, backgroundColor: !formData.lifetimeAggregateMaxBenefit ? '#cccccc' : '#ffffff' }}
             />
             </div>
-            </label>
     </form>
     </div>
   );

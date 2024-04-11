@@ -44,11 +44,14 @@ const EpilogFormContainer: React.FC<Input> = ({
         >
           {claimId && <span className="font-bold text-2xl">{claimName + ":"}</span>}
           <h1 className=" text-xl">{title}</h1>
-          <p className="font-bold text-xl ml-auto">{isCovered === undefined ? "needs more info" : 
-              isCovered ? "covered" : "not covered"}</p>
+          <p className="font-bold text-xl ml-auto">{isCovered === undefined ? "Needs More Info" : 
+              isCovered ? "Covered" : "Not Covered"}</p>
           <Button className="ml-0" onClick={() => void (onSave && onSave())}>
             Save
           </Button>
+        </div>
+        <div className="flex gap-3 items-center p-3 bg-yellow-300 font-bold">
+          Important Coverage Note: Cardinal Care only covers services received at <br/>(a) Stanford Health Care, (b) Menlo Medical Clinic, or (c) Sutter Health
         </div>
         {children}
         {/*{__debugFormData && <FormDataSpy data={__debugFormData} />}*/}

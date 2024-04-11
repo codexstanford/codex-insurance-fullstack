@@ -122,6 +122,9 @@ export const getClaimDetailsById = (claimId: string, dataset: ReturnType<typeof 
           case 'claim.policy':
             claimDetails.policyId = entry[2];
             break;
+          case 'claim.service_type':
+            claimDetails.serviceType = entry[2]?.slice(1, -1);
+            break;
           case 'claim.claimant':
             claimDetails.claimantId = entry[2];
             break;

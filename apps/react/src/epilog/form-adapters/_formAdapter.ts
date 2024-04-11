@@ -17,3 +17,4 @@ export interface FormAdapter<T extends FieldValues> {
 /* -------------------------------------------------------------------------- */
 
 export * as Covid19Vaccine from "./covid19VaccineAdapter";
+export * as Contraceptives from "./contraceptivesAdapter";

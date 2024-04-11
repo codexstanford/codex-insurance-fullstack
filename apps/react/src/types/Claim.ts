@@ -1,6 +1,7 @@
 export interface Claim {
     id: string;
     policyId: string;
+    serviceType: string;
     claimantId: string;
     time: string;
     hospitalStart: string;

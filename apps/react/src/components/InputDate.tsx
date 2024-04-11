@@ -31,6 +31,7 @@ const buttonClassNames = classNames(
 
 const InputDate: React.FC = ({
     options,
+    value,
     onChange,
     ...props
   }) => {
@@ -53,7 +54,9 @@ const InputDate: React.FC = ({
       },
     }), [options]);
   
-    const [inputValue, setInputValue] = useState("");
+
+
+    const [inputValue, setInputValue] = useState(DateTime.fromJSDate(value).toISODate());
   
     return (
       <>

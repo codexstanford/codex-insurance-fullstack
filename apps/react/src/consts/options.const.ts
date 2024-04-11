@@ -12,6 +12,14 @@ export const LOCATIONS = (() => {
   return compfindsReturnToBasicOptions(locationNames);
 })();
 
+export const CONTRACEPTIVE_OPTIONS = (() => {
+  const query = read("fda_approved.name_string(X, Y)");
+
+  const contraceptiveNames = compfinds(query, query, EPILOG_COMMON_DATASET, []);
+
+  return compfindsReturnToBasicOptions(contraceptiveNames);
+})();
+
 export const YES_OR_NO = [
   { id: "yes", label: "Yes" },
   { id: "no", label: "No" },

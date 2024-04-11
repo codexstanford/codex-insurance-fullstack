@@ -9,7 +9,7 @@ import {
   createConstraintContextData,
 } from "../../contexts/constraintContext";
 import { Covid19Vaccine } from "../../epilog/form-adapters/_formAdapter";
-import { VACCINE_OPTIONS } from "../../epilog/form-adapters/covid19VaccineAdapter";
+import { VACCINE_HISTORY_OPTIONS, VACCINE_OPTIONS } from "../../epilog/form-adapters/covid19VaccineAdapter";
 import useIsCovered from "../../hooks/useIsCovered";
 import { BasicOption } from "../../types/basicOption";
 import { classNames } from "../../utils/classNames";
@@ -68,7 +68,7 @@ export default function Covid19VaccineForm({
   const onClickAddVaccinationHistoryType = useCallback(
     () =>
       append(
-        VACCINE_OPTIONS.find((option) => option.id === "other") as BasicOption,
+        VACCINE_HISTORY_OPTIONS.find((option) => option.id === "other") as BasicOption,
       ),
     [onClickSave, getValues],
   );
@@ -265,7 +265,9 @@ export default function Covid19VaccineForm({
             label="Vaccination History"
             onClickAddField={onClickAddVaccinationHistoryType}
           >
-            <p>Add the types for all your Covid-19 vaccinations here. Click the plus button on the right to add an entry.</p>
+            <p>Add an entry for each Covid vaccine you've received. 
+            If you received it before September 11, 2023, indicate its type.
+            If it was the most recent formulation (i.e. received since September 11, 2023), indicate that instead.</p>
             {fields.map((field, index) => (
               <Controller
                 key={field.id}
@@ -275,7 +277,7 @@ export default function Covid19VaccineForm({
                   <div className="last:border-b-0 border-b-2 pb-2 flex flex-row items-center">
                     <InputSelectButtons
                       {...field}
-                      options={Covid19Vaccine.VACCINE_OPTIONS}
+                      options={Covid19Vaccine.VACCINE_HISTORY_OPTIONS}
                       canDeselect = {false}
                     />
                     <button
