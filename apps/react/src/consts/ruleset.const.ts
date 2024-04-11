@@ -77,10 +77,10 @@ eligible_service(C,P,specialized_screening_counselling):-
   claim.screening_type(C,cancer) &
   check_age_range_limit(C,cancer).   
 
-%eligible_service(C,P,preventive_care):-
-%  claim.location(C,L) &
-%  valid_location(preventive_care,L) &
-%  check_age_range_limit(C,vaccine).
+eligible_service(C,P,preventive_care):-
+  claim.location(C,L) &
+  valid_location(preventive_care,L) &
+  check_age_range_limit(C,vaccine).
 
 eligible_service(C,P,preventive_care):-
   claim.location(C,L) &

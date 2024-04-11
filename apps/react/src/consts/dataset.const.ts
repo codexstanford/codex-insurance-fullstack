@@ -66,14 +66,6 @@ covered_list_with_location([physician_consultation,allergy,inpatient_care,non_su
 covered_list([breast_pump_supplies,hospice,skilled_nursing,skilled_nursing]).
 home_not_covered_list([transportation,homemaker_service,home_delivery,maintenance_therapy]).
 
-age_range_limit(vaccine,covid,0,200,3).
-age_range_limit(vaccine,polio,0,5,5).
-age_range_limit(vaccine,polio,5,100,0).
-age_range_limit(vaccine,tb,0,24,1).
-age_range_limit(vaccine,tb,24,200,0).
-age_range_limit(cancer,prostate,0,200,1). 
-age_range_limit(cancer,breast,0,200,1).
-
 fda_approved(counseling).
 fda_approved(rod).
 fda_approved(larc).
