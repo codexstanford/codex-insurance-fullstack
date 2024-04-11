@@ -3,12 +3,9 @@ import React, { useState, useEffect } from 'react';
 type FormState = {
     international: boolean;
     evacCoverage: string;
-    evacCoverageWorkaround: boolean;
     repatriationCoverage: string;
-    repatriationCoverageWorkaround: boolean;
     jVisaHolder: boolean;
     jVisaDeductible: string;
-    jVisaDeductibleWorkaround: boolean;
     visaCopy: boolean;
     internationalTranslated: boolean;
     coverageStartDate: string;
@@ -33,12 +30,9 @@ type FormState = {
   const initialState: FormState = {
     international: false,
     evacCoverage: '',
-    evacCoverageWorkaround: false,
     repatriationCoverage: '',
-    repatriationCoverageWorkaround: false,
     jVisaHolder: false,
     jVisaDeductible: '',
-    jVisaDeductibleWorkaround: false,
     visaCopy: false,
     internationalTranslated: false,
     coverageStartDate: '',
@@ -148,14 +142,18 @@ const WaiveCardinalCare = () => {
     const annualDeductibleAmount = Number(formData.annualDeductibleInput);
     const annualOutOfPocketMaximumAmount = Number(formData.annualOutOfPocketMaximumInput); // Convert to number
   
+    const evacCoverageAmount = Number(formData.evacCoverage);
+    const repatriationCoverageAmount = Number(formData.repatriationCoverage);
+    const jVisaDeductibleAmount = Number(formData.jVisaDeductible);
+
     // Check for international student specific rules
     if (formData.international) {
       covered = covered &&
-                formData.evacCoverageWorkaround &&
-                formData.repatriationCoverageWorkaround &&
+                !isNaN(evacCoverageAmount) && evacCoverageAmount >= 50000 &&
+                !isNaN(repatriationCoverageAmount) && repatriationCoverageAmount >= 25000 &&
                 formData.visaCopy &&
                 formData.internationalTranslated &&
-                (formData.jVisaHolder ? formData.jVisaDeductibleWorkaround : true);
+                (formData.jVisaHolder ? !isNaN(jVisaDeductibleAmount) && jVisaDeductibleAmount <= 500 : true);
     }
   
     // Common requirements for all students
@@ -342,23 +340,6 @@ const WaiveCardinalCare = () => {
             />
         </div>
         
-          <label style={labelStyle}>Do you have $50,000 emergency evacuation coverage to home country?
-          </label>
-          <div style={inputContainerStyle}>
-            <input
-            type="button"
-            value="Yes"
-            onClick={() => setFormData({ ...formData, evacCoverageWorkaround: true })}
-
-            style={{ ...inputStyle, backgroundColor: formData.evacCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-            <input
-            type="button"
-            value="No"
-            onClick={() => setFormData({ ...formData, evacCoverageWorkaround: false })}
-            style={{ ...inputStyle, backgroundColor: !formData.evacCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-        </div>
         
         </div>
         <div>
@@ -386,23 +367,6 @@ const WaiveCardinalCare = () => {
             />
         </div>
         
-        <label style={labelStyle}>
-            Do you have $25,000 repatriation coverage to home country?
-            </label>
-          <div style={inputContainerStyle}>
-            <input
-            type="button"
-            value="Yes"
-            onClick={() => setFormData({ ...formData, repatriationCoverageWorkaround: true })}
-            style={{ ...inputStyle, backgroundColor: formData.repatriationCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-            <input
-            type="button"
-            value="No"
-            onClick={() => setFormData({ ...formData, evacCoverageWorkaround: false })}
-            style={{ ...inputStyle, backgroundColor: !formData.repatriationCoverageWorkaround ? '#cccccc' : '#ffffff' }}
-            />
-            </div>
             
         </div>
         
@@ -450,25 +414,6 @@ const WaiveCardinalCare = () => {
                 }}
             />
             </div>
-            
-            <label style={labelStyle}>
-                Do you have an Insurance Deductible of $500 or less?
-                </label>
-            <div style={inputContainerStyle}>
-                <input
-                type="button"
-                value="Yes"
-                onClick={() => setFormData({ ...formData, jVisaDeductibleWorkaround: true })}
-
-                style={{ ...inputStyle, backgroundColor: formData.jVisaDeductibleWorkaround ? '#cccccc' : '#ffffff' }}
-                />
-                <input
-                type="button"
-                value="No"
-                onClick={() => setFormData({ ...formData, jVisaDeductibleWorkaround: false })}
-                style={{ ...inputStyle, backgroundColor: !formData.jVisaDeductibleWorkaround ? '#cccccc' : '#ffffff' }}
-                />
-                </div>
                 
             </div>
         </div>
