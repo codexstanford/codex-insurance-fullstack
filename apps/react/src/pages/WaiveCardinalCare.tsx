@@ -294,6 +294,11 @@ const WaiveCardinalCare = () => {
         </button>
       </header>
     <form onSubmit={handleSubmit} style={formStyle}>
+      <div className="flex gap-3 items-center p-3 bg-yellow-200 font-bold">
+        Answer the following questions about your current health insurance coverage to determine whether you can waive Cardinal Care!
+        </div>
+        
+        <hr/>
       <label style={labelStyle}>
         Are you an international student?
         </label>
