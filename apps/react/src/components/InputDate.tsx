@@ -56,7 +56,7 @@ const InputDate: React.FC = ({
               value={inputValue}
               onChange={handleChange}
               onBlur={onBlur}
-              className={COMMON_INPUT_CLASSES + " pl-4 pr-2 py-2 border rounded"}
+              className={COMMON_INPUT_CLASSES + " pl-3 pr-2 py-2 border rounded"}
               style={{ display: 'block', width: '100%', fontSize: '16px', lineHeight: '20px' }}
             />
           </div>
