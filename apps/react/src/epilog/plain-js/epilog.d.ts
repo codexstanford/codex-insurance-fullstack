@@ -22,3 +22,8 @@ declare const debugfinds: (
 ) => string[] | string[][];
 
 declare const definemorerules: Function;
+
+declare const eliminatefacts: (
+  symbol: string,
+  dataset: ReturnType<typeof readdata>,
+) => ReturnType<typeof readdata>;
