@@ -30,7 +30,7 @@ export const postUserDataset = async (
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ epilogDataset: grindem(epilogDataset) }),
+    body: JSON.stringify({ epilogDataset: grindem(zniquify(epilogDataset)) }),
   });
   return await response.json();
 };

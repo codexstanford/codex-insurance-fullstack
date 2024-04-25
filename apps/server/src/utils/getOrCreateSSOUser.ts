@@ -71,6 +71,7 @@ export default async function getOrCreateSSOUser(
 
   const TOUR_EPILOG_DATASET = `
   policy(policy0)
+  person(person0)
   claim(claim0)
   person.dob(person0,06_04_1996)
   person.occupation(person0,other)
