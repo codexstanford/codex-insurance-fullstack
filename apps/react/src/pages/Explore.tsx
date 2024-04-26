@@ -53,8 +53,8 @@ export default function ExplorePage() {
     },
     [formAdapter, navigate],
   );
-  console.log("initialFormValues", initialFormValues);
-  console.log("service", service);
+  // console.log("initialFormValues", initialFormValues);
+  // console.log("service", service);
 
 
   if (service === "covidVaccine") {

@@ -12,7 +12,7 @@ import { removeFromDataset } from "../utils/removeFromDataset";
 export default function Dashboard() {
   const sessionUser = useContext(LoginContext);
   const dataset = useContext(UserDatasetContext);
-  console.log("dataset", dataset);
+  // console.log("dataset", dataset);
 
   if (!sessionUser || !dataset)
     throw new Error("LoginContext or UserDatasetContext not found");
@@ -86,8 +86,8 @@ export default function Dashboard() {
   }), [claimIds, dataset]);
 
 
-  console.log("claimItems", claimItems);
-  console.log("personItems", personItems);
+  // console.log("claimItems", claimItems);
+  // console.log("personItems", personItems);
 
   const { mutation } = useUserDataset(sessionUser.id);
 

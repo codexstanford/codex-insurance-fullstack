@@ -13,16 +13,16 @@ export default function useIsCovered(
     [formDataset],
   );
 
-  console.log("query", query);
-  console.log("formDataset", formDataset);
-  console.log("mergedDataset", mergedDataset);
+  // console.log("query", query);
+  // console.log("formDataset", formDataset);
+  // console.log("mergedDataset", mergedDataset);
 
   const result = useMemo(
     () => debugfinds(query, query, mergedDataset, EPILOG_RULESET) as string[][],
     [query, mergedDataset],
   );
 
-  console.log("result", result);
+  // console.log("result", result);
 
   const isCovered = result.length > 0;
 
