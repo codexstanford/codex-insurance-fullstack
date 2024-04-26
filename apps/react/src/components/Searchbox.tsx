@@ -42,7 +42,7 @@ export function Searchbox<T extends Record<string | number, string>>({
         );
 
   return (
-    <Combobox value={selected} onChange={setSelected}>
+    <Combobox value={selected} onChange={setSelected} nullable={true}>
       <div className="relative">
         <div
           className={classNames(
