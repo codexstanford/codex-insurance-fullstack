@@ -42,7 +42,11 @@ export function Searchbox<T extends Record<string | number, string>>({
         );
 
   return (
-    <Combobox value={selected} onChange={setSelected} nullable={true}>
+    <Combobox
+      value={selected}
+      onChange={(value) => setSelected(value ?? undefined)}
+      immediate={true}
+    >
       <div className="relative">
         <div
           className={classNames(
@@ -64,7 +68,7 @@ export function Searchbox<T extends Record<string | number, string>>({
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 onChange?.(selected);
-                console.log("ON CHANGE", selected);
+                // console.log("ON CHANGE", selected);
               }
             }}
           />

@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
+    "@headlessui/react": "0.0.0-insiders.26e1644",
     "@heroicons/react": "^2.1.1",
     "@tanstack/react-query": "^5.28.9",
     "common": "workspace:*",
