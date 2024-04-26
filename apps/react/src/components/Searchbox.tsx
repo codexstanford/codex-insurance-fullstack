@@ -14,6 +14,7 @@ import { classNames } from "../utils/classNames";
 export type Searchbox_Input<T extends Record<string | number, string>> = {
   options: T;
   onChange?: (key?: keyof T) => void;
+  resetAfterChange?: boolean;
   placehoder?: string;
 };
 
@@ -24,12 +25,19 @@ export type Searchbox_Input<T extends Record<string | number, string>> = {
 export function Searchbox<T extends Record<string | number, string>>({
   options,
   onChange,
+  resetAfterChange = false,
   placehoder,
 }: Searchbox_Input<T>) {
-  const [selected, setSelected] = useState<keyof typeof options | undefined>();
+  const [selected, setSelected] = useState<keyof typeof options | null>(null);
   const [query, setQuery] = useState("");
 
-  useEffect(() => onChange?.(selected), [selected]);
+  useEffect(() => {
+    onChange?.(selected ?? undefined);
+    if (resetAfterChange) {
+      setSelected(null);
+      setQuery("");
+    }
+  }, [selected]);
 
   const filteredEntries =
     query === ""
@@ -44,7 +52,7 @@ export function Searchbox<T extends Record<string | number, string>>({
   return (
     <Combobox
       value={selected}
-      onChange={(value) => setSelected(value ?? undefined)}
+      onChange={(value) => setSelected(value)}
       immediate={true}
     >
       <div className="relative">
@@ -65,12 +73,6 @@ export function Searchbox<T extends Record<string | number, string>>({
             displayValue={(id: keyof typeof options) => options[id] || ""}
             placeholder={placehoder || "Search..."}
             onChange={(event) => setQuery(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                onChange?.(selected);
-                // console.log("ON CHANGE", selected);
-              }
-            }}
           />
         </div>
         <Transition

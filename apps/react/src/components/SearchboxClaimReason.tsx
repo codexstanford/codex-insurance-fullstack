@@ -17,6 +17,7 @@ export default function SearchboxClaimReason({
       onChange={(situation) => {
         if (situation) navigate(ROUTES.SERVICE + "/" + situation);
       }}
+      resetAfterChange={true}
       placehoder={placeholder}
     />
   );
