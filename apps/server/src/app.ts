@@ -13,7 +13,7 @@ import addAuthMiddleware from "./auth/addAuthMiddleware";
 /*                                   Config                                   */
 /* -------------------------------------------------------------------------- */
 
-const port = 3000;
+const defaultPort = 3000;
 const pathToClient = path.join(__dirname, "../../react/build");
 
 /* -------------------------------------------------------------------------- */
@@ -54,6 +54,11 @@ app.get("*", (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 /*                                Start server                                */
 /* -------------------------------------------------------------------------- */
+
+let port : string | Number | undefined = process.env.PORT;
+if (port === undefined || port === "") {
+  port = defaultPort;
+}
 
 app.listen(port, () => {
   console.log(`Serving server app on http://localhost:${port}`);
