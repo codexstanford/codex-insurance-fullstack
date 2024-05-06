@@ -5,7 +5,6 @@ import { classNames } from "../utils/classNames";
 import { COMMON_INPUT_CLASSES } from "../consts/classes.const";
 import { InputContext } from "../contexts/inputContext.ts";
 import { DateTime } from "luxon";
-import { FaRegCalendarAlt } from 'react-icons/fa';
 import { stringToDate } from "../utils/epilogUtils";
 
 // https://github.com/OMikkel/tailwind-datepicker-react
@@ -48,7 +47,6 @@ const InputDate: React.FC = ({
 
       return (
         <label style={{ display: 'block', marginBottom: '10px', fontSize: '16px' }}>
-          Coverage Start Date
           <div style={{ position: 'relative' }}>
             <input
               type="date"

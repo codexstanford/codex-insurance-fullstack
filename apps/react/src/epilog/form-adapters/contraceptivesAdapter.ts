@@ -61,8 +61,11 @@ export const formAdapter: FormAdapter<FormValues> = {
         claimId = undefined;
       }
     }
+    console.log("epilogDataset in contraceptives adapter before getNextId", epilogDataset);
 
     if (!claimId) claimId = getNextId("claim", epilogDataset);
+    console.log("nextId", claimId);
+
 
     /* --------------------------------- Person --------------------------------- */
 
@@ -131,18 +134,32 @@ export const formAdapter: FormAdapter<FormValues> = {
 
     return formValues;
   },
+
+  
   formValuesToEpilog: (values) => {
+    console.log("values",values);
     /* --------------------------------- Person --------------------------------- */
 
+    if (!values.person) {
+        throw new Error('person data is missing in form values.');
+    }    
+    
     const personId = values.person.id;
 
     /* --------------------------------- Policy --------------------------------- */
+
+    if (!values.policy) {
+        throw new Error('policy data is missing in form values.');
+    }    
 
     const policyId = values.policy.id;
     const policyType = values.policyType?.id || "nil";
 
     /* ---------------------------------- Claim --------------------------------- */
 
+    if (!values.claim) {
+        throw new Error('Claim data is missing in form values.');
+    }    
     const claimId = values.claim.id;
 
     const whenDate = values.when;

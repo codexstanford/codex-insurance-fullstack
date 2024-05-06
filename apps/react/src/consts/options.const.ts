@@ -24,3 +24,19 @@ export const YES_OR_NO = [
   { id: "yes", label: "Yes" },
   { id: "no", label: "No" },
 ] satisfies BasicOption[];
+
+
+export const VACCINE_OPTIONS: BasicOption[] = [
+    { id: 'moderna', label: 'Moderna' },
+    { id: 'pfizer', label: 'Pfizer' },
+    { id: 'other', label: 'Other' }
+  ];
+  
+  export const VACCINE_HISTORY_OPTIONS: BasicOption[] = [
+    { id: 'moderna', label: 'Moderna' },
+    { id: 'pfizer', label: 'Pfizer' },
+    { id: 'other', label: 'Other' },
+    { id: 'new_formulation', label: 'Since September 11, 2023' }
+  ];
+
+  
