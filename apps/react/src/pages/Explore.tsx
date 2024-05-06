@@ -44,7 +44,7 @@ export default function ExplorePage() {
 if (!service) {
     return <div>Service type is required.</div>;
   }
-  const formAdapter = useMemo(() => new GeneralFormAdapter(service, [], undefined, true), [service]);
+  const formAdapter = useMemo(() => new GeneralFormAdapter(service, definemorefacts([], []), undefined, true), [service]);
   const initialFormValues = useMemo(() => formAdapter.epilogToFormValues(), [formAdapter]);
 
 

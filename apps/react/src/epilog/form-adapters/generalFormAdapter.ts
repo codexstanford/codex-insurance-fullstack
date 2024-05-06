@@ -9,7 +9,7 @@ import {
 } from "../../utils/epilogUtils";
 import { configs, FormConfig } from "./formConfigs";
 
-type Dataset = { [key: string]: any }; 
+type Dataset = ReturnType<typeof definemorefacts>; 
 
 interface BasicOption {
   id: string;
@@ -34,50 +34,22 @@ class GeneralFormAdapter {
   constructor(policyType: string, dataset: Dataset, claimId?: string, forceNewClaimId: boolean = false) {
     console.log(`Constructor called with claimId: ${claimId} and forceNewClaimId: ${forceNewClaimId}`);
     this.policyType = policyType;
-    console.log("initial dataset", dataset);
+    console.log("initial dataset", grindem(dataset));
     console.log("typeof dataset", typeof dataset);
     this.dataset = dataset; // Assume dataset is properly formatted as an object of arrays
 
-    const datasetArray = this.flattenDataset(dataset);
     if (claimId && !forceNewClaimId) {
         this.claimId = claimId;
     } else {
-        console.log("datasetArray before getnextId", datasetArray);
-        console.log("existing ids check", getExistingIds("claim", datasetArray));
-        this.claimId = getNextId("claim", datasetArray);
+        console.log("datasetArray before getnextId", grindem(dataset));
+        console.log("existing ids check", getExistingIds("claim", dataset));
+        this.claimId = getNextId("claim", dataset);
         console.log("claim Id after getnextId", this.claimId);
     }
     console.log("Initialized Claim ID:", this.claimId);
-    this.personId = this.findOrAssignPersonId(datasetArray);
-    this.policyId = getPolicyOfClaim(this.claimId, datasetArray) || getFirstOrNextId("policy", datasetArray);
+    this.personId = this.findOrAssignPersonId(dataset);
+    this.policyId = getPolicyOfClaim(this.claimId, dataset) || getFirstOrNextId("policy", dataset);
 }
-
-private flattenDataset(dataset: Dataset): string[][] {
-    let flatArray: string[][] = [];
-
-    // Process the dataset entries as key-value pairs
-    Object.entries(dataset).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-            if (value.length >= 3) {
-                let id = value[1]; // example: 'claim23'
-                for (let i = 2; i < value.length; i++) {
-                    flatArray.push([key, id, value[i]]);
-                }
-            }
-        } else if (typeof value === 'object' && value !== null && 'id' in value && 'label' in value) {
-            // Handling the object case, assuming it always contains 'id' and 'label'
-            flatArray.push([key, value.id, value.label]);
-        } else {
-            console.error(`Invalid dataset entry format for key ${key}:`, value);
-        }
-    });
-
-    return flatArray;
-}
-
-
-
-
 
 
   private findOrAssignPersonId(datasetArray: string[][]): string {
@@ -92,7 +64,7 @@ private flattenDataset(dataset: Dataset): string[][] {
 
 public epilogToFormValues(dataset?: Dataset): FormValues {
     this.dataset = dataset || this.dataset;
-    const datasetArray = this.flattenDataset(this.dataset);
+    const datasetArray = this.dataset;
 
     // Refresh claim ID each time form values are initialized
     this.claimId = getNextId("claim", datasetArray);
