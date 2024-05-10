@@ -1,7 +1,5 @@
+import { Claim } from "../types/Claim";
 import { BasicOption } from "../types/basicOption";
-import { Person } from '../types/Person';
-import { Claim } from '../types/Claim';
-
 
 /* -------------------------------------------------------------------------- */
 /*                                    Const                                   */
@@ -108,79 +106,81 @@ export const getReasonOfClaim = (
   return reason;
 };
 
-
-export const getClaimDetailsById = (claimId: string, dataset: ReturnType<typeof definemorefacts>): Claim | undefined => {
-    // Initialize an object to hold the claim's details
-    let claimDetails: Partial<Claim> = {
-      id: claimId,
-    };
-  
-    // Filter dataset for entries related to the claim
-    dataset.forEach(entry => {
-      if (entry[1] === claimId) {
-        switch (entry[0]) {
-          case 'claim.policy':
-            claimDetails.policyId = entry[2];
-            break;
-          case 'claim.service_type':
-            claimDetails.serviceType = entry[2]?.slice(1, -1);
-            break;
-          case 'claim.claimant':
-            claimDetails.claimantId = entry[2];
-            break;
-          case 'claim.time':
-            claimDetails.time = `${entry[2]} ${entry[3]}`;
-            break;
-          case 'claim.hosp_start_time':
-            claimDetails.hospitalStart = `${entry[2]} ${entry[3]}`;
-            break;
-          case 'claim.hosp_end_time':
-            claimDetails.hospitalEnd = `${entry[2]} ${entry[3]}`;
-            break;
-          case 'claim.hospital':
-            claimDetails.hospitalName = entry[2];
-            break;
-          case 'claim.reason':
-            claimDetails.reason = entry[2];
-            break;
-          case 'claim.vaccine':
-            claimDetails.vaccine = entry[2];
-            break;
-          case 'claim.vaccine_brand':
-            claimDetails.vaccineBrand = entry[2];
-            break;
-          case 'claim.vaccine_dose_count':
-            claimDetails.vaccineDoseCount = parseInt(entry[2], 10);
-            break;
-          case 'claim.consequence_of_occupation':
-            claimDetails.consequenceOfOccupation = entry[2];
-            break;
-          case 'claim.location':
-            claimDetails.location = entry[2];
-            break;
-          case 'claim.previous_vaccines_pfizer':
-            claimDetails.previousVaccinesPfizer = parseInt(entry[2], 10);
-            break;
-          case 'claim.previous_vaccines_moderna':
-            claimDetails.previousVaccinesModerna = parseInt(entry[2], 10);
-            break;
-          case 'claim.previous_vaccines_other':
-            claimDetails.previousVaccinesOther = parseInt(entry[2], 10);
-            break;
-          // Add cases for any other claim-related entries
-        }
-      }
-    });
-  
-    // Check if the required fields are present
-    if (!claimDetails.policyId || !claimDetails.claimantId) {
-      // If critical information is missing, consider this claim as undefined
-      return undefined;
-    }
-  
-    // Return the aggregated details as a full Claim object
-    return claimDetails as Claim;
+export const getClaimDetailsById = (
+  claimId: string,
+  dataset: ReturnType<typeof definemorefacts>,
+): Claim | undefined => {
+  // Initialize an object to hold the claim's details
+  let claimDetails: Partial<Claim> = {
+    id: claimId,
   };
+
+  // Filter dataset for entries related to the claim
+  dataset.forEach((entry) => {
+    if (entry[1] === claimId) {
+      switch (entry[0]) {
+        case "claim.policy":
+          claimDetails.policyId = entry[2];
+          break;
+        case "claim.service_type":
+          claimDetails.serviceType = entry[2]?.slice(1, -1);
+          break;
+        case "claim.claimant":
+          claimDetails.claimantId = entry[2];
+          break;
+        case "claim.time":
+          claimDetails.time = `${entry[2]} ${entry[3]}`;
+          break;
+        case "claim.hosp_start_time":
+          claimDetails.hospitalStart = `${entry[2]} ${entry[3]}`;
+          break;
+        case "claim.hosp_end_time":
+          claimDetails.hospitalEnd = `${entry[2]} ${entry[3]}`;
+          break;
+        case "claim.hospital":
+          claimDetails.hospitalName = entry[2];
+          break;
+        case "claim.reason":
+          claimDetails.reason = entry[2];
+          break;
+        case "claim.vaccine":
+          claimDetails.vaccine = entry[2];
+          break;
+        case "claim.vaccine_brand":
+          claimDetails.vaccineBrand = entry[2];
+          break;
+        case "claim.vaccine_dose_count":
+          claimDetails.vaccineDoseCount = parseInt(entry[2], 10);
+          break;
+        case "claim.consequence_of_occupation":
+          claimDetails.consequenceOfOccupation = entry[2];
+          break;
+        case "claim.location":
+          claimDetails.location = entry[2];
+          break;
+        case "claim.previous_vaccines_pfizer":
+          claimDetails.previousVaccinesPfizer = parseInt(entry[2], 10);
+          break;
+        case "claim.previous_vaccines_moderna":
+          claimDetails.previousVaccinesModerna = parseInt(entry[2], 10);
+          break;
+        case "claim.previous_vaccines_other":
+          claimDetails.previousVaccinesOther = parseInt(entry[2], 10);
+          break;
+        // Add cases for any other claim-related entries
+      }
+    }
+  });
+
+  // Check if the required fields are present
+  if (!claimDetails.policyId || !claimDetails.claimantId) {
+    // If critical information is missing, consider this claim as undefined
+    return undefined;
+  }
+
+  // Return the aggregated details as a full Claim object
+  return claimDetails as Claim;
+};
 
 /* --------------------------------- Policy --------------------------------- */
 
@@ -196,6 +196,36 @@ export const getTypeOfPolicy = (
   ) as string[];
 
   return policyType;
+};
+
+/* --------------------------------- Person --------------------------------- */
+
+export const getFirstNameOfPerson = (
+  personId: string,
+  userDataset: ReturnType<typeof definemorefacts>,
+) => {
+  let [personName] = compfinds(
+    "X",
+    read(`person.firstName(${personId}, X)`),
+    userDataset,
+    [],
+  ) as string[];
+
+  return removeEscapedDoubleQoutes(personName || "");
+};
+
+export const getLastNameOfPerson = (
+  personId: string,
+  userDataset: ReturnType<typeof definemorefacts>,
+) => {
+  let [personName] = compfinds(
+    "X",
+    read(`person.lastName(${personId}, X)`),
+    userDataset,
+    [],
+  ) as string[];
+
+  return removeEscapedDoubleQoutes(personName || "");
 };
 
 /* -------------------------------------------------------------------------- */
@@ -278,34 +308,33 @@ export const getFirstOrNextId = (
 
 /* --------------------------------- Person --------------------------------- */
 
-
 export const getPersonDetailsById = (userId, dataset) => {
-    // Initialize an object to hold the person's details
-    let personDetails = {
-      id: userId,
-      dob: '',
-      occupation: '',
-      immunocompromised: ''
-    };
-  
-    // Filter dataset for entries related to the person
-    dataset.forEach(entry => {
-      if (entry[1] === userId) {
-        switch (entry[0]) {
-          case 'person.dob':
-            personDetails.dob = entry[2];
-            break;
-          case 'person.occupation':
-            personDetails.occupation = entry[2];
-            break;
-          case 'person.immunocompromised':
-            personDetails.immunocompromised = entry[2] === 'yes' ? true : false;
-            break;
-          // Add cases for any other person-related entries
-        }
-      }
-    });
-  
-    // Return the aggregated details
-    return personDetails.dob ? personDetails : undefined;
+  // Initialize an object to hold the person's details
+  let personDetails = {
+    id: userId,
+    dob: "",
+    occupation: "",
+    immunocompromised: "",
   };
+
+  // Filter dataset for entries related to the person
+  dataset.forEach((entry) => {
+    if (entry[1] === userId) {
+      switch (entry[0]) {
+        case "person.dob":
+          personDetails.dob = entry[2];
+          break;
+        case "person.occupation":
+          personDetails.occupation = entry[2];
+          break;
+        case "person.immunocompromised":
+          personDetails.immunocompromised = entry[2] === "yes" ? true : false;
+          break;
+        // Add cases for any other person-related entries
+      }
+    }
+  });
+
+  // Return the aggregated details
+  return personDetails.dob ? personDetails : undefined;
+};

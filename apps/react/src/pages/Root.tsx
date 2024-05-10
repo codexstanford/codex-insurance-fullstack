@@ -19,6 +19,7 @@ import { IsSidebarCollapsedContext } from "../contexts/isSidebarCollapsedContext
 import useSessionUser from "../hooks/useSessionUser";
 import { classNames } from "../utils/classNames";
 import SearchboxClaimReason from "../components/SearchboxClaimReason";
+import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 
 const Root: React.FC = () => {
   const user = useSessionUser();
@@ -63,20 +64,24 @@ const Root: React.FC = () => {
               <SearchboxClaimReason placeholder="Explore Coverage" />
             )}
             <div className="flex gap-3 items-center ml-auto">
-            <ButtonLink href={"/waive_cardinal_care"} className="min-w-40 border-0 bg-gray-300">
-              See if I can waive Cardinal Care
-            </ButtonLink>
-          </div>
+              <ButtonLink
+                href={"/waive_cardinal_care"}
+                className="min-w-40 border-0 bg-gray-300"
+              >
+                See if I can waive Cardinal Care
+              </ButtonLink>
+            </div>
             <div className="py-3 flex gap-3 items-center">
               {!user && <ButtonLink href={ROUTES.LOGIN}>Login</ButtonLink>}
               {user && (
                 <>
-                  <span>{user.displayName?.substring(0, 9) === "dummyUser" ? "Steve Squirrel" : user.displayName}</span>
-                  <ButtonLink
-                    href={ROUTES.API_AUTH_LOGOUT}
-                    renderAsReactRouterLink={false}
-                  >
-                    Logout
+                  <ButtonLink href={ROUTES.PROFILE} className="gap-2">
+                    <span>
+                      {user.displayName?.substring(0, 9) === "dummyUser"
+                        ? "Steve Squirrel"
+                        : user.displayName}
+                    </span>
+                    <Cog8ToothIcon className="w-5 h-5" />
                   </ButtonLink>
                 </>
               )}

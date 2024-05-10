@@ -11,8 +11,9 @@ import Index from "./pages/Index";
 import ResourceListPage from "./pages/ResourceListPage";
 import Root from "./pages/Root";
 import Login from "./pages/auth/Login";
-import WaiveCardinalCare from './pages/WaiveCardinalCare';
+import WaiveCardinalCare from "./pages/WaiveCardinalCare";
 import { ROUTES_ID_PARAM_PLACEHOLDER } from "./consts/routes.const";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -41,10 +42,19 @@ const router = createBrowserRouter([
           </RequiresLogin>
         ),
       },
-
+      {
+        path: ROUTES.PROFILE,
+        element: (
+          <RequiresLogin>
+            <RequiresUserDataset>
+              <Profile />
+            </RequiresUserDataset>
+          </RequiresLogin>
+        ),
+      },
       {
         path: ROUTES.WAIVE_CARDINAL_CARE, // Adjust this path as needed
-        element: (<WaiveCardinalCare />),
+        element: <WaiveCardinalCare />,
       },
       /* -------------------------------------------------------------------------- */
       /*                                   Claims                                   */
