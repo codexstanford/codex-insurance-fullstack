@@ -23,7 +23,7 @@ export default function useIsCovered(
     [query, mergedDataset],
   );
 
-  console.log("result", result);
+  // console.log("result", result);
 
   const isCovered = result.length > 0;
 

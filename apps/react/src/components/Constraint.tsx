@@ -2,16 +2,12 @@ import { Disclosure } from "@headlessui/react";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
-  LockClosedIcon,
-  LockOpenIcon,
   PlusIcon,
 } from "@heroicons/react/24/outline";
-import React, { useCallback } from "react";
+import React from "react";
 import { COMMON_FOCUS_CLASSES } from "../consts/classes.const";
 import { classNames } from "../utils/classNames";
-import { ConstraintContext } from "../contexts/constraintContext";
 import Container from "./Container";
-import { InputContext } from "../contexts/inputContext";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -34,15 +30,6 @@ const Constraint: React.FC<Constraint_Input> = ({
   children,
   onClickAddField,
 }) => {
-  const constraintContext = React.useContext(ConstraintContext);
-
-  const isLocked = !!(id && constraintContext?.getIsLocked(id));
-
-  const onClickLock = useCallback(
-    () => void (id && constraintContext?.onClickLock(id)),
-    [id, constraintContext],
-  );
-
   return (
     <Disclosure defaultOpen={true}>
       {({ open }) => (
@@ -66,24 +53,9 @@ const Constraint: React.FC<Constraint_Input> = ({
                 <PlusIcon className="size-4 " />
               </button>
             )}
-            {/*<button
-              onClick={onClickLock}
-              className={classNames(
-                COMMON_FOCUS_CLASSES,
-                "border border-black rounded-full size-8 flex items-center justify-center",
-                [isLocked, "bg-blue-200"],
-              )}
-            >
-              {isLocked && <LockClosedIcon className="size-4 " />}
-              {!isLocked && <LockOpenIcon className="size-4" />}
-            </button>*/}
           </Container>
           <Disclosure.Panel>
-            <Container makeGutter={true}>
-              <InputContext.Provider value={{ isLocked }}>
-                {children}
-              </InputContext.Provider>
-            </Container>
+            <Container makeGutter={true}>{children}</Container>
           </Disclosure.Panel>
         </Container>
       )}

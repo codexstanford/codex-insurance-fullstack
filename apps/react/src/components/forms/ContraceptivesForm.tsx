@@ -1,30 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Constraint from "../../components/Constraint";
 import ConstraintContainer from "../../components/ConstraintContainer";
 import EpilogFormContainer from "../../components/EpilogFormContainer";
 import InputDate from "../../components/InputDate";
-import InputSelect from "../../components/InputSelect";
 import InputSelectButtons from "../../components/InputSelectButtons";
 import { CONTRACEPTIVE_OPTIONS, LOCATIONS } from "../../consts/options.const";
-import {
-  ConstraintContext,
-  IsConstraintLockedRecord,
-  createConstraintContextData,
-} from "../../contexts/constraintContext";
 import { Contraceptives } from "../../epilog/form-adapters/_formAdapter";
 import useIsCovered from "../../hooks/useIsCovered";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
 /* -------------------------------------------------------------------------- */
-
-interface IsLockedRecord extends IsConstraintLockedRecord {
-  insurance: boolean;
-  services: boolean;
-  when: boolean;
-  where: boolean;
-}
 
 type Input = {
   defaultValues: Contraceptives.FormValues;
@@ -41,7 +28,7 @@ export default function ContraceptivesForm({
 }: Input) {
   /* ------------------------------- Form logic ------------------------------- */
 
-  const { control, watch, getValues, formState } =
+  const { control, watch, getValues } =
     useForm<Contraceptives.FormValues>({
       defaultValues,
     });
@@ -51,76 +38,6 @@ export default function ContraceptivesForm({
     [onClickSave, getValues],
   );
 
-  /* --------------------------- Constraint locking --------------------------- */
-
-  const [isLockedRecord, setIsLockedRecord] = useState<IsLockedRecord>({
-    insurance: false,
-    services: false,
-    when: false,
-    where: false,
-  });
-
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.policyType &&
-        setIsLockedRecord((prev) => ({
-          ...prev,
-          insurance:
-            !!getValues(
-              "policyType.id",
-            ) /* if changed to multiple again: remove !! and append .length > 0 */,
-        }))
-      ),
-    [watch("policyType"), formState.touchedFields.policyType],
-  );
-
-  const constraintContextData = useMemo(
-    () => createConstraintContextData(isLockedRecord, setIsLockedRecord),
-    [isLockedRecord, setIsLockedRecord],
-  );
-
-
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.policyType &&
-        setIsLockedRecord((prev) => ({
-          ...prev,
-          insurance:
-            !!getValues(
-              "policyType.id",
-            ) /* if changed to multiple again: remove !! and append .length > 0 */,
-        }))
-      ),
-    [watch("policyType")],
-  );
-
-
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.when &&
-        setIsLockedRecord((prev) => ({ ...prev, when: true }))
-      ),
-    [watch("when")],
-  );
-
-  useEffect(
-    () =>
-      void (
-        formState.touchedFields.where &&
-        setIsLockedRecord((prev) => ({
-          ...prev,
-          where:
-            !!getValues(
-              "where",
-            ) /* if changed to multiple again: remove !! and append .length > 0 */,
-        }))
-      ),
-    [watch("where")],
-  );
-
   /* -------------------------------- IsCovered ------------------------------- */
 
   const formDataset = useMemo(
@@ -128,16 +45,15 @@ export default function ContraceptivesForm({
     [JSON.stringify(watch())],
   );
 
-  let allInputsEntered = useMemo(
-    () => {
-      const formValues = getValues();
+  let allInputsEntered = useMemo(() => {
+    const formValues = getValues();
 
-      return formValues.contraceptiveService !== null && 
-        formValues.when !== null &&
-        formValues.where !== null;
-    },
-    [watch("contraceptiveService"), watch("when"), watch("where")]
-  );
+    return (
+      formValues.contraceptiveService !== null &&
+      formValues.when !== null &&
+      formValues.where !== null
+    );
+  }, [watch("contraceptiveService"), watch("when"), watch("where")]);
 
   const isCovered = useIsCovered(defaultValues.claim.id + "", formDataset);
 
@@ -150,7 +66,6 @@ export default function ContraceptivesForm({
       isCovered={allInputsEntered ? isCovered : undefined}
       __debugFormData={watch()}
     >
-      <ConstraintContext.Provider value={constraintContextData}>
         <ConstraintContainer>
           {/*<Constraint id="insurance" label="Insurance">
             <Controller
@@ -164,7 +79,10 @@ export default function ContraceptivesForm({
               )}
             />
           </Constraint>*/}
-          <Constraint id="services" label="What contraceptive service did you have performed?">
+          <Constraint
+            id="services"
+            label="What contraceptive service did you have performed?"
+          >
             <Controller
               name="contraceptiveService"
               control={control}
@@ -195,7 +113,6 @@ export default function ContraceptivesForm({
             />
           </Constraint>
         </ConstraintContainer>
-      </ConstraintContext.Provider>
     </EpilogFormContainer>
   );
 }

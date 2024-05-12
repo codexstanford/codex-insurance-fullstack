@@ -46,7 +46,7 @@ export default function ClaimPage() {
 function RenderClaimForm() {
   /* ------------------------ Environmental conditions ------------------------ */
 
-  console.log("render claim form is being called")
+  // console.log("render claim form is being called")
   const sessionUser = useContext(LoginContext);
   const userDataset = useContext(UserDatasetContext);
   const existingClaimId = useContext(ExistingClaimContext);
@@ -97,7 +97,7 @@ function RenderClaimForm() {
   service === "contraceptives" ? contraceptivesOnClickSave : 
     service === "covidVaccine" ? covid19OnClickSave : covid19OnClickSave;
 
-  console.log("SERVICE:", service);
+  // console.log("SERVICE:", service);
 
   if (service === "covidVaccine") {
     return (

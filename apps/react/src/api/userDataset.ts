@@ -30,7 +30,7 @@ export const postUserDataset = async (
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ epilogDataset: grindem(epilogDataset) }),
+    body: JSON.stringify({ epilogDataset: grindem(zniquify(epilogDataset)) }),
   });
   return await response.json();
 };
@@ -59,7 +59,7 @@ export const useUserDataset = (userId: number) => {
         error: "Could not save",
       }),
     onSuccess: () => {
-      console.log("Invalidating query", queryKey);
+      // console.log("Invalidating query", queryKey);
       queryClient.invalidateQueries({ queryKey });
     },
   });

@@ -4,10 +4,8 @@ import {
   COMMON_BORDER_CLASSES,
   COMMON_INPUT_CLASSES,
 } from "../consts/classes.const";
-import { classNames } from "../utils/classNames";
-import { useContext } from "react";
-import { InputContext } from "../contexts/inputContext.ts";
 import { BasicOption } from "../types/basicOption";
+import { classNames } from "../utils/classNames";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -40,8 +38,6 @@ export default function InputSelect<
   placeholder = "Select an option",
   ...props
 }: InputSelect_Input<TOptions, TValue>) {
-  const inputContext = useContext(InputContext);
-
   let listboxButtonString = placeholder;
 
   if (Array.isArray(value) && value.length > 0) {
@@ -56,10 +52,7 @@ export default function InputSelect<
     <Listbox {...props} value={value} multiple={Array.isArray(value)} by="id">
       <div className="relative">
         <Listbox.Button
-          className={classNames(COMMON_INPUT_CLASSES, "relative pr-10", [
-            !!inputContext?.isLocked,
-            "bg-blue-200",
-          ])}
+          className={classNames(COMMON_INPUT_CLASSES, "relative pr-10")}
         >
           <span className="block truncate">{listboxButtonString}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
