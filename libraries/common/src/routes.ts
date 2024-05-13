@@ -31,6 +31,8 @@ export const LOGIN = "/login";
 
 export const DASHBOARD = "/dashboard";
 
+export const PROFILE = "/profile";
+
 export const SERVICE = "/service";
 
 export const NEW_KEYOWRD = "new";
