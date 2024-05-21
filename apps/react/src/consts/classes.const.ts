@@ -30,11 +30,11 @@ export const CODEX_BRAND_CLASSES = "font-bold text-xl text-gray-600";
 /*                                   Navbar                                   */
 /* -------------------------------------------------------------------------- */
 
-export const MAIN_CONTAINER_MT = "mt-20";
+export const MAIN_CONTAINER_MT = "mt-16";
 // Note: We can't just prepend a "-" to the const above
 // because Tailwind needs to find the whole class name
 // somewhere in the source code.
-export const MAIN_CONTAINER_REMOVE_MT = "-mt-20";
+export const MAIN_CONTAINER_REMOVE_MT = "-mt-16";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Misc                                    */

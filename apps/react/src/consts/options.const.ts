@@ -24,3 +24,7 @@ export const YES_OR_NO = [
   { id: "yes", label: "Yes" },
   { id: "no", label: "No" },
 ] satisfies BasicOption[];
+
+export const isYes = (value: any) => typeof value === "object" && value?.id === "yes";
+
+export const isNo = (value: any) => typeof value === "object" && value?.id === "no";

@@ -18,6 +18,7 @@ type Constraint_Input = {
   label: React.ReactNode;
   children?: React.ReactNode;
   onClickAddField?: () => void;
+  className?: string;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -29,11 +30,15 @@ const Constraint: React.FC<Constraint_Input> = ({
   label,
   children,
   onClickAddField,
+  className,
 }) => {
   return (
     <Disclosure defaultOpen={true}>
       {({ open }) => (
-        <Container makeGutter={true} className="p-3 bg-white">
+        <Container
+          makeGutter={true}
+          className={classNames("p-3 bg-white", className)}
+        >
           <Container>
             <Disclosure.Button as="button" className={COMMON_FOCUS_CLASSES}>
               {open && <ChevronUpIcon className="size-6" />}
