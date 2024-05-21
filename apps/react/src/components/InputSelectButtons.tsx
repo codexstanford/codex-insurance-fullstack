@@ -15,7 +15,7 @@ type InputSelectButtons_Input<
   value: TValue;
   onChange?: (value: TValue) => void;
   onBlur?: () => void;
-  canDeselect?: boolean,
+  canDeselect?: boolean;
   options: TOptions;
 };
 
@@ -41,7 +41,7 @@ export default function InputSelectButtons<
           key={opt.id}
           className={classNames("-uppercase", [
             isSelected(opt),
-            "bg-blue-200 hover:bg-blue-100",
+            "bg-blue-200 hover:bg-blue-100 selected",
           ])}
           disabled={opt?.specialStatus === "disabled"}
           onClick={() => {
