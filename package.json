@@ -12,6 +12,7 @@
     "build:server": "pnpm --filter server build",
     "build:react": "pnpm --filter react build",
     "build": "npm-run-all --parallel build:*",
+    "run-build": "NODE_ENV=production node build/server.js",
     "ssh:connect": "chmod 400 ssh-key.pem && ssh -i ssh-key.pem ec2-user@ec2-34-207-234-171.compute-1.amazonaws.com"
   },
   "keywords": [],

@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/app.ts",
-    "build": "esbuild src/app.ts --bundle --platform=node --target=node20 --outdir=./build/ --allow-overwrite"
+    "build": "node esbuild.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "better-sqlite3": "^9.4.3",
     "common": "workspace:*",
     "connect-sqlite3": "^0.9.15",
     "cookie-parser": "^1.4.6",
@@ -22,7 +23,8 @@
     "passport": "^0.7.0",
     "passport-google-oidc": "^0.1.0",
     "passport-local": "^1.0.0",
-    "schema": "workspace:*"
+    "schema": "workspace:*",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/connect-sqlite3": "^0.9.5",
@@ -34,8 +36,9 @@
     "@types/passport": "^1.0.16",
     "@types/passport-google-oauth2": "^0.1.8",
     "@types/passport-local": "^1.0.38",
+    "esbuild": "^0.20.2",
+    "esbuild-plugin-copy": "^2.1.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.2",
-    "esbuild": "^0.20.2"
+    "typescript": "^5.4.2"
   }
 }

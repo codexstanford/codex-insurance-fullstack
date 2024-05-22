@@ -4,8 +4,9 @@ import cookieParser from "cookie-parser";
 import { Express } from "express";
 import session from "express-session";
 import passport from "passport";
-import { createGoogleStrategy } from "./googleStrategy";
+import { VAR_FOLDER } from "../const";
 import { createDummyStrategy } from "./dummyStrategy";
+import { createGoogleStrategy } from "./googleStrategy";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -77,7 +78,10 @@ export default function addAuthMiddleware(app: Express) {
       resave: false,
       saveUninitialized: false,
       // @ts-ignore
-      store: new SQLiteStore({ db: "sessions.db", dir: "./var" }),
+      store: new SQLiteStore({
+        db: "sessions.sqlite",
+        dir: VAR_FOLDER,
+      }),
     }),
   );
 

@@ -1,10 +1,14 @@
 // https://expressjs.com/en/starter/hello-world.html
 
+import path from "path";
+import { BUILD_FOLDER } from "./const";
+import { config } from "dotenv";
+
+config({ path: path.join(BUILD_FOLDER, "../.env") });
+
 import { CLIENT_SESSION_USER_WINDOW_FIELD, ROUTES } from "common";
-import "dotenv/config";
 import { renderFile } from "ejs";
 import express from "express";
-import path from "path";
 import authRouter from "./api/auth";
 import userDatasetRouter from "./api/userDataset";
 import addAuthMiddleware from "./auth/addAuthMiddleware";
@@ -13,8 +17,9 @@ import addAuthMiddleware from "./auth/addAuthMiddleware";
 /*                                   Config                                   */
 /* -------------------------------------------------------------------------- */
 
-const port = 3000;
-const pathToClient = path.join(__dirname, "../../react/build");
+const port = process.env.NODE_ENV === "production" ? 80 : 3000;
+
+const pathToClient = path.join(BUILD_FOLDER, "./react");
 
 /* -------------------------------------------------------------------------- */
 /*                                   Express                                  */
@@ -56,5 +61,9 @@ app.get("*", (req, res, next) => {
 /* -------------------------------------------------------------------------- */
 
 app.listen(port, () => {
-  console.log(`Serving server app on http://localhost:${port}`);
+  console.log(
+    process.env.NODE_ENV === "production"
+      ? `Serving production server.`
+      : `Serving server app on http://localhost:${port}`,
+  );
 });

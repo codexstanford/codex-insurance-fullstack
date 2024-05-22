@@ -121,6 +121,9 @@ importers:
 
   apps/server:
     dependencies:
+      better-sqlite3:
+        specifier: ^9.4.3
+        version: 9.4.3
       common:
         specifier: workspace:*
         version: link:../../libraries/common
@@ -157,6 +160,9 @@ importers:
       schema:
         specifier: workspace:*
         version: link:../../libraries/schema
+      sqlite3:
+        specifier: ^5.1.7
+        version: 5.1.7
     devDependencies:
       '@types/connect-sqlite3':
         specifier: ^0.9.5
@@ -188,6 +194,9 @@ importers:
       esbuild:
         specifier: ^0.20.2
         version: 0.20.2
+      esbuild-plugin-copy:
+        specifier: ^2.1.1
+        version: 2.1.1(esbuild@0.20.2)
       ts-node-dev:
         specifier: ^2.0.0
         version: 2.0.0(@types/node@20.11.30)(typescript@5.4.2)
@@ -2027,6 +2036,7 @@ packages:
   /are-we-there-yet@3.0.1:
     resolution: {integrity: sha512-QZW4EDmGwlYur0Yyf/b2uGucHQMa8aFUP7eu9ddR73vvhFyt4V0Vl3QHPcTNJ8l6qYOBdxgXdnBXQrHilfRQBg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+    deprecated: This package is no longer supported.
     requiresBuild: true
     dependencies:
       delegates: 1.0.0
@@ -3441,6 +3451,7 @@ packages:
   /gauge@4.0.4:
     resolution: {integrity: sha512-f9m+BEN5jkg6a0fZjleidjN51VE1X+mPFQ2DJ0uv1V39oCLCbsGe6yjbBnp7eK7z/+GAon99a3nHuqbuuthyPg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+    deprecated: This package is no longer supported.
     requiresBuild: true
     dependencies:
       aproba: 2.0.0
@@ -4410,6 +4421,7 @@ packages:
   /npmlog@6.0.2:
     resolution: {integrity: sha512-/vBvz5Jfr9dT/aFWd0FIRf+T/Q2WBsLENygUaFUqstqsycmZAP/t5BvFJTK0viFmSUxiUKTUplWy5vt+rvKIxg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+    deprecated: This package is no longer supported.
     requiresBuild: true
     dependencies:
       are-we-there-yet: 3.0.1

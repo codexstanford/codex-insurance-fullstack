@@ -1,4 +1,9 @@
 {
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  },
   "env": {
     "browser": true,
     "es2021": true

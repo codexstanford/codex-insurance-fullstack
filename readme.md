@@ -1,14 +1,16 @@
 # Get it running
 
-## Prerequisites
+## Local
 
-Node.js and [pnpm]() must be installed. This project uses [pnpm's workspace](https://pnpm.io/workspaces) feature for the monorepo structure.
+### Prerequisites
 
-## Commands
+Node.js and [pnpm](https://pnpm.io/) must be installed. This project uses [pnpm's workspace](https://pnpm.io/workspaces) feature for the monorepo structure.
+
+### Commands
 
 1. Run `pnpm install` in the project directory.
-2. If there is no `sqlite.db` file in `apps/server/var`, create it by running `pnpm db:push`.
-3. Create a `.env` file with the required environmental variables. This file is gitignored for security reasons. You can either obtain it securely from someone who has it on his or her machine or create a new one by copying `apps/server/.env.blueprint` and renaming it to `.env`.
+2. If there is no `db.sqlite` file in `./var`, create it by running `pnpm db:push`.
+3. Create a `.env` file with the required environmental variables. This file is gitignored for security reasons. You can either obtain it securely from someone who has it on his or her machine or create a new one by copying `./.env.blueprint` and renaming it to `.env`.
 4. Run `pnpm dev` to start the development server. It will watch for file changes and rebuild the app. Note that this is only a development server and may lack some production functionality.
 
 ## Setting Up AWS EC2
@@ -21,13 +23,14 @@ Node.js and [pnpm]() must be installed. This project uses [pnpm's workspace](htt
 4. Install pnpm: `curl -fsSL https://get.pnpm.io/install.sh | sh -`.
 5. Install pm2: `pnpm install pm2 -g`.
 
-This setup allows you to upload code, install dependencies, and run the server using pm2. To automate this, set up continuous integration.
+This setup would already allow you to upload code via SSH, perform the steps form the local section above via SSH, and run the server using pm2. To automate this, see below how to set up continuous integration.
 
 ### Continuous Integration
 
 1. Add the key as a repository secret on [this GitHub page](https://github.com/codexstanford/codex-insurance-fullstack/settings/secrets/actions), naming it `SSH_PRIVATE_KEY`.
 2. Push a commit to the main branch to trigger the action defined in `.github/workflows/deploy-ec2.yaml`, which will build and transfer the app to EC2.
-3. Start the Node.js server from the SSH terminal: `pm2 start ~/codex-insurance-fullstack/apps/server/build/index.js --watch`.
+3. The project files are on the server now. Do step 2. and 3. of the local section above via SSH on the server.
+4. Start the Node.js server from the SSH terminal: `NODE_ENV=production pm2 start ~/codex-insurance-fullstack/build/server.js --watch`.
 
 # Constraints
 
