@@ -1,0 +1,4 @@
+{
+  "script": "build/server.js",
+  "watch": ["build"]
+}

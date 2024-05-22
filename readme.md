@@ -30,7 +30,20 @@ This setup would already allow you to upload code via SSH, perform the steps for
 1. Add the key as a repository secret on [this GitHub page](https://github.com/codexstanford/codex-insurance-fullstack/settings/secrets/actions), naming it `SSH_PRIVATE_KEY`.
 2. Push a commit to the main branch to trigger the action defined in `.github/workflows/deploy-ec2.yaml`, which will build and transfer the app to EC2.
 3. The project files are on the server now. Do step 2. and 3. of the local section above via SSH on the server. For step 3, you can use `echo "[paste env content here] > .env".`.
-4. Start the Node.js server from the SSH terminal: `NODE_ENV=production pm2 start ~/codex-insurance-fullstack/build/server.js --watch`.
+4. Start the Node.js server from the SSH terminal: `NODE_ENV=production pm2 start ~/codex-insurance-fullstack/process.json`.
+
+### Serving on port 80
+
+The Node server runs on port 3000 by default. To serve on the standard HTTP port 80, running the Node server as a superuser is required. However, this is considered a security risk. A more secure approach is to use a reverse proxy.
+
+To securely serve the Node app on port 80, you need to install Nginx on the server. Nginx will listen on port 80 and forward all requests to your Node app running on port 3000. Follow this tutorial for detailed instructions: [How to run a Node.js server with Nginx](https://dev.to/logrocket/how-to-run-a-node-js-server-with-nginx-588).
+
+If the `sites-available` and `sites-enabled` folders do not exist, create them. If the Nginx restart command doesn't work, try the following commands:
+
+```bash
+sudo pkill -f nginx & wait $!
+sudo systemctl start nginx
+```
 
 # Constraints
 
