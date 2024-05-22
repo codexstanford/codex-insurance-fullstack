@@ -2,7 +2,7 @@ import * as esbuild from "esbuild";
 import { copy } from "esbuild-plugin-copy";
 
 export const ctx = await esbuild.context({
-  entryPoints: ["./src/App.tsx"],
+  entryPoints: ["./src/app.tsx"],
   bundle: true,
   sourcemap: true,
   outfile: "./build/app.js",
