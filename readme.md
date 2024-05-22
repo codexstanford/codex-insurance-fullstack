@@ -30,7 +30,7 @@ This setup would already allow you to upload code via SSH, perform the steps for
 1. Add the key as a repository secret on [this GitHub page](https://github.com/codexstanford/codex-insurance-fullstack/settings/secrets/actions), naming it `SSH_PRIVATE_KEY`.
 2. Push a commit to the main branch to trigger the action defined in `.github/workflows/deploy-ec2.yaml`, which will build and transfer the app to EC2.
 3. The project files are on the server now. Do step 2. and 3. of the local section above via SSH on the server. For step 3, you can use `echo "[paste env content here] > .env".`.
-4. Start the Node.js server from the SSH terminal: `NODE_ENV=production pm2 start ~/codex-insurance-fullstack/process.json`.
+4. Start the Node.js server from the SSH terminal: `NODE_ENV=production pm2 start ~/codex-insurance-fullstack/process.json`. Use `pm2 status` to check status, and `pm2 logs` to see logs.
 
 ### Serving on port 80
 
