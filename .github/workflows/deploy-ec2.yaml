@@ -25,7 +25,7 @@ jobs:
         with:
           switches: -avzr --delete --mkpath
           path: ./*
-          remote_path: /var/www/codex-insurance-fullstack
+          remote_path: ~/codex-insurance-fullstack
           remote_host: ec2-34-207-234-171.compute-1.amazonaws.com
           remote_user: ec2-user
           remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"

@@ -27,7 +27,7 @@ This setup allows you to upload code, install dependencies, and run the server u
 
 1. Add the key as a repository secret on [this GitHub page](https://github.com/codexstanford/codex-insurance-fullstack/settings/secrets/actions), naming it `SSH_PRIVATE_KEY`.
 2. Push a commit to the main branch to trigger the action defined in `.github/workflows/deploy-ec2.yaml`, which will build and transfer the app to EC2.
-3. Start the Node.js server from the SSH terminal: `pm2 start /var/www/codex-insurance-fullstack/apps/server/build/index.js --watch`.
+3. Start the Node.js server from the SSH terminal: `pm2 start ~/codex-insurance-fullstack/apps/server/build/index.js --watch`.
 
 # Constraints
 
