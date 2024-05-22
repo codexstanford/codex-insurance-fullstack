@@ -23,7 +23,7 @@ jobs:
       - name: rsync deployments
         uses: burnett01/rsync-deployments@5.1
         with:
-          switches: -avzr --delete
+          switches: -avzr --delete --mkpath
           path: ./*
           remote_path: /var/www/codex-insurance-fullstack
           remote_host: ec2-34-207-234-171.compute-1.amazonaws.com
