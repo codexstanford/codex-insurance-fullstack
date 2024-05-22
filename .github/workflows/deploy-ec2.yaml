@@ -1,0 +1,31 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - run: pnpm install
+      - run: pnpm run build
+
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./*
+          remote_path: /var/www/codex-insurance-fullstack
+          remote_host: ec2-34-207-234-171.compute-1.amazonaws.com
+          remote_user: ec2-user
+          remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"

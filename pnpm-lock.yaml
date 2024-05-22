@@ -185,6 +185,9 @@ importers:
       '@types/passport-local':
         specifier: ^1.0.38
         version: 1.0.38
+      esbuild:
+        specifier: ^0.20.2
+        version: 0.20.2
       ts-node-dev:
         specifier: ^2.0.0
         version: 2.0.0(@types/node@20.11.30)(typescript@5.4.2)
