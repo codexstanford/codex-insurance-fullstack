@@ -17,7 +17,7 @@ import addAuthMiddleware from "./auth/addAuthMiddleware";
 /*                                   Config                                   */
 /* -------------------------------------------------------------------------- */
 
-const port = process.env.NODE_ENV === "production" ? 80 : 3000;
+const port = /* process.env.NODE_ENV === "production" ? 80 :  */ 3000;
 
 const pathToClient = path.join(BUILD_FOLDER, "./react");
 
