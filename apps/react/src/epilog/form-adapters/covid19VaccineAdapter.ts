@@ -177,7 +177,7 @@ export const formAdapter: FormAdapter<FormValues> = {
     ) as string[];
 
     const [dateTimeResult] = compfinds(
-      read("time(Date, Time)"),
+      read("time(Date, Time)"), // ["time", "24_05_13", "22_50"]
       read(`claim.time(${claimId}, Date, Time)`),
       epilogDataset,
       [],
@@ -267,16 +267,13 @@ export const formAdapter: FormAdapter<FormValues> = {
     person(${personId})
     policy(${policyId})
     claim(${claimId})
-
     person.dob(${personId}, ${dob})
     person.occupation(${personId}, other)
     person.immunocompromised(${personId}, ${isPersonImmunocompromised})
-
     policy.type(${policyId}, ${policyType})
     policy.insuree(${policyId}, ${personId})
     policy.startdate(${policyId}, ${personId}, 01_08_2023)
     policy.enddate(${policyId}, ${personId}, 30_06_2024)
-
     claim.policy(${claimId}, ${policyId})
     claim.service_type(${claimId}, "covidVaccine")
     claim.claimant(${claimId}, ${personId})

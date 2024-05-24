@@ -6,22 +6,24 @@ import { classNames } from "../utils/classNames";
 import Container from "./Container";
 import Heading from "./Heading";
 
-export default function ResourceList({
-  heading,
-  items = [],
-  linkToListPage,
-  linkToAddNew,
-  expanded = false,
-  onClickRemove,
-}: {
+type ResourceListProps = {
   heading?: string;
   items?: ResourceListItem[];
   linkToListPage: string;
   linkToAddNew?: string;
   expanded?: boolean;
   onClickRemove?: (resourceId: string) => void;
-}) {
-  return (
+};
+
+export default function ResourceList({
+    heading,
+    items = [],
+    linkToListPage,
+    linkToAddNew,
+    expanded = false,
+    onClickRemove,
+  }: ResourceListProps) {
+    return (
     <Container makeGutter={true} className="relative">
       {!expanded && (
         <div className="flex flex-row gap-3 items-center">
@@ -60,26 +62,28 @@ export default function ResourceList({
   );
 }
 
-function ResourceCard({
-  isAddNewCard = false,
-  label = "Unnamed",
-  item,
-  linkTo = "#",
-  onClickRemove,
-}: {
-  isAddNewCard?: boolean;
-  label?: string;
-  item?: any;
-  linkTo?: string;
-  onClickRemove?: () => void;
-}) {
+type ResourceCardProps = {
+    isAddNewCard?: boolean;
+    label?: string;
+    item?: any; // Specify a more specific type based on the actual structure of `item`
+    linkTo?: string;
+    onClickRemove?: () => void;
+  };
+  
+  function ResourceCard({
+    isAddNewCard = false,
+    label = "Unnamed",
+    item,
+    linkTo = "#",
+    onClickRemove,
+  }: ResourceCardProps) {
   const isPersonItem = item && "dob" in item;
   const isClaimItem = item && "policyId" in item; // Assuming 'policyId' indicates a claim item
 
   const navigate = useNavigate();
 
   // Existing functions for formatting DOB and occupation
-  const formatDOB = (dob: any) => {
+  const formatDOB = (dob: string) => {
     // Split the dob string by "_" and rearrange it to "YYYY-MM-DD" format
     const [day, month, year] = dob.split("_");
     const formattedDate = `${year}-${month}-${day}`;
@@ -95,35 +99,39 @@ function ResourceCard({
     });
   };
 
-  const formatClaimTime = (time: any) => {
-    const [datePart, timePart] = time.split(" ");
-    const [day, month, year] = datePart.split("_").map(Number);
-    const [hours, minutes] = timePart.split("_").map(Number);
+  const formatClaimTime = (time: string): string => {
+    const parts = time.split(" ");
+    if (parts.length < 2) {
+      return "Invalid time format";  // Appropriately handle cases where there's no space.
+    }
+  
+    const [datePart = "", timePart = ""] = parts;
+    const [day = 1, month = 1, year = 1970] = datePart.split("_").map(num => num ? Number(num) : 1);
+    const [hours = 0, minutes = 0] = timePart.split("_").map(num => num ? Number(num) : 0);
+  
     const date = new Date(year, month - 1, day, hours, minutes);
-    return format(date, "PPPp"); // Formats datetime to something like "April 5, 2024, 12:00 AM"
+    return format(date, "PPPp");  // 'date-fns' format
   };
+  
 
-  const detailStyle = {
+  const detailStyle: React.CSSProperties = {
     color: "#555",
     fontSize: "0.9rem",
     marginTop: "0.3rem",
-    textAlign: "left"
+    textAlign: "left" as "left" // Ensuring textAlign is correctly typed
   };
+  
 
-  const capitalizeOccupation = (occupation: any) =>
-    occupation.replace(/(?:^|\s)\S/g, (a: any) => a.toUpperCase());
+  const capitalizeOccupation = (occupation: string) =>
+    occupation.replace(/(?:^|\s)\S/g, (a: string) => a.toUpperCase());
 
   // Function to generate friendly ID for claims
-  const getFriendlyId = (id: any) => {return "Claim " + (parseInt(id.substring(5))+1)};
+  const getFriendlyId = (id: string) => "Claim " + (parseInt(id.substring(5))+1);
 
-  function formatLabel(label: any) {
-    // Split the label by underscores, capitalize the first letter of each word, and join them back with spaces
-    return label
-      .split("_")
-      .map((word: any) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
-
+  const formatLabel = (label: string) => label.split("_")
+  .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+  
   return (
     <>
     <button

@@ -1,5 +1,4 @@
 import { BasicOption } from "../types/basicOption";
-import { Person } from '../types/Person';
 import { Claim } from '../types/Claim';
 
 
@@ -20,7 +19,7 @@ export type ID_PREFIX =
 /*                                    Read                                    */
 /* -------------------------------------------------------------------------- */
 
-export const removeEscapedDoubleQoutes = (str: string) => str.replace(/"/g, "");
+export const removeEscapedDoubleQuotes = (str: string) => str.replace(/"/g, "");
 
 export const compfindsReturnToBasicOptions = (
   compfindsReturn: ReturnType<typeof compfinds>,
@@ -44,7 +43,7 @@ export const compfindsReturnToBasicOptions = (
               JSON.stringify(entry),
           );
 
-        return { id, label: removeEscapedDoubleQoutes(label) };
+        return { id, label: removeEscapedDoubleQuotes(label) };
       }
 
       throw new Error(
@@ -150,7 +149,7 @@ export const getClaimDetailsById = (claimId: string, dataset: ReturnType<typeof 
             claimDetails.vaccineBrand = entry[2];
             break;
           case 'claim.vaccine_dose_count':
-            claimDetails.vaccineDoseCount = parseInt(entry[2], 10);
+            claimDetails.vaccineDoseCount = entry[2] ? parseInt(entry[2], 10) : 0; // Default to 0 if undefined
             break;
           case 'claim.consequence_of_occupation':
             claimDetails.consequenceOfOccupation = entry[2];
@@ -159,13 +158,13 @@ export const getClaimDetailsById = (claimId: string, dataset: ReturnType<typeof 
             claimDetails.location = entry[2];
             break;
           case 'claim.previous_vaccines_pfizer':
-            claimDetails.previousVaccinesPfizer = parseInt(entry[2], 10);
+            claimDetails.previousVaccinesPfizer = entry[2] ? parseInt(entry[2], 10) : 0; // Default to 0 if undefined
             break;
           case 'claim.previous_vaccines_moderna':
-            claimDetails.previousVaccinesModerna = parseInt(entry[2], 10);
+            claimDetails.previousVaccinesModerna = entry[2] ? parseInt(entry[2], 10) : 0; // Default to 0 if undefined
             break;
           case 'claim.previous_vaccines_other':
-            claimDetails.previousVaccinesOther = parseInt(entry[2], 10);
+            claimDetails.previousVaccinesOther = entry[2] ? parseInt(entry[2], 10) : 0; // Default to 0 if undefined
             break;
           // Add cases for any other claim-related entries
         }
@@ -280,13 +279,13 @@ export const getFirstOrNextId = (
 /* --------------------------------- Person --------------------------------- */
 
 
-export const getPersonDetailsById = (userId, dataset) => {
+export const getPersonDetailsById = (userId: string, dataset: ReturnType<typeof definemorefacts>) => {
     // Initialize an object to hold the person's details
     let personDetails = {
       id: userId,
       dob: '',
       occupation: '',
-      immunocompromised: ''
+      immunocompromised: false
     };
   
     // Filter dataset for entries related to the person
@@ -294,10 +293,10 @@ export const getPersonDetailsById = (userId, dataset) => {
       if (entry[1] === userId) {
         switch (entry[0]) {
           case 'person.dob':
-            personDetails.dob = entry[2];
+            personDetails.dob = entry[2] || '';
             break;
           case 'person.occupation':
-            personDetails.occupation = entry[2];
+            personDetails.occupation = entry[2] || '';
             break;
           case 'person.immunocompromised':
             personDetails.immunocompromised = entry[2] === 'yes' ? true : false;

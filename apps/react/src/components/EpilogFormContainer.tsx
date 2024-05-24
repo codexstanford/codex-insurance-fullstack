@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { classNames } from "../utils/classNames";
 import { Button } from "./Button";
 import Container from "./Container";
-/* import FormDataSpy from "./FormDataSpy"; */
+import FormDataSpy from "./FormDataSpy"; 
 import { ExistingClaimContext } from "../contexts/existingClaimContext";
 
 type Input = {
@@ -20,7 +20,7 @@ const EpilogFormContainer: React.FC<Input> = ({
   onSave,
   isCovered,
   children,
-/*   __debugFormData, */
+  __debugFormData
 }) => {
   const claimId = useContext(ExistingClaimContext);
 
@@ -54,7 +54,7 @@ const EpilogFormContainer: React.FC<Input> = ({
           Important Coverage Note: Cardinal Care only covers services received at <br/>(a) Stanford Health Care, (b) Menlo Medical Clinic, or (c) Sutter Health
         </div>
         {children}
-        {/*{__debugFormData && <FormDataSpy data={__debugFormData} />}*/}
+        {__debugFormData && <FormDataSpy data={__debugFormData} />}
       </Container>
     </>
   );

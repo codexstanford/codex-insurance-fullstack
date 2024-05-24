@@ -44,9 +44,9 @@ export default function ExplorePage() {
 if (!service) {
     return <div>Service type is required.</div>;
   }
-  const formAdapter = useMemo(() => new GeneralFormAdapter(service, definemorefacts([], []), undefined, true), [service]);
-  const initialFormValues = useMemo(() => formAdapter.epilogToFormValues(), [formAdapter]);
 
+  const formAdapter = useMemo(() => new GeneralFormAdapter(service, definemorefacts([], []), undefined, true), [service]);
+  const initialFormValues = useMemo(() => formAdapter.epilogToFormValues(definemorefacts([], [])), [formAdapter]);
 
   const onClickSave = useCallback(
     (formValues: any) => {
@@ -142,8 +142,7 @@ if (!service) {
   }
   
   const formAdapter = useMemo(() => new GeneralFormAdapter(service, userDataset, undefined, true), [service, userDataset]);
-  const initialFormValues = useMemo(() => formAdapter.epilogToFormValues(userDataset), [formAdapter]);
-
+  const initialFormValues = useMemo(() => {const values = formAdapter.epilogToFormValues(userDataset); console.log("values in useMemo", values); return values}, [formAdapter, userDataset]);
 
 
   // Passing undefined as the second argument to epilogToFormValues will
@@ -165,14 +164,21 @@ if (!service) {
         return;
       }
   
-      const claimId = formValues.claim.id;  // This assumes claim.id is directly accessible and properly formatted
-      const { dataset } = formAdapter.formValuesToEpilog(formValues);
+      const claimId = formValues.claim.id;
+      console.log("claimId in onClickSave", claimId);
+
+      const dataset  = formAdapter.formValuesToEpilog(formValues);
+      console.log("dataset in onClickSave", JSON.stringify(dataset));
   
       const mergedDataset = definemorefacts(dataset, userDataset);
+
+      console.log("merged dataset in onClickSave", JSON.stringify(mergedDataset));
+
+
       mutation.mutateAsync(mergedDataset)
         .then(() => {
           console.log("Navigating to claim with ID:", claimId);
-          navigate(getClaimUrl(claimId)); // Ensure this URL construction is correct
+          navigate(getClaimUrl(claimId)); 
         })
         .catch(error => console.error("Failed to submit claim:", error));
     },

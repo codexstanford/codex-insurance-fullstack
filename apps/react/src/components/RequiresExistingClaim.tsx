@@ -13,7 +13,9 @@ export default function RequiresExistingClaim({
 }) {
   /* ------------------------ Environmental conditions ------------------------ */
 
+
   const userDataset = useContext(UserDatasetContext);
+  console.log("userDatasetContext", UserDatasetContext);
 
   if (!userDataset)
     throw new Error(
@@ -22,7 +24,10 @@ export default function RequiresExistingClaim({
 
   /* ------------------------------ Actual check ------------------------------ */
 
+  console.log("userDataset in RequiresExistingClaim", userDataset);
   const existingClaimIds = getExistingIds("claim", userDataset);
+
+  console.log("existingClaimIds In RequiresExistingClaim", existingClaimIds);
 
   if (!existingClaimIds.includes(claimId)) {
     return (
