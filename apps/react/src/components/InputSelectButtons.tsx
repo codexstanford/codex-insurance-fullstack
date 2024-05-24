@@ -29,43 +29,46 @@ export default function InputSelectButtons<
   canDeselect = true,
   options,
 }: InputSelectButtons_Input<TOptions, TValue>) {
-  const isSelected = (opt: TOptions[number]) =>
-    Array.isArray(value)
-      ? value.some((v) => v.id === opt.id)
-      : value && value.id === opt.id;
+  const isSelected = (opt: TOptions[number]) => {
+    const optionKey = opt.id || opt.value;  // Assuming all options have either an id or value
+    return Array.isArray(value)
+      ? value.some((v) => v.id === optionKey || v.value === optionKey)
+      : value && (value.id === optionKey || value.value === optionKey);
+  };
 
   return (
     <div className="flex gap-3 flex-wrap">
-      {options.map((opt) => (
-        <Button
-          key={opt.id}
-          className={classNames("-uppercase", [
-            isSelected(opt),
-            "bg-blue-200 hover:bg-blue-100",
-          ])}
-          disabled={opt?.specialStatus === "disabled"}
-          onClick={() => {
-            if (opt.specialStatus === "disabled") return;
-            if (isSelected(opt) && canDeselect) {
-              // Now unselect
-              onChange?.(
-                (Array.isArray(value)
-                  ? Object.freeze(value.filter((v) => v.id !== opt.id))
-                  : null) as TValue,
-              );
-            } else {
-              onChange?.(
-                (Array.isArray(value)
+      {options.map((opt) => {
+        const optKey = opt.id || opt.value;  // Handle options with id or value
+        return (
+          <Button
+            key={optKey}
+            className={classNames("-uppercase", [
+              isSelected(opt),
+              "bg-blue-200 hover:bg-blue-100",
+            ])}
+            disabled={opt.specialStatus === "disabled"}
+            onClick={() => {
+              if (opt.specialStatus === "disabled") return;
+              const isOptSelected = isSelected(opt);
+              if (isOptSelected && canDeselect) {
+                const newValue = Array.isArray(value)
+                  ? Object.freeze(value.filter((v) => v.id !== optKey && v.value !== optKey))
+                  : null;
+                onChange?.(newValue as TValue);
+              } else {
+                const newValue = Array.isArray(value)
                   ? [...value, opt]
-                  : opt) as unknown as TValue,
-              );
-            }
-            onBlur?.();
-          }}
-        >
-          {opt.label}
-        </Button>
-      ))}
+                  : opt;
+                onChange?.(newValue as unknown as TValue);
+              }
+              onBlur?.();
+            }}
+          >
+            {opt.label}
+          </Button>
+        );
+      })}
     </div>
   );
 }

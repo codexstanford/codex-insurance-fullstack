@@ -276,6 +276,7 @@ export const getExistingIds = (
 ) => {
   const X = "X";
   const query = read(`${idPrefix}(${X})`);
+  console.log("get existing ids query:", query);
   const existingIds = compfinds(X, query, userDataset, []) as string[];
   return existingIds.sort();
 };

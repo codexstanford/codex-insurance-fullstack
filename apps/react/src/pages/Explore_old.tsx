@@ -1,17 +1,15 @@
 import { ROUTES } from "common";
 import { getClaimUrl } from "common/src/routes";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserDataset } from "../api/userDataset";
 import RequiresLogin from "../components/RequiresLogin";
 import RequiresUserDataset from "../components/RequiresUserDataset";
-//import Covid19VaccineForm from "../components/forms/Covid19VaccineForm";
-//import ContraceptivesForm from "../components/forms/ContraceptivesForm";
-import GeneralPolicyForm from "../components/forms/GeneralPolicyForm";
+import Covid19VaccineForm from "../components/forms/Covid19VaccineForm";
+import ContraceptivesForm from "../components/forms/ContraceptivesForm";
 import { LoginContext } from "../contexts/loginContext";
 import { UserDatasetContext } from "../contexts/userDatasetContext";
-//import { Covid19Vaccine, Contraceptives } from "../epilog/form-adapters/_formAdapter";
-import GeneralFormAdapter from "../epilog/form-adapters/generalFormAdapter";
+import { Covid19Vaccine, Contraceptives } from "../epilog/form-adapters/_formAdapter";
 import useSessionUser from "../hooks/useSessionUser";
 import { setAfterLoginAction } from "../utils/storage";
 import Container from "../components/Container";
@@ -39,81 +37,43 @@ export default function ExplorePage() {
     );
   }
 
-//  const { formAdapter } = service === "contraceptives" ? Contraceptives :
-//    service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
-if (!service) {
-    return <div>Service type is required.</div>;
-  }
-  const formAdapter = useMemo(() => new GeneralFormAdapter(service, definemorefacts([], []), undefined, true), [service]);
-  const initialFormValues = useMemo(() => formAdapter.epilogToFormValues(), [formAdapter]);
+  const { formAdapter } = service === "contraceptives" ? Contraceptives :
+    service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
 
+  const initialFormValues = formAdapter.epilogToFormValues([]);
 
   const onClickSave = useCallback(
-    (formValues: any) => {
-      try {
-        const { dataset } = formAdapter.formValuesToEpilog(formValues);
-        const claimId = formValues.claim?.id;
-        if (!claimId) {
-          console.error("Claim ID is undefined.");
-          return;
-        }
-        setAfterLoginAction({
-          saveToUserDataset: dataset,
-          redirectPath: ROUTES.getClaimUrl(claimId.toString()),
-        });
-        navigate(ROUTES.LOGIN);
-      } catch (error) {
-        console.error("Error processing form data:", error);
-      }
+    (formValues: Covid19Vaccine.FormValues) => {
+      const formDataset = formAdapter.formValuesToEpilog(formValues);
+      setAfterLoginAction({
+        saveToUserDataset: formDataset,
+        redirectPath: ROUTES.getClaimUrl(formValues.claim.id + ""),
+      });
+      navigate(ROUTES.LOGIN);
     },
-    [formAdapter, navigate]
+    [formAdapter, navigate],
   );
-  
-
-//  const onClickSave = useCallback(
-//    (formValues: Covid19Vaccine.FormValues) => {
-//      const formDataset = formAdapter.formValuesToEpilog(formValues);
-//      setAfterLoginAction({
-//        saveToUserDataset: formDataset,
-//        redirectPath: ROUTES.getClaimUrl(formValues.claim.id + ""),
-//      });
-//      navigate(ROUTES.LOGIN);
-//    },
-//    [formAdapter, navigate],
-//  );
-
   console.log("initialFormValues", initialFormValues);
   console.log("service", service);
 
-  return (
-    <Container addVerticalPadding={true}>
-      <GeneralPolicyForm
-        policyType={service}
+
+  if (service === "covidVaccine") {
+    return (
+      <Covid19VaccineForm
         defaultValues={initialFormValues}
         onClickSave={onClickSave}
       />
-    </Container>
-  );
-  
-
-
-//  if (service === "covidVaccine") {
-//    return (
-//      <Covid19VaccineForm
-//        defaultValues={initialFormValues}
-//        onClickSave={onClickSave}
-//      />
-//    );
-//  } else if (service === "contraceptives") {
-//    return (
-//      <ContraceptivesForm
-//        defaultValues={initialFormValues}
-//        onClickSave={onClickSave}
-//      />
-//    );
-//  } else {
-//    return <div>Service not recognized.</div>;
-//  }
+    );
+  } else if (service === "contraceptives") {
+    return (
+      <ContraceptivesForm
+        defaultValues={initialFormValues}
+        onClickSave={onClickSave}
+      />
+    );
+  } else {
+    return <div>Service not recognized.</div>;
+  }
 }
 
 function RenderNewClaimFormLoggedIn() {
@@ -135,23 +95,18 @@ function RenderNewClaimFormLoggedIn() {
   // 1. The onClickSave function is different. It navigates to the claim page.
   // 2. The initialFormValues are generated differently. The second argument to epilogToFormValues is undefined, which makes the function generate a new distinct claimId.
 
-//  const { formAdapter } = service === "contraceptives" ? Contraceptives :
-//    service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
-if (!service) {
-    return <div>Service type is required.</div>;
-  }
-  
-  const formAdapter = useMemo(() => new GeneralFormAdapter(service, userDataset, undefined, true), [service, userDataset]);
-  const initialFormValues = useMemo(() => formAdapter.epilogToFormValues(userDataset), [formAdapter]);
-
-
+  const { formAdapter } = service === "contraceptives" ? Contraceptives :
+    service === "covidVaccine" ? Covid19Vaccine : Covid19Vaccine;
 
   // Passing undefined as the second argument to epilogToFormValues will
   // make the function generate a new distinct claimId
 
   // TODO If the user opens the form two times, both will assume the same claimId. If one then gets saved, and then the other, the latter will overwrite the first claim.
 
-
+  const initialFormValues = formAdapter.epilogToFormValues(
+    userDataset,
+    undefined,
+  );
 
   const { mutation } = useUserDataset(sessionUser.id);
   const navigate = useNavigate();
@@ -179,50 +134,26 @@ if (!service) {
     [formAdapter, navigate, userDataset, mutation]
   );
   
-  
 
-//  const onClickSave = useCallback(
-//    (formValues: Covid19Vaccine.FormValues) => {
-//      const formDataset = formAdapter.formValuesToEpilog(formValues);
-//      const mergedDataset = definemorefacts(formDataset, userDataset);
-//      mutation
-//        .mutateAsync(mergedDataset)
-//        .then(() => navigate(getClaimUrl(formValues.claim.id + "")));
-//    },
-//    [formAdapter, mutation],
-//  );
-
-
-  return (
-    <Container addVerticalPadding={true}>
-      <GeneralPolicyForm
-        policyType={service}
-        defaultValues={initialFormValues}
-        onClickSave={onClickSave}
-      />
-    </Container>
-  );
-  
-
-//  if (service === "covidVaccine") {
-//    return (
-//      <Container addVerticalPadding={true}>
-//        <Covid19VaccineForm
-//          defaultValues={initialFormValues}
-//          onClickSave={onClickSave}
-//        />
-//      </Container>
-//    );
-//  } else if (service === "contraceptives") {
-//    return (
-//      <Container addVerticalPadding={true}>
-//        <ContraceptivesForm
-//          defaultValues={initialFormValues}
-//          onClickSave={onClickSave}
-//        />
-//      </Container>
-//    );
-//  } else {
-//    return <div>Service not recognized.</div>;
-//  }
+  if (service === "covidVaccine") {
+    return (
+      <Container addVerticalPadding={true}>
+        <Covid19VaccineForm
+          defaultValues={initialFormValues}
+          onClickSave={onClickSave}
+        />
+      </Container>
+    );
+  } else if (service === "contraceptives") {
+    return (
+      <Container addVerticalPadding={true}>
+        <ContraceptivesForm
+          defaultValues={initialFormValues}
+          onClickSave={onClickSave}
+        />
+      </Container>
+    );
+  } else {
+    return <div>Service not recognized.</div>;
+  }
 }
