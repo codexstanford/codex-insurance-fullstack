@@ -32,14 +32,19 @@ export default function InputSelectButtons<
   const isSelected = (opt: TOptions[number]) => {
     const optionKey = opt.id || opt.value;  // Assuming all options have either an id or value
     return Array.isArray(value)
-      ? value.some((v) => v.id === optionKey || v.value === optionKey)
-      : value && (value.id === optionKey || value.value === optionKey);
+      ? value.some((v) => v.id === optionKey || v.label === optionKey)
+      : value && (value.id === optionKey || value.label === optionKey);
   };
+
+  console.log("Current value in InputSelectButtons: ", value); 
+
+
 
   return (
     <div className="flex gap-3 flex-wrap">
       {options.map((opt) => {
         const optKey = opt.id || opt.value;  // Handle options with id or value
+        isSelected(opt) ? console.log("isSelected(opt) is true", opt.label) : console.log("");
         return (
           <Button
             key={optKey}

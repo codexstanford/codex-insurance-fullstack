@@ -28,7 +28,7 @@ export default function RequiresUserDataset({
   if (query.isError)
     return (
       <Callout
-        heading="Network erorr"
+        heading="Network error"
         addGoHomeButton={true}
         wrapInFullpageContainer={true}
       >

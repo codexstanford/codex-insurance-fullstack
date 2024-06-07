@@ -19,6 +19,9 @@ const InputDate: React.FC<InputDateProps> = ({
 //  }
 
   const [inputValue, setInputValue] = useState(value);
+  console.log("inputValueinInputDate", inputValue);
+  console.log("valueinInputDate", value);
+
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newDateValue = e.target.value; // "YYYY-MM-DD" format

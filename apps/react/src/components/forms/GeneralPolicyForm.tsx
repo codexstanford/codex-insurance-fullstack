@@ -25,19 +25,42 @@ interface GeneralPolicyFormProps {
   onClickSave: (formValues: any) => void;
 }
 
+function formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 const GeneralPolicyForm: React.FC<GeneralPolicyFormProps> = ({
   policyType,
   defaultValues,
   onClickSave,
 }) => {
+    console.log("Received defaultValues:", defaultValues);
+
   const adapter = useMemo(
     () => new GeneralFormAdapter(policyType, defaultValues),
     [policyType, defaultValues],
   );
 
+
+const defaultValuesProcessed = {
+    ...defaultValues,
+    startDate: formatDate(defaultValues.startDate)  // Assuming 'startDate' is the key for the date
+};
+
+
   const { control, handleSubmit, getValues, watch } = useForm({
-    defaultValues,
-  });
+    defaultValues: defaultValuesProcessed,
+});
   console.log("InitialFormValues after control:", getValues());
 
   const formConfig = configs[policyType];
@@ -87,6 +110,7 @@ const formDataset = useMemo(() => {
     formDataset,
   );
   console.log("formDataset", formDataset);
+  
 
 
   return (
@@ -116,7 +140,7 @@ const formDataset = useMemo(() => {
                         <button
                           type="button"
                           onClick={() => fieldArrays[field.id].remove(index)}
-                          className="ml-2 p-1 border rounded"
+                          className="ml-2 p-1 border-2 rounded"
                         >
                           Remove
                         </button>
@@ -127,7 +151,7 @@ const formDataset = useMemo(() => {
                 <button
                   type="button"
                   onClick={() => fieldArrays[field.id].append({ value: "" })}
-                  className="mt-2 p-1 border rounded"
+                  className="mt-2 p-1 border-2 rounded"
                 >
                   Add Entry
                 </button>
@@ -158,7 +182,8 @@ function renderField(
 ) {
   switch (config.type) {
     case "date":
-      return <InputDate {...field} />;
+        const formattedDate = formatDate(field.value);  // Ensure field.value is a Date object or similar
+        return <InputDate {...field} value={formattedDate} />;
     case "select":
       return <InputSelectButtons {...field} options={config.options || []} />;
     case "text":

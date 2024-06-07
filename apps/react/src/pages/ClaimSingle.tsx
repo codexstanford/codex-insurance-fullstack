@@ -74,6 +74,8 @@ function RenderClaimForm() {
 
 
   const formAdapter = useMemo(() => new GeneralFormAdapter(service, userDataset, existingClaimId, true), [service, userDataset, existingClaimId]);
+
+  console.log("userDatasetBeforeInitialFormValues", userDataset);
   const initialFormValues = formAdapter.epilogToFormValues(
     userDataset,
     existingClaimId,

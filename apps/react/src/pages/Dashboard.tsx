@@ -61,6 +61,7 @@ export default function Dashboard() {
       }
 
     const details = getClaimDetailsById(id, dataset); // Use getClaimDetailsById
+    console.log("getClaimDetailsById(id, dataset) in Dashboard", details);
     return details ? {
       id: details.id,
       label: serviceTypeToLabel(details.serviceType) || 'Unknown Service Type',

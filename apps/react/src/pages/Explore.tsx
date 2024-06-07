@@ -51,7 +51,8 @@ if (!service) {
   const onClickSave = useCallback(
     (formValues: any) => {
       try {
-        const { dataset } = formAdapter.formValuesToEpilog(formValues);
+        console.log("entered try in OnClickSave");
+        const dataset = formAdapter.formValuesToEpilog(formValues);
         const claimId = formValues.claim?.id;
         if (!claimId) {
           console.error("Claim ID is undefined.");
@@ -157,7 +158,7 @@ if (!service) {
 
   const onClickSave = useCallback(
     (formValues: any) => {
-      console.log("Received Form Values:", formValues);
+      console.log("Received Form Values in Explore:", formValues);
   
       if (!formValues || !formValues.claim || typeof formValues.claim.id !== 'string') {
         console.error("Claim ID is undefined or not properly formatted. Received form values:", formValues);
